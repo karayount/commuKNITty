@@ -2,3 +2,4 @@ secret*
 *.pyc
 env
 ckenv
+*.DS_Store

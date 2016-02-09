@@ -124,31 +124,13 @@ class BasketYarnPhoto(db.Model):
                                nullable=False)
     photo = db.Column(db.String(400), nullable=False, unique=True)
 
-
-class Rating(db.Model):
-    """Ratings by users for movies for ratings website."""
-
-    __tablename__ = "ratings"
-
-    rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.user_id'),
-                        nullable=False)
-    movie_id = db.Column(db.Integer,
-                         db.ForeignKey('movies.movie_id'),
-                         nullable=False)
-    score = db.Column(db.Integer, nullable=False)
-
-    user = db.relationship("User",
-                           backref=db.backref("ratings", order_by=rating_id))
-
-    movie = db.relationship("Movie",
-                            backref=db.backref("ratings", order_by=rating_id))
+    basket_yarn = db.relationship("BasketYarn")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Rating user_id=%s movie_id=%s score=%s>" % (self.user_id, self.movie_id, self.score)
+        return "<BasketYarnPhoto photo_id=%s basket_yarn_id=%s>" % (self.photo_id,
+                                                                    self.basket_yarn_id)
 
 
 ##############################################################################
