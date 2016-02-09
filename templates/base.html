@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  {% block header %}
+    HEADER CONTENT GOES HERE
+  {% endblock %}
+</head>
+
+<body>
+  
+  <div class="container">
+
+  <!-- Show flashed messages -->
+  {% with messages = get_flashed_messages() %}
+      {% for message in messages %}
+          <div class="alert alert-warning">{{ message }}</div>
+      {% endfor %}
+  {% endwith %}
+
+
+  {% block body %} 
+    BODY CONTENT GOES HERE 
+  {% endblock %}
+  
+  </div>
+
+</body>
+</html>

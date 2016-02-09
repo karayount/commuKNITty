@@ -51,7 +51,7 @@ class Preference(db.Model):
                                                         self.pref_category)
 
 
-class Basket(db.model):
+class Basket(db.Model):
     """Basket of Yarns belonging to commuKNITty User."""
 
     __tablename__ = "baskets"
@@ -81,8 +81,9 @@ class Yarn(db.Model):
     # attributes below will be copied from ravelry, for simpler search
     yarn_name = db.Column(db.String(50))
     yarn_company = db.Column(db.String(50))
-    weight = db.Column(db.String(25))
+    yarn_weight = db.Column(db.String(25))
     ball_yardage = db.Column(db.Integer)
+    ball_grams = db.Column(db.Integer)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -95,7 +96,7 @@ class BasketYarn(db.Model):
 
     __tablename__ = "basket_yarns"
 
-    baket_yarn_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    basket_yarn_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     basket_id = db.Column(db.Integer,
                           db.ForeignKey('baskets.basket_id'),
                           nullable=False)
