@@ -13,10 +13,47 @@ from server import app
 import requests
 
 
+def load_users():
+    """Load existing users into database from file"""
+
+    print "Users"
+
+    # Delete all rows in table, so if we need to run this a second time,
+    # we won't be trying to add duplicate records
+    User.query.delete()
+
+    for row in open("seed_data/user_data.txt"):
+        row = row.rstrip()
+        username, years_knitting, miles_knit, photo = row.split("|")
+
+        if miles_knit != "":
+            miles_knit = float(miles_knit)
+        else:
+            miles_knit = None
+
+        user = User(username=username,
+                    years_knitting=years_knitting,
+                    miles_knit=miles_knit,
+                    photo=photo)
+
+        # We need to add to the session or it won't ever be stored
+        db.session.add(user)
+        db.session.add(basket)
+
+    # Once we're done, we should commit our work
+    db.session.commit()
+
+
 def load_yarns():
     """Load yarns into database from Ravelry API requests for most popular
 
        Ravelry pagination uses 50 records per page. Response in JSON."""
+
+    print "Yarns"
+
+    # Delete all rows in table, so if we need to run this a second time,
+    # we won't be trying to add duplicate records
+    Yarn.query.delete()
 
     base_request = "https://api.ravelry.com/yarns/search.json?sort=projects&page="
 
@@ -54,6 +91,44 @@ def load_yarns():
         db.session.commit()
 
 
+def load_preferences():
+    """Load user preferences from file
+
+       pref_category will and pref_value will match Ravelry search terms,
+       so they can be appended to url for API requests. "pc" stands for
+       pattern category, and "pa" is pattern attribute.
+       Mapping is as follows "pref_category: pref_value"
+       weight: lace, weight: fingering, weight: sport, weight: dk,
+       weight: worsted, weight: aran, weight: bulky, pc: cardigan,
+       pc: pullover, pc: vest, pc: socks, pc: mittens, pc: gloves,
+       pc: fingerless, pc: beanie-toque, pc: earflap, pc: cowl,
+       pc: scarf, pc: shawl-wrap, fit: adult, fit: child, fit: baby,
+       pa: cables, pa: lace, pa: intarsia, pa: stranded, pa: stripes-colorwork
+       """
+
+    print "Preferences"
+
+    # Delete all rows in table, so if we need to run this a second time,
+    # we won't be trying to add duplicate records
+    Preference.query.delete()
+
+    for row in open("seed_data/preference_data.txt"):
+        row = row.rstrip()
+        user_id, pref_category, pref_value = row.split("|")
+
+        user_id = int(user_id)
+
+        preference = Preference(user_id=user_id,
+                                pref_category=pref_category,
+                                pref_value=pref_value)
+
+        # We need to add to the session or it won't ever be stored
+        db.session.add(preference)
+
+    # Once we're done, we should commit our work
+    db.session.commit()
+
+
 if __name__ == "__main__":
     connect_to_db(app)
 
@@ -61,4 +136,6 @@ if __name__ == "__main__":
     db.create_all()
 
     # Import different types of data
-    load_yarns()
+    # load_yarns()
+    load_users()
+    load_preferences()

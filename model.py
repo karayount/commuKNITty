@@ -18,7 +18,7 @@ class User(db.Model):
     username = db.Column(db.String(25), unique=True, nullable=False)
     years_knitting = db.Column(db.String(40))
     miles_knit = db.Column(db.Float)
-    photo = db.Column
+    photo = db.Column(db.String(400))
 
     preferences = db.relationship("Preference")
     basket = db.relationship("Basket")

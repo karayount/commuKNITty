@@ -26,6 +26,9 @@ def show_user_profile(user_id):
     return render_template("profile.html")  # include user object, so can display username)
 
 
+# search: build base request to include craft=knitting
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
