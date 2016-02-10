@@ -79,7 +79,7 @@ class Yarn(db.Model):
     # rav_yarn_id is ravelry's key for this record, to simplify searching
     rav_yarn_id = db.Column(db.Integer)
     # attributes below will be copied from ravelry, for simpler search
-    yarn_name = db.Column(db.String(50))
+    yarn_name = db.Column(db.String(100))
     yarn_company = db.Column(db.String(50))
     yarn_weight = db.Column(db.String(25))
     ball_yardage = db.Column(db.Integer)
@@ -103,6 +103,8 @@ class BasketYarn(db.Model):
     yarn_id = db.Column(db.Integer,
                         db.ForeignKey('yarns.yarn_id'),
                         nullable=False)
+    yards = db.Column(db.Integer)
+    colorway = db.Column(db.String(50))
 
     basket = db.relationship("Basket")
     yarn = db.relationship("Yarn")

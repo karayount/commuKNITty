@@ -13,7 +13,7 @@ from server import app
 import requests
 
 
-def load_users():
+def load_users_and_create_baskets():
     """Load existing users into database from file"""
 
     print "Users"
@@ -38,6 +38,9 @@ def load_users():
 
         # We need to add to the session or it won't ever be stored
         db.session.add(user)
+        db.session.flush()
+
+        basket = Basket(user_id=user.user_id)
         db.session.add(basket)
 
     # Once we're done, we should commit our work
@@ -55,7 +58,7 @@ def load_yarns():
     # we won't be trying to add duplicate records
     Yarn.query.delete()
 
-    base_request = "https://api.ravelry.com/yarns/search.json?sort=projects&page="
+    base_request = "https://api.ravelry.com/yarns/search.json?weight=lace%7Cfingering%7Csport%7Cdk%7Cworsted%7Caran%7Cbulky&sort=projects&page="
 
     # loop through first 40 pages (numbering starts at 1) to get 2000 records
     for i in range(1, 41):
@@ -67,7 +70,9 @@ def load_yarns():
         yarn_dict = page_of_yarns.json()
         # python dictionary has 2 keys: paginator, and yarns (which is a list
         # of dictionaries, one per yarn object)
-        for yarn in range(len(yarn_dict)):
+        print i
+        print len(yarn_dict["yarns"])
+        for yarn in range(len(yarn_dict["yarns"])):
             rav_yarn_id = yarn_dict["yarns"][yarn]["id"]
             yarn_name = yarn_dict["yarns"][yarn]["name"]
             yarn_company = yarn_dict["yarns"][yarn]["yarn_company_name"]
@@ -97,6 +102,7 @@ def load_preferences():
        pref_category will and pref_value will match Ravelry search terms,
        so they can be appended to url for API requests. "pc" stands for
        pattern category, and "pa" is pattern attribute.
+
        Mapping is as follows "pref_category: pref_value"
        weight: lace, weight: fingering, weight: sport, weight: dk,
        weight: worsted, weight: aran, weight: bulky, pc: cardigan,
@@ -129,6 +135,35 @@ def load_preferences():
     db.session.commit()
 
 
+def load_basket_yarns():
+    """Load BasketYarn data from file."""
+
+    print "BasketYarns"
+
+    # Delete all rows in table, so if we need to run this a second time,
+    # we won't be trying to add duplicate records
+    BasketYarn.query.delete()
+
+    for row in open("seed_data/basket_yarns.txt"):
+        row = row.rstrip()
+        basket_id, yarn_id, yards, colorway = row.split("|")
+
+        basket_id = int(basket_id)
+        yarn_id = int(yarn_id)
+        yards = int(yards)
+
+        basket_yarn = BasketYarn(basket_id=basket_id,
+                                 yarn_id=yarn_id,
+                                 yards=yards,
+                                 colorway=colorway)
+
+        # We need to add to the session or it won't ever be stored
+        db.session.add(basket_yarn)
+
+    # Once we're done, we should commit our work
+    db.session.commit()
+
+
 if __name__ == "__main__":
     connect_to_db(app)
 
@@ -136,6 +171,7 @@ if __name__ == "__main__":
     db.create_all()
 
     # Import different types of data
-    # load_yarns()
-    load_users()
+    load_yarns()
+    load_users_and_create_baskets()
     load_preferences()
+    load_basket_yarns()
