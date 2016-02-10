@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>commuKNITty: {{ user.username }}'s profile</title>
+{% endblock %}
+
+{% block body %}
+
+    <h2>Welcome {{ user.username }}</h2>
+    <!-- link to basket IF BASKET NOT EMPTY -->
+    <div id="basket_yarns">
+        {% if basket_yarns|length > 0 %}
+            {% for yarn in basket_yarns %}
+                You have {{ yarn.yards }} yards of {{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }} in the color {{ yarn.colorway }}.<br>
+            {% endfor %}
+        {% endif %}
+    </div> <!-- end basket yarns -->
+    <div id="preferences">    
+        <h4 text="bold">Your preferences</h4>
+        {% if (pc|length == 0) and (fit|length == 0) and (weight|length == 0) and (pa|length == 0) %}
+            You have no preferences saved. You can update your preferences below.<br>
+        {% else %}
+            {% if pc|length > 0 %}
+                <br>You like to knit these kinds of items:
+                {% for pref in pc %}
+                    <br>{{ pref.pref_value | prettify_preference }}
+                {% endfor %}
+            {% endif %}
+            {% if fit|length > 0 %}
+                <br><br>Size(s) you like to knit:
+                {% for pref in fit %}
+                    <br>{{ pref.pref_value | prettify_preference }}
+                {% endfor %}
+            {% endif %}
+            {% if weight|length > 0 %}
+                <br><br>Preferred yarn weight(s):
+                {% for pref in weight %}
+                    <br>{{ pref.pref_value | prettify_preference }}
+                {% endfor %}
+            {% endif %}
+            {% if pa|length > 0 %}
+                <br><br>Techniques you enjoy: 
+                {% for pref in pa %}
+                    <br>{{ pref.pref_value | prettify_preference }}
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    </div> <!-- end id preferences -->
+
+    <!-- allow to update preferences - MAKE FORM TOGGLE-ABLE -->
+    <div id="preferences_form">
+    <br>
+        <form>Update your preferences
+            <br><br><label>What do you like to knit? (choose as many as you like)</label><br>
+            <table>
+                <tr>
+                    <td><label><input type = "checkbox" name = "pc" value = "cardigan">Cardigans</label></td>
+                    <td><label><input type = "checkbox" name = "pc" value = "pullover">Pullovers</label></td>
+                    <td><label><input type = "checkbox" name = "pc" value = "vest">Vests</label></td>
+                </tr>
+                <tr>
+                    <td><label><input type = "checkbox" name = "pc" value = "mittens">Mittens</label></td>
+                    <td><label><input type = "checkbox" name = "pc" value = "gloves">Gloves</label></td>
+                    <td><label><input type = "checkbox" name = "pc" value = "fingerless">Fingerless Gloves/Mitts</label></td>
+                </tr>
+                <tr>
+                    <td><label><input type = "checkbox" name = "pc" value = "socks">Socks</label></td>
+                    <td><label><input type = "checkbox" name = "pc" value = "beanie-toque">Beanies</label></td>
+                    <td><label><input type = "checkbox" name = "pc" value = "earflap">Hats with Earflaps</label></td>
+                </tr>
+                <tr>
+                    <td><label><input type = "checkbox" name = "pc" value = "scarf">Scarves</label></td>
+                    <td><label><input type = "checkbox" name = "pc" value = "shawl-wrap">Shawls</label></td>
+                    <td><label><input type = "checkbox" name = "pc" value = "cowl">Cowls</label></td>
+                </tr>
+            </table>
+            <br>
+            <label>Who do you like to knit for?</label><br>
+            <table>
+                <tr>
+                    <td><label><input type = "checkbox" name = "fit" value = "adult">Adults</label></td>
+                    <td><label><input type = "checkbox" name = "fit" value = "baby">Babies</label></td>
+                    <td><label><input type = "checkbox" name = "fit" value = "child">Children</label></td>
+                </tr>
+            </table>
+            <br>
+            <label>What are your preferred yarn weights?</label><br>
+            <table>
+                <tr>
+                    <td><label><input type = "checkbox" name = "weight" value = "lace">Lace</label></td>
+                    <td><label><input type = "checkbox" name = "weight" value = "fingering">Fingering</label></td>
+                    <td><label><input type = "checkbox" name = "weight" value = "sport">Sport</label></td>
+                    <td><label><input type = "checkbox" name = "weight" value = "dk">DK</label></td>
+                </tr>
+                <tr>
+                    <td><label><input type = "checkbox" name = "weight" value = "worsted">Worsted</label></td>
+                    <td><label><input type = "checkbox" name = "weight" value = "aran">Aran</label></td>
+                    <td><label><input type = "checkbox" name = "weight" value = "bulky">Bulky</label></td>
+                </tr>
+            </table>
+            <br>
+            <label>Do you enjoy any of these techniques?</label><br>
+                <tr>
+                    <td><label><input type = "checkbox" name = "pa" value = "worsted">Worsted</label></td>
+                    <td><label><input type = "checkbox" name = "pa" value = "aran">Aran</label></td>
+                    <td><label><input type = "checkbox" name = "pa" value = "bulky">Bulky</label></td>
+                </tr>
+            <br><br>
+            <input type="submit" value="Update your preferences">
+        </form>
+    </div> <!-- end preferences_form -->     
+
+{% endblock %}

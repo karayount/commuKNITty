@@ -108,6 +108,7 @@ class BasketYarn(db.Model):
 
     basket = db.relationship("Basket")
     yarn = db.relationship("Yarn")
+    photos = db.relationship("BasketYarnPhoto")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
