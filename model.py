@@ -16,11 +16,11 @@ class User(db.Model):
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     username = db.Column(db.String(25), unique=True, nullable=False)
-    years_knitting = db.Column(db.String(40))
+    years_knitting = db.Column(db.String(40))  # TODO: store date started knitting and calculate
     miles_knit = db.Column(db.Float)
     photo = db.Column(db.String(400))
 
-    preferences = db.relationship("Preference")
+    # preferences accessible. Built using backref in Preference class
     basket = db.relationship("Basket")
 
     def __repr__(self):
@@ -30,25 +30,56 @@ class User(db.Model):
 
 
 class Preference(db.Model):
-    """Preference of commuKNITty app User"""
+    """Preferences that users can have.
+
+    Since these are static (only certain options allowed in commuKNITty app)
+    their id will be read in from seed_data txt file."""
 
     __tablename__ = "preferences"
 
-    pref_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.user_id'),
-                        nullable=False)
+    pref_id = db.Column(db.Integer, primary_key=True)
+
     # pref_category, pref_value will be used for Ravelry API search parameters
+    # pref_category options: weight, pc, fit, or pa
+    # pref_value options: lace, fingering, sport, dk, worsted, aran, bulky,
+    #   cardigan, pullover, vest, socks, mittens, gloves, fingerless,
+    #   beanie-toque, earflap, cowl, scarf, shawl-wrap, adult, child, baby,
+    #   cables, lace, intarsia, stranded, stripes-colorwork
+
     pref_category = db.Column(db.String(50), nullable=False)
     pref_value = db.Column(db.String(50), nullable=False)
 
-    user = db.relationship("User")
+    users = db.relationship("User",
+                            secondary="user_preferences",
+                            backref="preferences")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Preference pref_id=%s category=%s>" % (self.pref_id,
-                                                        self.pref_category)
+        return "<Preference pref_id=%s pref_category=%s pref_value=%s>" % (
+            self.pref_id,
+            self.pref_category,
+            self.pref_value)
+
+
+class UserPreference(db.Model):
+    """Preference of commuKNITty app User"""
+
+    __tablename__ = "user_preferences"
+
+    user_pref_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
+    pref_id = db.Column(db.Integer,
+                        db.ForeignKey('preferences.pref_id'),
+                        nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<UserPreference user_pref_id=%s user_id=%s>" % (self.user_pref_id,
+                                                                self.user_id)
 
 
 class Basket(db.Model):
@@ -84,6 +115,7 @@ class Yarn(db.Model):
     yarn_weight = db.Column(db.String(25))
     ball_yardage = db.Column(db.Integer)
     ball_grams = db.Column(db.Integer)
+    yarn_photo = db.Column(db.String(400))
 
     def __repr__(self):
         """Provide helpful representation when printed."""

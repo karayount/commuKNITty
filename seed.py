@@ -3,6 +3,7 @@
 from sqlalchemy import func
 from model import User
 from model import Preference
+from model import UserPreference
 from model import Basket
 from model import Yarn
 from model import BasketYarn
@@ -18,33 +19,34 @@ def load_users_and_create_baskets():
 
     print "Users"
 
-    # Delete all rows in table, so if we need to run this a second time,
-    # we won't be trying to add duplicate records
     User.query.delete()
+    user_data = "seed_data/user_data.txt"
 
-    for row in open("seed_data/user_data.txt"):
-        row = row.rstrip()
-        username, years_knitting, miles_knit, photo = row.split("|")
+    with open(user_data) as users:
+        for row in users:
+            row = row.rstrip()
+            username, years_knitting, miles_knit, photo = row.split("|")
 
-        if miles_knit != "":
-            miles_knit = float(miles_knit)
-        else:
-            miles_knit = None
+            # TODO: try except this
+            if miles_knit != "":
+                miles_knit = float(miles_knit)
+            else:
+                miles_knit = None
 
-        user = User(username=username,
-                    years_knitting=years_knitting,
-                    miles_knit=miles_knit,
-                    photo=photo)
+            user = User(username=username,
+                        years_knitting=years_knitting,
+                        miles_knit=miles_knit,
+                        photo=photo)
 
-        # We need to add to the session or it won't ever be stored
-        db.session.add(user)
-        db.session.flush()
+            # Add new User object to the session
+            db.session.add(user)
+            db.session.flush()
 
-        basket = Basket(user_id=user.user_id)
-        db.session.add(basket)
+            basket = Basket(user_id=user.user_id)
+            db.session.add(basket)
 
-    # Once we're done, we should commit our work
-    db.session.commit()
+        # Commit changes to DB
+        db.session.commit()
 
 
 def load_yarns():
@@ -61,7 +63,10 @@ def load_yarns():
     base_request = "https://api.ravelry.com/yarns/search.json?weight=lace%7Cfingering%7Csport%7Cdk%7Cworsted%7Caran%7Cbulky&sort=projects&page="
 
     # loop through first 40 pages (numbering starts at 1) to get 2000 records
-    for i in range(1, 41):
+    first_page = 1
+    last_page = 40
+
+    for i in range(first_page, last_page+1):
         # build request url using current page number
         current_page_request = base_request + str(i)
         # save response json for this page
@@ -70,36 +75,38 @@ def load_yarns():
         yarn_dict = page_of_yarns.json()
         # python dictionary has 2 keys: paginator, and yarns (which is a list
         # of dictionaries, one per yarn object)
-        print i
-        print len(yarn_dict["yarns"])
-        for yarn in range(len(yarn_dict["yarns"])):
-            rav_yarn_id = yarn_dict["yarns"][yarn]["id"]
-            yarn_name = yarn_dict["yarns"][yarn]["name"]
-            yarn_company = yarn_dict["yarns"][yarn]["yarn_company_name"]
-            yarn_weight = yarn_dict["yarns"][yarn]["yarn_weight"]["name"]
-            ball_yardage = yarn_dict["yarns"][yarn]["yardage"]
-            ball_grams = yarn_dict["yarns"][yarn]["grams"]
+        yarns_fetched = yarn_dict.get("yarns", [])
+
+        for yarn in yarns_fetched:
+
+            rav_yarn_id = yarn["id"]
+            # TODO: test if each one there (using get), use default or continue (if want to skip this one)
+            yarn_name = yarn["name"]
+            yarn_company = yarn["yarn_company_name"]
+            yarn_weight = yarn["yarn_weight"]["name"]
+            ball_yardage = yarn["yardage"]
+            ball_grams = yarn["grams"]
+            yarn_photo = yarn["first_photo"]["small_url"]
 
             new_yarn = Yarn(rav_yarn_id=rav_yarn_id,
                             yarn_name=yarn_name,
                             yarn_company=yarn_company,
                             yarn_weight=yarn_weight,
                             ball_yardage=ball_yardage,
-                            ball_grams=ball_grams)
+                            ball_grams=ball_grams,
+                            yarn_photo=yarn_photo)
 
-            # print new_yarn
-
-            # We need to add to the session or it won't ever be stored
+            # Add new Yarn object to the session
             db.session.add(new_yarn)
 
-        # Once we're done, we should commit our work
+        # Commit changes to DB
         db.session.commit()
 
 
 def load_preferences():
-    """Load user preferences from file
+    """Load all options for preferences, from file
 
-       pref_category will and pref_value will match Ravelry search terms,
+       pref_category and pref_value will match Ravelry search terms,
        so they can be appended to url for API requests. "pc" stands for
        pattern category, and "pa" is pattern attribute.
 
@@ -114,25 +121,50 @@ def load_preferences():
 
     print "Preferences"
 
-    # Delete all rows in table, so if we need to run this a second time,
-    # we won't be trying to add duplicate records
     Preference.query.delete()
+    preference_data = "seed_data/preference_data.txt"
 
-    for row in open("seed_data/preference_data.txt"):
-        row = row.rstrip()
-        user_id, pref_category, pref_value = row.split("|")
+    with open(preference_data) as prefs:
+        for row in prefs:
+            row = row.rstrip()
+            pref_id, pref_category, pref_value = row.split("|")
 
-        user_id = int(user_id)
+            pref_id = int(pref_id)
 
-        preference = Preference(user_id=user_id,
-                                pref_category=pref_category,
-                                pref_value=pref_value)
+            preference = Preference(pref_id=pref_id,
+                                    pref_category=pref_category,
+                                    pref_value=pref_value)
 
-        # We need to add to the session or it won't ever be stored
-        db.session.add(preference)
+            # Add new Preference object to the session
+            db.session.add(preference)
 
-    # Once we're done, we should commit our work
-    db.session.commit()
+        # Commit changes to DB
+        db.session.commit()
+
+
+def load_user_preferences():
+    """Load user preferences from file"""
+
+    print "UserPreferences"
+
+    UserPreference.query.delete()
+    user_preference_data = "seed_data/user_preference_data.txt"
+
+    with open(user_preference_data) as user_prefs:
+        for row in user_prefs:
+            row = row.rstrip()
+            user_id, pref_id = row.split("|")
+
+            user_id = int(user_id)
+
+            user_preference = UserPreference(user_id=user_id,
+                                             pref_id=pref_id)
+
+            # Add new UserPreference object to the session
+            db.session.add(user_preference)
+
+        # Commit changes to DB
+        db.session.commit()
 
 
 def load_basket_yarns():
@@ -140,28 +172,28 @@ def load_basket_yarns():
 
     print "BasketYarns"
 
-    # Delete all rows in table, so if we need to run this a second time,
-    # we won't be trying to add duplicate records
     BasketYarn.query.delete()
+    basket_yarn_data = "seed_data/basket_yarn_data.txt"
 
-    for row in open("seed_data/basket_yarns.txt"):
-        row = row.rstrip()
-        basket_id, yarn_id, yards, colorway = row.split("|")
+    with open(basket_yarn_data) as basket_yarns:
+        for row in basket_yarns:
+            row = row.rstrip()
+            basket_id, yarn_id, yards, colorway = row.split("|")
 
-        basket_id = int(basket_id)
-        yarn_id = int(yarn_id)
-        yards = int(yards)
+            basket_id = int(basket_id)
+            yarn_id = int(yarn_id)
+            yards = int(yards)
 
-        basket_yarn = BasketYarn(basket_id=basket_id,
-                                 yarn_id=yarn_id,
-                                 yards=yards,
-                                 colorway=colorway)
+            basket_yarn = BasketYarn(basket_id=basket_id,
+                                     yarn_id=yarn_id,
+                                     yards=yards,
+                                     colorway=colorway)
 
-        # We need to add to the session or it won't ever be stored
-        db.session.add(basket_yarn)
+            # Add new BasketYarn object to the session
+            db.session.add(basket_yarn)
 
-    # Once we're done, we should commit our work
-    db.session.commit()
+        # Commit changes to DB
+        db.session.commit()
 
 
 if __name__ == "__main__":
@@ -174,4 +206,5 @@ if __name__ == "__main__":
     load_yarns()
     load_users_and_create_baskets()
     load_preferences()
+    load_user_preferences()
     load_basket_yarns()
