@@ -50,52 +50,58 @@
     </div> <!-- end id preferences -->
 
     <!-- allow to update preferences -->
-    <!-- TODO: MAKE FORM TOGGLE-ABLE -->
+    <!-- TODO: make form default to hidden -->
     <div id="preferences_form">
     <br>
         <button id="update_preferences_button">Update your preferences</button>
-        <form action="/save_preferences" method="POST">
-            <br><br><label>What do you like to knit? (choose as many as you like)</label><br>
+        <form id="update_preferences_form" action="/save_preferences" method="POST">
+            <label>What do you like to knit? (choose as many as you like)</label><br>
+        
             {% for pattern_category in all_pc %}
                 {% if pattern_category in user_pc %}
-                    <label><input type="checkbox" name="pc" value="{{ pattern_category }}" checked> {{ pattern_category | prettify_preference }}</label>
+                    <label><input type="checkbox" name="pc" value="{{ pattern_category }}" checked id="pc-{{ pattern_category }}"> {{ pattern_category | prettify_preference }}</label>
                 {% else %}
-                    <label><input type="checkbox" name="pc" value="{{ pattern_category }}"> {{ pattern_category | prettify_preference }}</label>
+                    <label><input type="checkbox" name="pc" value="{{ pattern_category }}" id="pc-{{ pattern_category }}"> {{ pattern_category | prettify_preference }}</label>
                 {% endif %}
             {% endfor %}                
             <br>
+        
             <label>Who do you like to knit for?</label><br>
              {% for size in all_fit %}
                 {% if size in user_fit %}
-                    <label><input type="checkbox" name="fit" value="{{ size }}" checked> {{ size | prettify_preference }}</label>
+                    <label><input type="checkbox" name="fit" value="{{ size }}" checked id="fit-{{ size }}"> {{ size | prettify_preference }}</label>
                 {% else %}
-                    <label><input type="checkbox" name="fit" value="{{ size }}"> {{ size | prettify_preference }}</label>
+                    <label><input type="checkbox" name="fit" value="{{ size }}" id="fit-{{ size }}"> {{ size | prettify_preference }}</label>
                 {% endif %}
             {% endfor %}
             <br>
+        
             <label>What are your preferred yarn weights?</label><br>
              {% for weight in all_weight %}
                 {% if weight in user_weight %}
-                    <label><input type="checkbox" name="weight" value="{{ weight }}" checked> {{ weight | prettify_preference }}</label>
+                    <label><input type="checkbox" name="weight" value="{{ weight }}" checked id="weight-{{ weight }}"> {{ weight | prettify_preference }}</label>
                 {% else %}
-                    <label><input type="checkbox" name="weight" value="{{ weight }}"> {{ weight | prettify_preference }}</label>
+                    <label><input type="checkbox" name="weight" value="{{ weight }}" id="weight-{{ weight }}"> {{ weight | prettify_preference }}</label>
                 {% endif %}
             {% endfor %}
             <br>
+        
             <label>Do you enjoy any of these techniques?</label><br>
                {% for technique in all_pa %}
                 {% if technique in user_pa %}
-                    <label><input type="checkbox" name="pa" value="{{ technique }}" checked> {{ technique | prettify_preference }}</label>
+                    <label><input type="checkbox" name="pa" value="{{ technique }}" checked id="pa-{{ technique }}"> {{ technique | prettify_preference }}</label>
                 {% else %}
-                    <label><input type="checkbox" name="pa" value="{{ technique }}"> {{ technique | prettify_preference }}</label>
+                    <label><input type="checkbox" name="pa" value="{{ technique }}" id="pa-{{ technique }}"> {{ technique | prettify_preference }}</label>
                 {% endif %}
             {% endfor %}
-                    <!-- TODO: figure out mechanism for adding 3 prefs for colorwork -->
             <br><br>
+        
             <input type="submit" value="Submit changes">
+        
         </form>
     </div> <!-- end preferences_form -->     
 
-    <script>"something.js"</script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script type='text/javascript' src='/static/preferences_form.js'></script>
 
 {% endblock %}

@@ -95,11 +95,15 @@ def show_user_profile(user_id):
                            all_fit=all_fit)
 
 
-@app.route("/save_preferences")
-def update_preferences_in_db(methods=['POST']):
-    """Process form in user profile to update preferences associated to user.
+@app.route("/update_preference", methods=['POST'])
+def update_preference_in_db(preference):
+    """Process form field in user profile to update preferences.
 
-    Updates database based on"""
+    Updates database based on checkbox clicked"""
+
+
+
+
 
 # TODO: search: build base request to include craft=knitting
 
