@@ -3,7 +3,7 @@ import requests
 from flask import Flask, render_template, session, redirect, request, flash
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
                    UserPreference, Preference, BasketYarnPhoto)
-from preferences import categorize_user_prefs, categorize_all_prefs
+from preferences import group_user_prefs, get_all_grouped_prefs
 from jinja_filters import prettify_preference
 
 app = Flask(__name__)
@@ -20,26 +20,29 @@ def show_landing_page():
     return render_template("landing_page.html")
 
 
-@app.route("/home")
-def show_homepage():
-    """Show homepage of logged in commuKNITty user"""
-
-    return render_template("homepage.html")
-
-
 @app.route("/process_login")
 def process_login():
 
-    username = request.form.get("username")
+    username = request.args.get("username")
 
     existing_user = User.query.filter(User.username == username).first()
     if existing_user is None:
         flash("Username incorrect. Please re-enter")
         return redirect("/")
     else:
-        session["user"] = existing_user
-        return redirect("/home")
+        session["user_id"] = existing_user.user_id
+        # return redirect("/home")
+        return "processed login"
 
+@app.route("/home")
+def show_homepage():
+    """Show homepage of logged in commuKNITty user"""
+
+    user = User.query.get(session["user"])
+
+
+    # return render_template("homepage.html", user=user)
+    return "homepage isn't quite broken!"
 
 @app.route("/profile/<int:user_id>")
 def show_user_profile(user_id):
@@ -49,52 +52,70 @@ def show_user_profile(user_id):
     basket = Basket.query.filter(Basket.user_id == user.user_id).one()
     basket_yarns = BasketYarn.query.filter(BasketYarn.basket_id == basket.basket_id).all()
 
-    # get dictionary of categorizes user preferences
-    user_prefs = categorize_user_prefs(user)
-    # create lists to pass to jinja
-    user_pc = user_prefs["pc"]
-    user_weight = user_prefs["weight"]
-    user_pa = user_prefs["pa"]
-    user_fit = user_prefs["fit"]
-
-    all_prefs = categorize_all_prefs()
-    # create list to pass to jinja
-    all_pc = all_prefs["all_pc"]
-    all_weight = all_prefs["all_weight"]
-    all_pa = all_prefs["all_pa"]
-    all_fit = all_prefs["all_fit"]
+    # get GroupedPreferences object for user and all
+    user_grouped_prefs = group_user_prefs(user)
+    all_grouped_prefs = get_all_grouped_prefs()
 
     return render_template("profile.html",
                            user=user,
                            basket_yarns=basket_yarns,
-                           user_pc=user_pc,
-                           user_weight=user_weight,
-                           user_pa=user_pa,
-                           user_fit=user_fit,
-                           all_pc=all_pc,
-                           all_weight=all_weight,
-                           all_pa=all_pa,
-                           all_fit=all_fit)
+                           user_prefs=user_grouped_prefs,
+                           all_prefs=all_grouped_prefs)
 
 
-@app.route("/update_preference", methods=['POST'])
-def update_preference_in_db(preference):
+@app.route("/update_preference.json", methods=['POST'])
+def update_preference_in_db():
     """Process form field in user profile to update preferences.
 
-    Updates database based on checkbox clicked"""
+    Updates database based on checkbox clicked. Include is 0 if checkbox
+    empty, and 1 if checked. Preference sent to function is html ID, which
+    is in format 'pref_category-pref_value'. """
+
+    preference = request.form.get("preference")
+    include = request.form.get("include")
+
+    # string parse preference so before first '-' is category and after is value
+    index = preference.find('-')
+    pref_category = preference[0:index]
+    pref_value = preference[index+1:]
+
+    # get preference object for this category-value pair, so pref_id can be used
+    #   to add/remove UserPreference
+    pref = Preference.query.filter(Preference.pref_category == pref_category,
+                                   Preference.pref_value == pref_value).one()
+    pref_id = pref.pref_id
+    # user_id = session["user"].user_id
+    user_id = 1
+
+    # if include == 1, add to db
+    if (include == 1):
+        new_user_pref = UserPreference(user_id=user_id, pref_id=pref_id)
+        db.session.add(new_user_pref)
+
+    # if include == 0, search for record in db, and remove if there (it should be)
+    elif (include == 0):
+        user_pref_to_be_removed = UserPreference.query.filter(
+            UserPreference.user_id == user_id,
+            UserPreference.pref_id == pref_id).one()
+        db.session.delete(user_pref_to_be_removed)
+
+    db.session.commit()
+
+    return "string"
 
 
 @app.route("/basket")
 def show_basket():
     """Shows yarns in user's basket"""
 
-    # basket = Basket.query.filter(basket.user_id == user.user_id)
+    user = session["user"]
+    basket = Basket.query.filter(Basket.user_id == user.user_id).one()
+    user_basket_yarns = BasketYarn.query.filter(BasketYarn.basket_id == basket.basket_id).all()
+
+    return render_template("basket.html", user, user_basket_yarns)
 
 
 # TODO: search: build base request to include craft=knitting
-
-# TODO: update user preferences: if they choose colorwork, should store all three:
-#   intarsia, stranded, stripes-colorwork
 
 
 if __name__ == "__main__":

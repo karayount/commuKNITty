@@ -107,17 +107,8 @@ def load_preferences():
     """Load all options for preferences, from file
 
        pref_category and pref_value will match Ravelry search terms,
-       so they can be appended to url for API requests. "pc" stands for
-       pattern category, and "pa" is pattern attribute.
-
-       Mapping is as follows "pref_category: pref_value"
-       weight: lace, weight: fingering, weight: sport, weight: dk,
-       weight: worsted, weight: aran, weight: bulky, pc: cardigan,
-       pc: pullover, pc: vest, pc: socks, pc: mittens, pc: gloves,
-       pc: fingerless, pc: beanie-toque, pc: earflap, pc: cowl,
-       pc: scarf, pc: shawl-wrap, fit: adult, fit: child, fit: baby,
-       pa: cables, pa: lace, pa: intarsia, pa: stranded, pa: stripes-colorwork
-       """
+       so they can be appended to url for API requests. Complete
+       mapping is laid out in preferences.py """
 
     print "Preferences"
 

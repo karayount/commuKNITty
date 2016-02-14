@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 
+<!-- {% macro input(name, value='', type='text', size=20) -%}
+    <input type="{{ type }}" name="{{ name }}" value="{{
+        value|e }}" size="{{ size }}">
+{%- endmacro %}
+The macro can then be called like a function in the namespace:
+
+<p>{{ input('username') }}</p>
+<p>{{ input('password', type='password') }}</p> -->
+
 {% block header %}
     <title>commuKNITty: {{ user.username }}'s profile</title>
 {% endblock %}
@@ -11,7 +20,8 @@
     <div id="basket_yarns"> <!-- TODO: display photos here -->
         {% if basket_yarns|length > 0 %}
             {% for yarn in basket_yarns %}
-                You have {{ yarn.yards }} yards of {{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }} in the color {{ yarn.colorway }}.<br>
+                You have {{ yarn.yards }} yards of {{ yarn.yarn.yarn_company }}
+                {{ yarn.yarn.yarn_name }} in the color {{ yarn.colorway }}.<br>
             {% endfor %}
         {% endif %}
     </div> <!-- end basket yarns -->
@@ -19,7 +29,9 @@
         <h4 text="bold">Your preferences</h4>
         <!-- each list (pc, fit, weight, pa) is a list of pref_value strings 
              preference object associated with user (through user_preferences) -->
-        {% if (user_pc|length == 0) and (user_fit|length == 0) and (user_weight|length == 0) and (user_pa|length == 0) %}
+
+        {% if (user_pc|length == 0) and (user_fit|length == 0) and
+              (user_weight|length == 0) and (user_pa|length == 0) %}
             You have no preferences saved. You can update your preferences below.<br>
         {% else %}
             {% if user_pc|length > 0 %}
@@ -51,10 +63,10 @@
 
     <!-- allow to update preferences -->
     <!-- TODO: make form default to hidden -->
-    <div id="preferences_form">
+    <div id="preferences_form" style="display: none">
     <br>
         <button id="update_preferences_button">Update your preferences</button>
-        <form id="update_preferences_form" action="/save_preferences" method="POST">
+        <form id="update_preferences_form">
             <label>What do you like to knit? (choose as many as you like)</label><br>
         
             {% for pattern_category in all_pc %}
