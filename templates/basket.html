@@ -6,8 +6,18 @@
 
 {% block body %}
     
-    {% for yarn in user_basket_yarns %}
-        
-    {% endfor %}
+    {% if user_basket_yarns|length > 0 %}
+        {% for yarn in user_basket_yarns %}
+            You have {{ yarn.yards }} yards of {{ yarn.yarn.yarn_company }}
+            {{ yarn.yarn.yarn_name }} in the color {{ yarn.colorway }}.<br>
+        {% endfor %}
+    {%  else %}
+        <label>You don't have any yarn in your basket yet.</label>
+    {% endif %}
+
+    <label><button>Add yarn to your basket</button></label>
+    <br>
+    <label><button>Search for pattern ideas</button></label>
+
 
 {% endblock %}

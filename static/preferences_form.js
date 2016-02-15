@@ -6,7 +6,7 @@
 
 // toggle update preferences form on Update Preferences Button click
 $('#update_preferences_button').click(function() {
-  $('#preferences_form').toggle();
+  $('#update_preferences_form').toggle();
 
 });
 

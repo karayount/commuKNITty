@@ -1,13 +1,26 @@
 {% extends 'base.html' %}
 
-<!-- {% macro input(name, value='', type='text', size=20) -%}
-    <input type="{{ type }}" name="{{ name }}" value="{{
-        value|e }}" size="{{ size }}">
-{%- endmacro %}
-The macro can then be called like a function in the namespace:
+{% macro print_current_pref(master_list, user_list, heading) %}
+    {% if user_list|length > 0 %}
+        <br>{{ heading }}:
+        {% for pref in user_list %}
+            <br>{{ pref | prettify_preference }}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
 
-<p>{{ input('username') }}</p>
-<p>{{ input('password', type='password') }}</p> -->
+{% macro print_update_pref(category, master_list, user_list, heading) %}
+    <label>{{ heading }}</label><br>
+    {% for pref in master_list %}
+        {% if pref in user_list %}
+            <label><input type="checkbox" name="{{ category }}" value="{{ pref }}" checked id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label>
+        {% else %}
+            <label><input type="checkbox" name="{{ category }}" value="{{ pref }}" id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label>
+        {% endif %}
+    {% endfor %}
+
+{% endmacro %}
+
 
 {% block header %}
     <title>commuKNITty: {{ user.username }}'s profile</title>
@@ -18,98 +31,32 @@ The macro can then be called like a function in the namespace:
     <h2>Welcome {{ user.username }}</h2>
     <!-- link to basket IF BASKET NOT EMPTY -->
     <div id="basket_yarns"> <!-- TODO: display photos here -->
-        {% if basket_yarns|length > 0 %}
-            {% for yarn in basket_yarns %}
-                You have {{ yarn.yards }} yards of {{ yarn.yarn.yarn_company }}
-                {{ yarn.yarn.yarn_name }} in the color {{ yarn.colorway }}.<br>
-            {% endfor %}
-        {% endif %}
+        <h4><a href="/basket">What's in your basket?</a></h4>
     </div> <!-- end basket yarns -->
     <div id="preferences">    
         <h4 text="bold">Your preferences</h4>
-        <!-- each list (pc, fit, weight, pa) is a list of pref_value strings 
-             preference object associated with user (through user_preferences) -->
 
-        {% if (user_pc|length == 0) and (user_fit|length == 0) and
-              (user_weight|length == 0) and (user_pa|length == 0) %}
+        {% if (user_prefs.pc|length == 0) and (user_prefs.fit|length == 0) and
+              (user_prefs.weight|length == 0) and (user_prefs.pa|length == 0) %}
             You have no preferences saved. You can update your preferences below.<br>
         {% else %}
-            {% if user_pc|length > 0 %}
-                <br>You like to knit these kinds of items:
-                {% for pref in user_pc %}
-                    <br>{{ pref | prettify_preference }}
-                {% endfor %}
-            {% endif %}
-            {% if user_fit|length > 0 %}
-                <br><br>Size(s) you like to knit:
-                {% for pref in user_fit %}
-                    <br>{{ pref | prettify_preference }}
-                {% endfor %}
-            {% endif %}
-            {% if user_weight|length > 0 %}
-                <br><br>Preferred yarn weight(s):
-                {% for pref in user_weight %}
-                    <br>{{ pref | prettify_preference }}
-                {% endfor %}
-            {% endif %}
-            {% if user_pa|length > 0 %}
-                <br><br>Techniques you enjoy: 
-                {% for pref in user_pa %}
-                    <br>{{ pref | prettify_preference }}
-                {% endfor %}
-            {% endif %}
+            {{ print_current_pref(all_prefs.pc, user_prefs.pc, 'You like to knit these kinds of items') }}<br>
+            {{ print_current_pref(all_prefs.fit, user_prefs.fit, 'Size(s) you like to knit') }}<br>
+            {{ print_current_pref(all_prefs.weight, user_prefs.weight, 'Preferred yarn weight(s)') }}<br>
+            {{ print_current_pref(all_prefs.pa, user_prefs.pa, 'Techniques you enjoy') }}<br>
         {% endif %}
     </div> <!-- end id preferences -->
 
     <!-- allow to update preferences -->
     <!-- TODO: make form default to hidden -->
-    <div id="preferences_form" style="display: none">
+    <div id="preferences_form">
     <br>
         <button id="update_preferences_button">Update your preferences</button>
-        <form id="update_preferences_form">
-            <label>What do you like to knit? (choose as many as you like)</label><br>
-        
-            {% for pattern_category in all_pc %}
-                {% if pattern_category in user_pc %}
-                    <label><input type="checkbox" name="pc" value="{{ pattern_category }}" checked id="pc-{{ pattern_category }}"> {{ pattern_category | prettify_preference }}</label>
-                {% else %}
-                    <label><input type="checkbox" name="pc" value="{{ pattern_category }}" id="pc-{{ pattern_category }}"> {{ pattern_category | prettify_preference }}</label>
-                {% endif %}
-            {% endfor %}                
-            <br>
-        
-            <label>Who do you like to knit for?</label><br>
-             {% for size in all_fit %}
-                {% if size in user_fit %}
-                    <label><input type="checkbox" name="fit" value="{{ size }}" checked id="fit-{{ size }}"> {{ size | prettify_preference }}</label>
-                {% else %}
-                    <label><input type="checkbox" name="fit" value="{{ size }}" id="fit-{{ size }}"> {{ size | prettify_preference }}</label>
-                {% endif %}
-            {% endfor %}
-            <br>
-        
-            <label>What are your preferred yarn weights?</label><br>
-             {% for weight in all_weight %}
-                {% if weight in user_weight %}
-                    <label><input type="checkbox" name="weight" value="{{ weight }}" checked id="weight-{{ weight }}"> {{ weight | prettify_preference }}</label>
-                {% else %}
-                    <label><input type="checkbox" name="weight" value="{{ weight }}" id="weight-{{ weight }}"> {{ weight | prettify_preference }}</label>
-                {% endif %}
-            {% endfor %}
-            <br>
-        
-            <label>Do you enjoy any of these techniques?</label><br>
-               {% for technique in all_pa %}
-                {% if technique in user_pa %}
-                    <label><input type="checkbox" name="pa" value="{{ technique }}" checked id="pa-{{ technique }}"> {{ technique | prettify_preference }}</label>
-                {% else %}
-                    <label><input type="checkbox" name="pa" value="{{ technique }}" id="pa-{{ technique }}"> {{ technique | prettify_preference }}</label>
-                {% endif %}
-            {% endfor %}
-            <br><br>
-        
-            <input type="submit" value="Submit changes">
-        
+        <form id="update_preferences_form" style="display: none">
+            {{ print_update_pref('pc', all_prefs.pc, user_prefs.pc, 'What do you like to knit? (Choose as many as you like.') }}<br>
+            {{ print_update_pref('fit', all_prefs.fit, user_prefs.fit, 'Who do you like to knit for?') }}<br>
+            {{ print_update_pref('weight', all_prefs.weight, user_prefs.weight, 'What are your preferred yarn weights?') }}<br>
+            {{ print_update_pref('pa', all_prefs.pa, user_prefs.pa, 'Do you enjoy any of these techniques?') }}<br>
         </form>
     </div> <!-- end preferences_form -->     
 

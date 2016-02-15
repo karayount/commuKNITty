@@ -31,18 +31,16 @@ def process_login():
         return redirect("/")
     else:
         session["user_id"] = existing_user.user_id
-        # return redirect("/home")
-        return "processed login"
+        return redirect("/home")
 
 @app.route("/home")
 def show_homepage():
     """Show homepage of logged in commuKNITty user"""
 
-    user = User.query.get(session["user"])
+    user = User.query.get(session["user_id"])
 
 
-    # return render_template("homepage.html", user=user)
-    return "homepage isn't quite broken!"
+    return render_template("homepage.html", user=user)
 
 @app.route("/profile/<int:user_id>")
 def show_user_profile(user_id):
@@ -72,7 +70,7 @@ def update_preference_in_db():
     is in format 'pref_category-pref_value'. """
 
     preference = request.form.get("preference")
-    include = request.form.get("include")
+    include = int(request.form.get("include"))
 
     # string parse preference so before first '-' is category and after is value
     index = preference.find('-')
@@ -84,22 +82,22 @@ def update_preference_in_db():
     pref = Preference.query.filter(Preference.pref_category == pref_category,
                                    Preference.pref_value == pref_value).one()
     pref_id = pref.pref_id
-    # user_id = session["user"].user_id
-    user_id = 1
+    user_id = session["user_id"]
 
-    # if include == 1, add to db
     if (include == 1):
         new_user_pref = UserPreference(user_id=user_id, pref_id=pref_id)
         db.session.add(new_user_pref)
 
     # if include == 0, search for record in db, and remove if there (it should be)
-    elif (include == 0):
+    else:
         user_pref_to_be_removed = UserPreference.query.filter(
             UserPreference.user_id == user_id,
             UserPreference.pref_id == pref_id).one()
         db.session.delete(user_pref_to_be_removed)
 
     db.session.commit()
+
+
 
     return "string"
 
@@ -108,11 +106,20 @@ def update_preference_in_db():
 def show_basket():
     """Shows yarns in user's basket"""
 
-    user = session["user"]
+    user = User.query.get(session["user_id"])
     basket = Basket.query.filter(Basket.user_id == user.user_id).one()
     user_basket_yarns = BasketYarn.query.filter(BasketYarn.basket_id == basket.basket_id).all()
 
-    return render_template("basket.html", user, user_basket_yarns)
+    return render_template("basket.html",
+                           user=user,
+                           user_basket_yarns=user_basket_yarns)
+
+
+@app.route("/search")
+def show_search_page():
+    """Search page for users: personalized recs, and for basket yarns."""
+
+
 
 
 # TODO: search: build base request to include craft=knitting

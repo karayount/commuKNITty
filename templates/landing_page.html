@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <title>Welcome to commuKNITty</title>
+{% endblock %}
+
+{% block body %}
+
+    <h2>commuKNITty</h2>
+    <p>your home for knitting.</p>
+    <button id="login_button">Log In</button>
+    <form action="/process_login" id="login_form" style="display: none" method="GET">
+        <label>Username<input type="text" id="username_for_login" 
+                        name="username"></label>
+        <input type="submit" value="Log In">
+    </form>
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script type='text/javascript' src='/static/login_form.js'></script>
+
+{% endblock %}
