@@ -6,9 +6,17 @@
 
 {% block body %}
 
-    <label><button>Search for personalized recommendations</button></label>
+    <label><button id="personalized_search_button">Search for personalized recommendations</button></label>
     <br>
-    <label><button>Search for patterns for yarns in your basket</button></label>
+    <label><button id="basket_search_button">Search for patterns for yarns in your basket</button></label>
+    <br>
+    <label><button id="pattern_search_button">Search for patterns by attribute</button></label>
+    <form id="pattern_search_form" style="display: none">
+        <label><input type="text">test form input</label>
+    </form>
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script type='text/javascript' src='/static/search_forms.js'></script>
 
 
 {% endblock %}

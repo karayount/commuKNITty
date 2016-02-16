@@ -97,9 +97,9 @@ def update_preference_in_db():
 
     db.session.commit()
 
+    display_id = preference + "-display"
 
-
-    return "string"
+    return display_id
 
 
 @app.route("/basket")
@@ -119,10 +119,51 @@ def show_basket():
 def show_search_page():
     """Search page for users: personalized recs, and for basket yarns."""
 
-
+    return render_template("search.html")
 
 
 # TODO: search: build base request to include craft=knitting
+
+
+@app.route("/yarn_driven_search/<int:basket_yarn_id>")
+def yarn_driven_search(basket_yarn_id):
+    """Shows patterns from API search given a basket yarn"""
+
+    basket_yarn = BasketYarn.query.get(basket_yarn_id)
+    yarn = Yarn.query.filter(Yarn.yarn_id == basket_yarn.yarn_id).first()
+
+    base_url = "https://api.ravelry.com/patterns/search.json?sort=projects&craft=knitting"
+    append_weight = "&weight="
+    append_yardage = "&yardage=0%7C"
+    append_page = "&page="
+
+    if yarn != None:
+        weight = yarn.yarn_weight
+        yardage = basket_yarn.yards
+        first_page = 1
+        last_page = 10
+
+        for i in range(first_page, last_page+1):
+            search_url = base_url + append_weight + weight + append_yardage + yardage + append_page + str(i)
+
+            page_of_patterns = requests.get(search_url)
+            pattern_dict = page_of_patterns.json()
+            patterns_fetched = pattern_dict.get("patterns", [])
+
+            for pattern in patterns_fetched:
+                permalink = pattern["permalink"]
+                pattern_name = pattern["name"]
+                pattern_id = pattern["id"]
+                pattern_photo = pattern["first_photo"]["small_url"]
+
+        # url_to_link http://www.ravelry.com/patterns/library/{{ pattern.permalink }}
+
+        # show patterns with: image, name, pattern_category, link to Rav
+
+    return "show results here"
+
+
+
 
 
 if __name__ == "__main__":

@@ -7,13 +7,10 @@
 // toggle update preferences form on Update Preferences Button click
 $('#update_preferences_button').click(function() {
   $('#update_preferences_form').toggle();
-
 });
 
-
-
 function reprintPreferences(data) {
-    alert("You changed the db!");
+    $("#" + data).toggle();
 }
 
 function updatePreference(evt) {

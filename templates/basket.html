@@ -8,8 +8,16 @@
     
     {% if user_basket_yarns|length > 0 %}
         {% for yarn in user_basket_yarns %}
-            You have {{ yarn.yards }} yards of {{ yarn.yarn.yarn_company }}
-            {{ yarn.yarn.yarn_name }} in the color {{ yarn.colorway }}.<br>
+            <div class="basket_yarn_photo">
+                <img src="{{ yarn.yarn.yarn_photo }}">
+            </div>
+            <div class="basket_yarn_data">
+                <p>{{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }}</p>
+                <p>Color: {{ yarn.colorway }}</p>
+                <p>Yards in basket: {{ yarn.yards }}</p>
+                <a href="/yarn_driven_search/{{ yarn.basket_yarn_id }}">Things to make with this yarn</a>
+                <br>
+            </div> {# end basket_yarn_data class #}
         {% endfor %}
     {%  else %}
         <label>You don't have any yarn in your basket yet.</label>
@@ -17,7 +25,7 @@
 
     <label><button>Add yarn to your basket</button></label>
     <br>
-    <label><button>Search for pattern ideas</button></label>
+    <label><button id="pattern_search">Search for pattern ideas</button></label>
 
 
 {% endblock %}

@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
-{% macro print_current_pref(master_list, user_list, heading) %}
-    {% if user_list|length > 0 %}
-        <br>{{ heading }}:
-        {% for pref in user_list %}
-            <br>{{ pref | prettify_preference }}
-        {% endfor %}
-    {% endif %}
+{% macro print_current_pref(category, master_list, user_list, heading) %}
+    <br>{{ heading }}:
+    {% for pref in master_list %}
+        {% if pref in user_list %}
+            <a id="{{ category }}-{{ pref }}-display" style="display: inline">{{ pref | prettify_preference }}</a>
+        {% else %}
+            <a id="{{ category }}-{{ pref }}-display" style="display: none">{{ pref | prettify_preference }}</a>
+        {% endif %}
+    {% endfor %}
 {% endmacro %}
 
 {% macro print_update_pref(category, master_list, user_list, heading) %}
@@ -18,7 +20,6 @@
             <label><input type="checkbox" name="{{ category }}" value="{{ pref }}" id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label>
         {% endif %}
     {% endfor %}
-
 {% endmacro %}
 
 
@@ -40,10 +41,10 @@
               (user_prefs.weight|length == 0) and (user_prefs.pa|length == 0) %}
             You have no preferences saved. You can update your preferences below.<br>
         {% else %}
-            {{ print_current_pref(all_prefs.pc, user_prefs.pc, 'You like to knit these kinds of items') }}<br>
-            {{ print_current_pref(all_prefs.fit, user_prefs.fit, 'Size(s) you like to knit') }}<br>
-            {{ print_current_pref(all_prefs.weight, user_prefs.weight, 'Preferred yarn weight(s)') }}<br>
-            {{ print_current_pref(all_prefs.pa, user_prefs.pa, 'Techniques you enjoy') }}<br>
+            {{ print_current_pref('pc', all_prefs.pc, user_prefs.pc, 'You like to knit these kinds of items') }}<br>
+            {{ print_current_pref('fit', all_prefs.fit, user_prefs.fit, 'Size(s) you like to knit') }}<br>
+            {{ print_current_pref('weight', all_prefs.weight, user_prefs.weight, 'Preferred yarn weight(s)') }}<br>
+            {{ print_current_pref('pa', all_prefs.pa, user_prefs.pa, 'Techniques you enjoy') }}<br>
         {% endif %}
     </div> <!-- end id preferences -->
 
