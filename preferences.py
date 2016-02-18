@@ -1,6 +1,8 @@
 """This module has helper functions to deal with Preferences"""
 
-from model import UserPreference, Preference
+from model import UserPreference, Preference, db
+from flask import session
+
 
 # mapping of (pref_category, pref_value) pairs:
 # ("weight", "lace"), ("weight", "fingering"), ("weight", "sport"),
@@ -16,6 +18,7 @@ from model import UserPreference, Preference
 class GroupedPreferences(object):
     """Attribute for each category which stores list of values."""
 
+    #comment why names like pc, pa
     def __init__(self, pc=[], weight=[], fit=[], pa=[]):
         self.pc = pc
         self.weight = weight
@@ -82,5 +85,38 @@ def get_all_grouped_prefs():
 
     return ALL_PREFERENCES
 
+
+def update_user_preference(preference, include):
+    """ Takes id of changed checkbox and updates user_preferences table.
+
+    :param preference: html ID of checkbox, as 'pref_category-pref_value'.
+    :param include: 0 or 1 to indicate whether checkbox is checked
+    :return: None
+    """
+
+    # string parse preference so before first '-' is category and after is value
+    index = preference.find('-')
+    pref_category = preference[0:index]
+    pref_value = preference[index+1:]
+
+    # get preference object for this category-value pair, so pref_id can be used
+    #   to add/remove UserPreference
+    pref = Preference.query.filter(Preference.pref_category == pref_category,
+                                   Preference.pref_value == pref_value).one()
+    pref_id = pref.pref_id
+    user_id = session["user_id"]
+
+    if (include == 1):
+        new_user_pref = UserPreference(user_id=user_id, pref_id=pref_id)
+        db.session.add(new_user_pref)
+
+    # if include == 0, search for record in db, and remove if there (it should be)
+    else:
+        user_pref_to_be_removed = UserPreference.query.filter(
+            UserPreference.user_id == user_id,
+            UserPreference.pref_id == pref_id).one()
+        db.session.delete(user_pref_to_be_removed)
+
+    db.session.commit()
 
 

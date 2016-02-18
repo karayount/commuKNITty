@@ -3,7 +3,7 @@ import requests
 from flask import Flask, render_template, session, redirect, request, flash
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
                    UserPreference, Preference, BasketYarnPhoto)
-from preferences import group_user_prefs, get_all_grouped_prefs
+from preferences import group_user_prefs, get_all_grouped_prefs, update_user_preference
 from jinja_filters import prettify_preference
 
 app = Flask(__name__)
@@ -65,37 +65,16 @@ def show_user_profile(user_id):
 def update_preference_in_db():
     """Process form field in user profile to update preferences.
 
-    Updates database based on checkbox clicked. Include is 0 if checkbox
-    empty, and 1 if checked. Preference sent to function is html ID, which
-    is in format 'pref_category-pref_value'. """
+    calls update_user_preference to update database based on checkbox clicked.
+    Include is 0 if checkbox empty, and 1 if checked.
+    Preference sent to function is html ID, which is in format
+    'pref_category-pref_value'. """
 
     preference = request.form.get("preference")
     include = int(request.form.get("include"))
 
-    # string parse preference so before first '-' is category and after is value
-    index = preference.find('-')
-    pref_category = preference[0:index]
-    pref_value = preference[index+1:]
-
-    # get preference object for this category-value pair, so pref_id can be used
-    #   to add/remove UserPreference
-    pref = Preference.query.filter(Preference.pref_category == pref_category,
-                                   Preference.pref_value == pref_value).one()
-    pref_id = pref.pref_id
-    user_id = session["user_id"]
-
-    if (include == 1):
-        new_user_pref = UserPreference(user_id=user_id, pref_id=pref_id)
-        db.session.add(new_user_pref)
-
-    # if include == 0, search for record in db, and remove if there (it should be)
-    else:
-        user_pref_to_be_removed = UserPreference.query.filter(
-            UserPreference.user_id == user_id,
-            UserPreference.pref_id == pref_id).one()
-        db.session.delete(user_pref_to_be_removed)
-
-    db.session.commit()
+    # update the db to reflect the change in user preference
+    update_user_preference(preference, include)
 
     display_id = preference + "-display"
 

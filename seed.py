@@ -1,14 +1,9 @@
-"""Utility file to seed ratings database from MovieLens data in seed_data/"""
+"""Utility file to seed commuknitty database from Ravelry API calls, and
+    from static data in files in seed_data/"""
 
 from sqlalchemy import func
-from model import User
-from model import Preference
-from model import UserPreference
-from model import Basket
-from model import Yarn
-from model import BasketYarn
-from model import BasketYarnPhoto
-
+from model import (User, Preference, UserPreference, Basket, Yarn, BasketYarn,
+                   BasketYarnPhoto, Project, Pattern)
 from model import connect_to_db, db
 from server import app
 import requests
@@ -87,6 +82,7 @@ def load_yarns():
             ball_yardage = yarn["yardage"]
             ball_grams = yarn["grams"]
             yarn_photo = yarn["first_photo"]["small_url"]
+            yarn_permalink = yarn["permalink"]
 
             new_yarn = Yarn(rav_yarn_id=rav_yarn_id,
                             yarn_name=yarn_name,
@@ -94,7 +90,8 @@ def load_yarns():
                             yarn_weight=yarn_weight,
                             ball_yardage=ball_yardage,
                             ball_grams=ball_grams,
-                            yarn_photo=yarn_photo)
+                            yarn_photo=yarn_photo,
+                            yarn_permalink=yarn_permalink)
 
             # Add new Yarn object to the session
             db.session.add(new_yarn)
@@ -194,7 +191,7 @@ if __name__ == "__main__":
     db.create_all()
 
     # Import different types of data
-    load_yarns()
+    # load_yarns()
     load_users_and_create_baskets()
     load_preferences()
     load_user_preferences()

@@ -78,8 +78,9 @@ class UserPreference(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<UserPreference user_pref_id=%s user_id=%s>" % (self.user_pref_id,
-                                                                self.user_id)
+        return "<UserPreference user_pref_id=%s user_id=%s>" % (
+            self.user_pref_id,
+            self.user_id)
 
 
 class Basket(db.Model):
@@ -98,7 +99,8 @@ class Basket(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Basket basket_id=%s user_id=%s>" % (self.basket_id, self.user_id)
+        return "<Basket basket_id=%s user_id=%s>" % (self.basket_id,
+                                                     self.user_id)
 
 
 class Yarn(db.Model):
@@ -116,6 +118,7 @@ class Yarn(db.Model):
     ball_yardage = db.Column(db.Integer)
     ball_grams = db.Column(db.Integer)
     yarn_photo = db.Column(db.String(400))
+    yarn_permalink = db.Column(db.String(100))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -165,8 +168,63 @@ class BasketYarnPhoto(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<BasketYarnPhoto photo_id=%s basket_yarn_id=%s>" % (self.photo_id,
-                                                                    self.basket_yarn_id)
+        return "<BasketYarnPhoto photo_id=%s basket_yarn_id=%s>" % (
+            self.photo_id,
+            self.basket_yarn_id)
+
+
+
+# classes that are just used for search, in MVP
+class Project(db.Model):
+    """Project with associated yarn and pattern
+
+    Can be expanded later to include user, connect to updates, status,
+        start and finish dates, photos"""
+
+    __tablename__ = "projects"
+
+    project_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    project_yarn_id = db.Column(db.Integer,
+                        db.ForeignKey("yarns.yarn_id"),
+                        nullable=False)
+    project_yarn_permalink = db.Column(db.String(100), nullable=False)
+    project_rav_pattern_id = db.Column(db.Integer, nullable=False)
+    # project_pattern_id may not be needed if just searching on rav_pattern_id
+    # project_pattern_id = db.Column(db.Integer, nullable=False)
+    project_pattern_name = db.Column(db.String(200), nullable=False)
+    # for post-MVP use
+    rav_project_id = db.Column(db.Integer, unique=True)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Project yarn_permalink=%s pattern_name=%s>" % (
+            self.project_yarn_permalink,
+            self.project_pattern_name)
+
+
+class Pattern(db.Model):
+    """Pattern from Ravelry, with category, yarn weight, and yardage.
+
+    These will be connected to Project objects through their foreign
+    key. Ravelry first_photo included for display"""
+
+    __tablename__ = "patterns"
+
+    pattern_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    rav_pattern_id = db.Column(db.Integer, nullable=False)
+    pattern_photo = db.Column(db.String(400), nullable=False)
+    req_yardage = db.Column(db.Integer, nullable=False)
+    pattern_yarn_weight = db.Column(db.String(25))
+    pattern_name = db.Column(db.String(200), nullable=False)
+
+    rav_pattern_link = db.Column(db.String(400), nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Pattern pattern_id=%s pattern_name=%s>" % (self.pattern_id,
+                                                            self.pattern_name)
 
 
 ##############################################################################
