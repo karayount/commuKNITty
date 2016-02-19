@@ -2,7 +2,8 @@ from jinja2 import StrictUndefined
 import requests
 from flask import Flask, render_template, session, redirect, request, flash
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
-                   UserPreference, Preference, BasketYarnPhoto)
+                   UserPreference, Preference, BasketYarnPhoto, Project,
+                   Pattern)
 from preferences import group_user_prefs, get_all_grouped_prefs, update_user_preference
 from jinja_filters import prettify_preference
 
@@ -106,43 +107,30 @@ def show_search_page():
 
 @app.route("/yarn_driven_search/<int:basket_yarn_id>")
 def yarn_driven_search(basket_yarn_id):
-    """Shows patterns from API search given a basket yarn"""
+    """Shows patterns given a basket yarn.
+
+    Patterns are linked to Yarns through Projects. This function will return
+    Pattern object for which there are Projects which have both this Pattern
+    and Yarn linked."""
 
     basket_yarn = BasketYarn.query.get(basket_yarn_id)
-    yarn = Yarn.query.filter(Yarn.yarn_id == basket_yarn.yarn_id).first()
+    available_yards = basket_yarn.yards + 1
 
-    base_url = "https://api.ravelry.com/patterns/search.json?sort=projects&craft=knitting"
-    append_weight = "&weight="
-    append_yardage = "&yardage=0%7C"
-    append_page = "&page="
+    pattern_ids_from_projects_with_this_yarn = (db.session.query(
+        Project.project_rav_pattern_id).filter(
+        Project.project_yarn_id == basket_yarn_id)).all()
 
-    if yarn != None:
-        weight = yarn.yarn_weight
-        yardage = basket_yarn.yards
-        first_page = 1
-        last_page = 10
+    list_of_pattern_ids = []
+    for pattern_id in pattern_ids_from_projects_with_this_yarn:
+        list_of_pattern_ids.append(pattern_id[0])
 
-        for i in range(first_page, last_page+1):
-            search_url = base_url + append_weight + weight + append_yardage + yardage + append_page + str(i)
+    list_of_patterns = Pattern.query.filter(
+        (Pattern.rav_pattern_id.in_(list_of_pattern_ids)) &
+        (Pattern.req_yardage < available_yards) ).all()
 
-            page_of_patterns = requests.get(search_url)
-            pattern_dict = page_of_patterns.json()
-            patterns_fetched = pattern_dict.get("patterns", [])
-
-            for pattern in patterns_fetched:
-                permalink = pattern["permalink"]
-                pattern_name = pattern["name"]
-                pattern_id = pattern["id"]
-                pattern_photo = pattern["first_photo"]["small_url"]
-
-        # url_to_link http://www.ravelry.com/patterns/library/{{ pattern.permalink }}
-
-        # show patterns with: image, name, pattern_category, link to Rav
-
-    return "show results here"
-
-
-
+    return render_template("patterns_for_basket_yarn.html",
+                           basket_yarn=basket_yarn,
+                           patterns=list_of_patterns)
 
 
 if __name__ == "__main__":

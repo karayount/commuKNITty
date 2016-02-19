@@ -189,8 +189,6 @@ class Project(db.Model):
                         nullable=False)
     project_yarn_permalink = db.Column(db.String(100), nullable=False)
     project_rav_pattern_id = db.Column(db.Integer, nullable=False)
-    # project_pattern_id may not be needed if just searching on rav_pattern_id
-    # project_pattern_id = db.Column(db.Integer, nullable=False)
     project_pattern_name = db.Column(db.String(200), nullable=False)
     # for post-MVP use
     rav_project_id = db.Column(db.Integer, unique=True)
@@ -217,7 +215,9 @@ class Pattern(db.Model):
     req_yardage = db.Column(db.Integer, nullable=False)
     pattern_yarn_weight = db.Column(db.String(25))
     pattern_name = db.Column(db.String(200), nullable=False)
-
+    # pattern_category corresponds to Preference.pref_value where
+    # Preference.pref_category = "pc"
+    pattern_category = db.Column(db.String(50), nullable=False)
     rav_pattern_link = db.Column(db.String(400), nullable=False)
 
     def __repr__(self):

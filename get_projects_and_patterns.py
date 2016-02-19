@@ -1,7 +1,13 @@
+""" This script loads Project and Pattern objects into db from API calls
+to Ravelry. It is intended to be run a single time.
+"""
+
 import json
 
 from model import Yarn, db, Project, Pattern
 import requests
+from preferences import ALL_PREFERENCES
+
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""
@@ -44,7 +50,7 @@ def get_project_from_yarns(start_index, end_index):
         yarn_id, yarn_permalink = yarns_to_search[i]
         yarn_pattern_ids = set([])
 
-        for page in range(1, 11):
+        for page in range(1, 6):
             # create url for API request
             search_string = (base_search + yarn_permalink + append_categories +
                              append_page + str(page))
@@ -74,16 +80,134 @@ def get_project_from_yarns(start_index, end_index):
                                           project_yarn_permalink = yarn_permalink,
                                           project_rav_pattern_id = project_rav_pattern_id,
                                           project_pattern_name = project_pattern_name)
-
+                    print i, page, project_pattern_name
                     db.session.add(new_project)
                 except UnicodeEncodeError:
                     continue
 
+            db.session.commit()
+
+
+def get_patterns_from_projects(start_index, end_index):
+    """ Using Projects, create Pattern objects.
+
+    Use Ravelry API to retrieve patterns with pattern_name from Project.
+    Compare retrieved pattern pattern_ids to pattern_id in Project, and
+    create Pattern object for matches."""
+
+    patterns_to_find = db.session.query(Project.project_rav_pattern_id).all()
+    # remove duplicates by transforming list into set, then back
+    patterns_to_find = set(patterns_to_find)
+    patterns_to_find = list(patterns_to_find)
+    # 41468 (from 251081 in initial list)
+
+    base_url = "https://api.ravelry.com/patterns/"
+    append_extension = ".json"
+
+    for i in range(start_index, end_index+1):
+        project_rav_pattern_id = patterns_to_find[i][0]
+        search_string = base_url + str(project_rav_pattern_id) + append_extension
+        # submit search through get request to Ravelry API
+        json_pattern = requests.get(search_string)
+        # convert json to python dictionary
+        dict_project_pattern = json_pattern.json()
+        current_pattern = dict_project_pattern["pattern"]
+
+        # save information from dictionary, if any is missing, don't add
+        # this pattern to database
+        try:
+            pattern_photo = current_pattern["photos"][0]["small_url"]
+            req_yardage = current_pattern["yardage_max"]
+            if req_yardage == None:
+                req_yardage = current_pattern["yardage"]
+                if req_yardage == None:
+                    continue
+            try:
+                pattern_yarn_weight = current_pattern["yarn_weight"]["name"]
+            except KeyError:
+                if current_pattern["packs"][0]["yarn_weight"] == None:
+                    continue
+                else:
+                    pattern_yarn_weight = current_pattern["packs"][0]["yarn_weight"]["name"]
+            pattern_name = current_pattern["name"]
+            pattern_permalink = current_pattern["permalink"]
+            pattern_categories = current_pattern["pattern_categories"]
+        except (KeyError, IndexError):
+            continue
+
+        # build variables from json data to create object
+        pattern_yarn_weight = pattern_yarn_weight.lower()
+        if pattern_yarn_weight not in (ALL_PREFERENCES.weight):
+            continue
+        rav_pattern_link = ("http://www.ravelry.com/patterns/library/" +
+                            pattern_permalink)
+        try:
+            for category in pattern_categories:
+                if category["permalink"] in (ALL_PREFERENCES.pc):
+                    pattern_category = category["permalink"]
+                elif (category["parent"]["permalink"] == "socks"):
+                    pattern_category = "socks"
+                else:
+                    continue
+        except KeyError:
+            continue
+
+        # create new Pattern object and save it to db
+        new_pattern = Pattern(rav_pattern_id=project_rav_pattern_id,
+                              pattern_photo=pattern_photo,
+                              req_yardage=req_yardage,
+                              pattern_yarn_weight=pattern_yarn_weight,
+                              pattern_name=pattern_name,
+                              pattern_category=pattern_category,
+                              rav_pattern_link=rav_pattern_link)
+
+        db.session.add(new_pattern)
+        print i
+
     db.session.commit()
 
 
-get_project_from_yarns(1, 5)
+# get_patterns_from_projects(0, 10)
+# get_patterns_from_projects(11, 30)
+# get_patterns_from_projects(31, 100)
+# get_patterns_from_projects(101, 150)
+# get_patterns_from_projects(151, 400)
+# get_patterns_from_projects(401, 1000)
+# get_patterns_from_projects(1001, 1883)
+# get_patterns_from_projects(1884, 1884)
+# get_patterns_from_projects(1884, 2000)
+# get_patterns_from_projects(2001, 3000)
+# get_patterns_from_projects(3001, 5000)
+# get_patterns_from_projects(5001, 5500)
+# get_patterns_from_projects(5501, 7000)
+# get_patterns_from_projects(7001, 10000)
+# get_patterns_from_projects(10001, 16321)
+# get_patterns_from_projects(16322, 16322)
+# get_patterns_from_projects(16323, 16405)
+# get_patterns_from_projects(16406, 17000)
+# get_patterns_from_projects(17001, 20000)
+# get_patterns_from_projects(20001, 25000)
+# get_patterns_from_projects(25001, 41466)
+get_patterns_from_projects(41467,41467)
 
 
-# the search below has ~2 million results
-# http://www.ravelry.com/projects/search#weight=lace%7Cfingering%7Csport%7Cdk%7Cworsted%7Caran%7Cbulky&pc=cardigan%7Cpullover%7Cvest%7Csocks%7Cfingerless%7Cgloves%7Cmittens%7Cbeanie-toque%7Cearflap%7Cscarf%7Cshawl-wrap%7Ccowl&sort=best&yardage=0%7C2000&status=finished&view=cards&craft=knitting&ravelry-download=yes
+#41468
+
+
+
+
+
+# get_project_from_yarns(1998, 1999)
+# get_project_from_yarns(1990, 1997)
+# get_project_from_yarns(1970, 1989)
+# get_project_from_yarns(1940, 1969)
+# get_project_from_yarns(1900, 1939)
+# get_project_from_yarns(1800, 1899)
+# get_project_from_yarns(1700, 1799)
+# get_project_from_yarns(1500, 1699)
+# get_project_from_yarns(1300, 1499)
+# get_project_from_yarns(1000, 1299)
+# get_project_from_yarns(500, 999)
+# get_project_from_yarns(400, 499)
+# get_project_from_yarns(200, 399)
+# get_project_from_yarns(0, 199)

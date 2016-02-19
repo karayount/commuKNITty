@@ -1,0 +1,23 @@
+
+{# show patterns with: image, name, pattern_category, link to Rav#}
+
+{% extends 'base.html' %}
+
+{% block header %}
+    <title>commuKNITty: patterns for {{ basket_yarn.yarn.yarn_name }}</title>
+{% endblock %}
+
+{% block body %}
+
+    <h3>Patterns for {{ basket_yarn.yarn.yarn_name }}</h3>
+
+    {% for pattern in patterns %}
+        <div id="{{ pattern.pattern_name }}">
+            <img src="{{ pattern.pattern_photo }}"><br>
+            {{ pattern.pattern_name }}<br>
+            Category: {{ pattern.pattern_category }}<br>
+            <a href="{{ pattern.rav_pattern_link }}">See details on Ravelry</a>
+        </div>
+    {% endfor %}
+
+{% endblock %}
