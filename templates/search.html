@@ -1,16 +1,27 @@
 {% extends 'base.html' %}
 
+{% macro print_pref(category, master_list, heading) %}
+    <label>{{ heading }}</label><br>
+    {% for pref in master_list %}
+        <label><input type="checkbox" name="{{ category }}" value="{{ pref }}" id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label>
+    {% endfor %}
+{% endmacro %}
+
 {% block header %}
     <title>commuKNITty: search</title>
 {% endblock %}
 
 {% block body %}
 
-    <label><button id="personalized_search_button">Search for personalized recommendations</button></label>
+    <label><button id="personalized_search_button">See patterns recommended just for you</button></label>
     <br>
-    <label><button id="pattern_search_button">Search for patterns by attribute</button></label>
-    <form id="pattern_search_form" style="display: none">
-        <label><input type="text">put whole checkbox list from profile here</label>
+    <label><button id="pattern_search_button">Search for patterns</button></label>
+    <form action="/parameter_search_results" method='POST' id="pattern_search_form" style="display: none">
+        <br>{{ print_pref('pc', all_prefs.pc, 'Pattern Category') }}<br>
+        <br>{{ print_pref('fit', all_prefs.fit, 'Size') }}<br>
+        <br>{{ print_pref('weight', all_prefs.weight, 'Yarn Weight') }}<br>
+        <br>{{ print_pref('pa', all_prefs.pa, 'Technique') }}<br>
+        <label><input type="submit" value="Search"</label>
     </form>
 
     <script src="https://code.jquery.com/jquery.js"></script>

@@ -1,11 +1,15 @@
 from jinja2 import StrictUndefined
 import requests
 from flask import Flask, render_template, session, redirect, request, flash
+from jinja_filters import prettify_preference
+
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
                    UserPreference, Preference, BasketYarnPhoto, Project,
                    Pattern)
-from preferences import group_user_prefs, get_all_grouped_prefs, update_user_preference
-from jinja_filters import prettify_preference
+from preferences import (group_user_prefs, get_all_grouped_prefs,
+                         update_user_preference, GroupedPreferences)
+from search import (build_pattern_list_from_parameters,
+                    build_pattern_list_from_yarn)
 
 app = Flask(__name__)
 app.secret_key = "thatthingyouneedtoremembertodoitrhymeswithcount"
@@ -99,7 +103,10 @@ def show_basket():
 def show_search_page():
     """Search page for users: personalized recs, and for basket yarns."""
 
-    return render_template("search.html")
+    all_grouped_prefs = get_all_grouped_prefs()
+
+    return render_template("search.html",
+                           all_prefs=all_grouped_prefs)
 
 
 # TODO: search: build base request to include craft=knitting
@@ -114,23 +121,27 @@ def yarn_driven_search(basket_yarn_id):
     and Yarn linked."""
 
     basket_yarn = BasketYarn.query.get(basket_yarn_id)
-    available_yards = basket_yarn.yards + 1
-
-    pattern_ids_from_projects_with_this_yarn = (db.session.query(
-        Project.project_rav_pattern_id).filter(
-        Project.project_yarn_id == basket_yarn_id)).all()
-
-    list_of_pattern_ids = []
-    for pattern_id in pattern_ids_from_projects_with_this_yarn:
-        list_of_pattern_ids.append(pattern_id[0])
-
-    list_of_patterns = Pattern.query.filter(
-        (Pattern.rav_pattern_id.in_(list_of_pattern_ids)) &
-        (Pattern.req_yardage < available_yards) ).all()
+    list_of_patterns = build_pattern_list_from_yarn(basket_yarn_id)
 
     return render_template("patterns_for_basket_yarn.html",
                            basket_yarn=basket_yarn,
                            patterns=list_of_patterns)
+
+
+@app.route("/parameter_search_results", methods=['POST'])
+def show_parameter_search_results():
+    """ Shows patterns based on user selections
+    :return: html page with patterns
+    """
+
+    pc = request.form.getlist("pc")
+    weight = request.form.getlist("weight")
+    fit = request.form.getlist("fit")
+    pa = request.form.getlist("pa")
+
+    search_params = GroupedPreferences(pc, weight, fit, pa)
+
+    patterns = build_pattern_list_from_parameters(search_params)
 
 
 if __name__ == "__main__":
