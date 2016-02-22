@@ -1,6 +1,6 @@
 """This module has helper functions to deal with Preferences"""
 
-from model import UserPreference, Preference, db
+from model import UserPreference, Preference, db, User
 from flask import session
 
 
@@ -18,7 +18,8 @@ from flask import session
 class GroupedPreferences(object):
     """Attribute for each category which stores list of values."""
 
-    #comment why names like pc, pa
+    # pc and pa are ravelry category names, which will be used to build
+    # urls to send API requests.
     def __init__(self, pc=[], weight=[], fit=[], pa=[]):
         self.pc = pc
         self.weight = weight
@@ -70,12 +71,10 @@ def group_user_prefs(user):
         elif pref.pref_category == "fit":
             fit.append(pref.pref_value)
 
-    categorized_user_prefs = {
-        "pc": pc,
-        "weight": weight,
-        "pa": pa,
-        "fit": fit
-    }
+    categorized_user_prefs = GroupedPreferences(weight=weight,
+                                                pc=pc,
+                                                fit=fit,
+                                                pa=pa)
 
     return categorized_user_prefs
 
@@ -104,7 +103,8 @@ def update_user_preference(preference, include):
     pref = Preference.query.filter(Preference.pref_category == pref_category,
                                    Preference.pref_value == pref_value).one()
     pref_id = pref.pref_id
-    user_id = session["user_id"]
+    user = User.query.filter(User.username == session["username"]).first()
+    user_id = user.user_id
 
     if (include == 1):
         new_user_pref = UserPreference(user_id=user_id, pref_id=pref_id)

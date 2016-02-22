@@ -13,10 +13,13 @@
 
 {% block body %}
 
-    <label><button id="personalized_search_button">See patterns recommended just for you</button></label>
+    <form action="/preference_search_results">
+        <label><input type="submit" value="See patterns recommended just for you" id="personalized_search_button"></input></label>
+    </form>
     <br>
-    <label><button id="pattern_search_button">Search for patterns</button></label>
-    <form action="/parameter_search_results" method='POST' id="pattern_search_form" style="display: none">
+
+    <label><button id="parameter_search_button">Search for patterns</button></label>
+    <form action="/parameter_search_results" method='POST' id="parameter_search_form" style="display: none">
         <br>{{ print_pref('pc', all_prefs.pc, 'Pattern Category') }}<br>
         <br>{{ print_pref('fit', all_prefs.fit, 'Size') }}<br>
         <br>{{ print_pref('weight', all_prefs.weight, 'Yarn Weight') }}<br>

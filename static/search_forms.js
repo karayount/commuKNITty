@@ -2,7 +2,7 @@
 
 "use strict";
 
-$('#pattern_search_button').click(function() {
-  $('#pattern_search_form').toggle();
-
+$('#parameter_search_button').click(function() {
+    $('#parameter_search_form').toggle();
 });
+

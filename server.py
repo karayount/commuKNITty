@@ -6,10 +6,10 @@ from jinja_filters import prettify_preference
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
                    UserPreference, Preference, BasketYarnPhoto, Project,
                    Pattern)
+from pattern_search import (build_pattern_list_from_parameters,
+                            build_pattern_list_from_yarn)
 from preferences import (group_user_prefs, get_all_grouped_prefs,
                          update_user_preference, GroupedPreferences)
-from search import (build_pattern_list_from_parameters,
-                    build_pattern_list_from_yarn)
 
 app = Flask(__name__)
 app.secret_key = "thatthingyouneedtoremembertodoitrhymeswithcount"
@@ -35,23 +35,30 @@ def process_login():
         flash("Username incorrect. Please re-enter")
         return redirect("/")
     else:
-        session["user_id"] = existing_user.user_id
+        session["username"] = existing_user.username
         return redirect("/home")
+
 
 @app.route("/home")
 def show_homepage():
     """Show homepage of logged in commuKNITty user"""
 
-    user = User.query.get(session["user_id"])
-
+    user = User.query.filter(User.username == session["username"]).first()
 
     return render_template("homepage.html", user=user)
 
-@app.route("/profile/<int:user_id>")
-def show_user_profile(user_id):
+
+@app.route("/profile/<string:username>")
+def show_user_profile(username):
     """Show the user their info"""
 
-    user = User.query.get(user_id)
+    user = User.query.filter(User.username == session["username"]).first()
+
+    # verify that page is for the logged in user
+    if user.username != username:
+        flash("You are not authorized to view this profile")
+        return redirect("/")
+
     basket = Basket.query.filter(Basket.user_id == user.user_id).one()
     basket_yarns = BasketYarn.query.filter(BasketYarn.basket_id == basket.basket_id).all()
 
@@ -90,7 +97,7 @@ def update_preference_in_db():
 def show_basket():
     """Shows yarns in user's basket"""
 
-    user = User.query.get(session["user_id"])
+    user = User.query.filter(User.username == session["username"]).first()
     basket = Basket.query.filter(Basket.user_id == user.user_id).one()
     user_basket_yarns = BasketYarn.query.filter(BasketYarn.basket_id == basket.basket_id).all()
 
@@ -107,9 +114,6 @@ def show_search_page():
 
     return render_template("search.html",
                            all_prefs=all_grouped_prefs)
-
-
-# TODO: search: build base request to include craft=knitting
 
 
 @app.route("/yarn_driven_search/<int:basket_yarn_id>")
@@ -142,7 +146,29 @@ def show_parameter_search_results():
     search_params = GroupedPreferences(pc, weight, fit, pa)
 
     patterns = build_pattern_list_from_parameters(search_params)
+    headline = "Pattern results from your search"
 
+    return render_template("pattern_search_results.html",
+                           headline=headline,
+                           patterns=patterns)
+
+
+@app.route("/preference_search_results")
+def show_preference_search_results():
+    """ Shows patterns based on user preferences
+    :return: html page with patterns
+    """
+
+    user = User.query.filter(User.username == session["username"]).first()
+
+    search_params = group_user_prefs(user)
+
+    search_result_patterns = build_pattern_list_from_parameters(search_params)
+    headline = "Customized pattern recommendations for " + user.username
+
+    return render_template("pattern_search_results.html",
+                           patterns=search_result_patterns,
+                           headline=headline)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
