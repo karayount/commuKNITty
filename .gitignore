@@ -1,5 +1,6 @@
-secret*
+*secret*
 *.pyc
 env
 ckenv
 *.DS_Store
+*test*

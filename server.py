@@ -39,11 +39,23 @@ def process_login():
         return redirect("/home")
 
 
+@app.route("/process_logout")
+def process_logout():
+
+    del session["username"]
+
+    flash("You're now logged out!")
+    return redirect("/")
+
+
 @app.route("/home")
 def show_homepage():
     """Show homepage of logged in commuKNITty user"""
 
     user = User.query.filter(User.username == session["username"]).first()
+    if user == None:
+        flash("You are not authorized to view this page")
+        return redirect("/")
 
     return render_template("homepage.html", user=user)
 
@@ -98,6 +110,9 @@ def show_basket():
     """Shows yarns in user's basket"""
 
     user = User.query.filter(User.username == session["username"]).first()
+    if user == None:
+        flash("You are not authorized to view this page")
+        return redirect("/")
     basket = Basket.query.filter(Basket.user_id == user.user_id).one()
     user_basket_yarns = BasketYarn.query.filter(BasketYarn.basket_id == basket.basket_id).all()
 
@@ -106,9 +121,19 @@ def show_basket():
                            user_basket_yarns=user_basket_yarns)
 
 
+@app.route("/add_yarn_to_basket")
+def add_yarn_to_basket():
+
+
+
 @app.route("/search")
 def show_search_page():
     """Search page for users: personalized recs, and for basket yarns."""
+
+    user = User.query.filter(User.username == session["username"]).first()
+    if user == None:
+        flash("You are not authorized to view this page")
+        return redirect("/")
 
     all_grouped_prefs = get_all_grouped_prefs()
 
@@ -124,6 +149,11 @@ def yarn_driven_search(basket_yarn_id):
     Pattern object for which there are Projects which have both this Pattern
     and Yarn linked."""
 
+    user = User.query.filter(User.username == session["username"]).first()
+    if user == None:
+        flash("You are not authorized to view this page")
+        return redirect("/")
+
     basket_yarn = BasketYarn.query.get(basket_yarn_id)
     list_of_patterns = build_pattern_list_from_yarn(basket_yarn_id)
 
@@ -137,6 +167,11 @@ def show_parameter_search_results():
     """ Shows patterns based on user selections
     :return: html page with patterns
     """
+
+    user = User.query.filter(User.username == session["username"]).first()
+    if user == None:
+        flash("You are not authorized to view this page")
+        return redirect("/")
 
     pc = request.form.getlist("pc")
     weight = request.form.getlist("weight")
@@ -160,6 +195,9 @@ def show_preference_search_results():
     """
 
     user = User.query.filter(User.username == session["username"]).first()
+    if user == None:
+        flash("You are not authorized to view this page")
+        return redirect("/")
 
     search_params = group_user_prefs(user)
 

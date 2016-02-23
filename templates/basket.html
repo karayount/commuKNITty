@@ -5,8 +5,21 @@
 {% endblock %}
 
 {% block body %}
-    
+
+    <div id="add_yarn_section">
+        <label><button id="add_yarn_button">Add yarn to your basket</button></label>
+        <div id="search_yarn_by_name" style="display: none">
+            <label><input type="text" id="yarn_name_field">Name of yarn: </label>
+        </div>
+        <div id="yarn_search_results" style="display: none">
+
+        </div>
+        href="/add_yarn_to_basket"
+    </div>
+    <br>
+
     {% if user_basket_yarns|length > 0 %}
+        <h3>What's in your basket?</h3>
         {% for yarn in user_basket_yarns %}
             <div class="basket_yarn_photo">
                 <img src="{{ yarn.yarn.yarn_photo }}">
@@ -23,9 +36,7 @@
         <label>You don't have any yarn in your basket yet.</label>
     {% endif %}
 
-    <label><button>Add yarn to your basket</button></label>
-    <br>
-    <label><button id="pattern_search">Search for pattern ideas</button></label>
-
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script type='text/javascript' src='/static/basket.js'></script>
 
 {% endblock %}
