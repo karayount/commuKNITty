@@ -1,6 +1,5 @@
 from jinja2 import StrictUndefined
-import requests
-from flask import Flask, render_template, session, redirect, request, flash
+from flask import Flask, render_template, session, redirect, request, flash, jsonify
 from jinja_filters import prettify_preference
 
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
@@ -10,6 +9,8 @@ from pattern_search import (build_pattern_list_from_parameters,
                             build_pattern_list_from_yarn)
 from preferences import (group_user_prefs, get_all_grouped_prefs,
                          update_user_preference, GroupedPreferences)
+from local import get_businesses_from_yelp, create_map_markers
+
 
 app = Flask(__name__)
 app.secret_key = "thatthingyouneedtoremembertodoitrhymeswithcount"
@@ -58,6 +59,26 @@ def show_homepage():
         return redirect("/")
 
     return render_template("homepage.html", user=user)
+
+
+@app.route("/local")
+def show_local():
+    """ Show local page with Yelp map results and group meeting events.
+    :return: rendered template
+    """
+
+    business_list = get_businesses_from_yelp()
+
+    return render_template("local.html",
+                           business_list=business_list)
+
+
+@app.route("/get_markers.json")
+def get_markers():
+
+    markers = create_map_markers()
+
+    return jsonify(markers)
 
 
 @app.route("/profile/<string:username>")
@@ -121,9 +142,9 @@ def show_basket():
                            user_basket_yarns=user_basket_yarns)
 
 
-@app.route("/add_yarn_to_basket")
-def add_yarn_to_basket():
-
+# @app.route("/add_yarn_to_basket")
+# def add_yarn_to_basket():
+#     #TODO: build this
 
 
 @app.route("/search")
