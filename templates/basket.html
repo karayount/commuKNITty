@@ -32,26 +32,29 @@
             text-align: center;
             z-index: 11; /* 1px higher than the overlay layer */
         }
+        .start-hidden {
+            display: none;
+        }
     </style>
 {% endblock %}
 
 {% block body %}
 
-    <div class="overlay" style="display: none"></div>
-    <div class="modal" style="display: none">
-        <div class="page" id="search-yarn" style="display: none">
+    <div class="overlay start-hidden"></div>
+    <div class="modal start-hidden">
+        <div class="page start-hidden" id="search-yarn">
             <form id="search-yarn-form">
                 <label>Name of yarn: <input type="text" id="yarn-name-field" name="yarn_name"></label>
                 <input type="submit" id="search-yarn-submit" value="Search Yarns">
             </form>
         </div>
 
-        <div class="page" id="yarn-search-results" style="display: none">
+        <div class="page start-hidden" id="yarn-search-results">
             <p>No yarns matched your search.</p>
             <button class="search-again-button">Search again</button>
         </div>
 
-        <div class="page" id="new-yarn-form" style="display: none">
+        <div class="page start-hidden" id="new-yarn-form">
         </div>
 
     </div> {# end modal window content #}

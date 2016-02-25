@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <title>Welcome to commuKNITty</title>
+    <title>Welcome to commuKNITty</title>
+    <style>
+        .start-hidden {
+            display: none;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
@@ -9,7 +14,7 @@
     <h2>commuKNITty</h2>
     <p>your home for knitting.</p>
     <button id="login-button">Log In</button>
-    <form action="/process_login" id="login-form" style="display: none" method="GET">
+    <form action="/process_login" id="login-form" class="start-hidden" method="GET">
         <label>Username<input type="text" id="username-for-login"
                         name="username"></label>
         <input type="submit" value="Log In">
