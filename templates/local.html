@@ -23,6 +23,9 @@
         #yelp_results {
             float: left;
         }
+        #groups {
+            float: left;
+        }
         #map {
             float: left;
             position: relative;
@@ -36,6 +39,10 @@
 {% block body %}
 
     <div id="all-the-things">
+        <div id="groups">
+            <h1>print group info here</h1>
+        </div>
+
         <div id="yelp-results">
             <h2>Local knitterly resources</h2>
                 {% for biz in business_list %}

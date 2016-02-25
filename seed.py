@@ -192,7 +192,7 @@ if __name__ == "__main__":
 
     # Import different types of data
     # load_yarns()
-    # load_users_and_create_baskets()
+    load_users_and_create_baskets()
     # load_preferences()
-    # load_user_preferences()
-    # load_basket_yarns()
+    load_user_preferences()
+    load_basket_yarns()
