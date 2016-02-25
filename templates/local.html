@@ -11,22 +11,6 @@
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
     </style>
-
-{% endblock %}
-
-{% block body %}
-
-     <h2>Local knitterly resources</h2>
-    <div id="yelp_results">
-        {% for biz in business_list %}
-            <a class="yelp_biz_name">{{ biz.biz_name }}</a><br>
-            <a class="yelp_biz_addr">{{ biz.biz_addr }}</a><br>
-            <a class="yelp_url" href="{{ biz.biz_url }}">find {{ biz.biz_name }} on Yelp</a><br>
-        {% endfor %}
-    </div>
-    <div id="local_meetups">group things here</div>
-
-
     <style>
         .mapboxgl-popup {
             max-width: 400px;
@@ -36,19 +20,70 @@
         .marker-title {
             font-weight: 700;
         }
+        #yelp_results {
+            float: left;
+        }
+        #map {
+            float: left;
+            position: relative;
+        }
     </style>
 
-{#    upon load, call ajax function which returns jsonified object#}
+{% endblock %}
 
-    <div id='map' style="width: 150px; height: 150px"></div>
+{% block body %}
+
+    <div id="all-the-things">
+        <div id="yelp_results">
+            <h2>Local knitterly resources</h2>
+                {% for biz in business_list %}
+                    <a class="yelp_biz_name">{{ biz.biz_name }}</a><br>
+                    <a class="yelp_biz_addr">{{ biz.biz_addr }}</a><br>
+                    <a class="yelp_url" href="{{ biz.biz_url }}">find {{ biz.biz_name }} on Yelp</a><br>
+                {% endfor %}
+            <div id="local_meetups">group things here</div>
+        </div>
+
+
+        <div id='map' style="width: 400px; height: 400px"></div>
+
+    </div>
 
     <script src="https://code.jquery.com/jquery.js"></script>
     <script>
 
     function renderMap(results) {
          mapboxgl.accessToken = 'pk.eyJ1Ijoia2FyYXlvdW50IiwiYSI6ImNpa3l3NjNoODA5M3J1YWtzbWN5bjFxd2MifQ.lpKDreQHp7X-urPys6nmSg';
-
-        var markers = results;
+{#        debugger;#}
+        var markers2 = results;
+        console.log(markers2);
+        var markers = {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-77.03238901390978, 38.913188059745586]
+                    },
+                    "properties": {
+                        "title": "Mapbox DC",
+                        "marker-symbol": "monument"
+                    }
+                }, {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [-122.414, 37.776]
+                    },
+                    "properties": {
+                        "title": "Mapbox SF",
+                        "marker-symbol": "harbor"
+                    }
+                }]
+            }
+        };
         console.log(markers);
 
         var map = new mapboxgl.Map({
@@ -60,10 +95,12 @@
 
         map.on('style.load', function () {
             // Add marker data as a new GeoJSON source.
-            map.addSource("markers", {
-                "type": "geojson",
-                "data": markers
-            });
+            map.addSource("markers", markers2);
+
+{#            {#}
+{#                "type": "geojson",#}
+{#                "data": markers#}
+{#            }#}
 
             // Add a layer showing the markers.
             map.addLayer({
@@ -117,7 +154,6 @@
         }
 
     $.get("/get_markers.json", renderMap);
-
 
     </script>
 

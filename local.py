@@ -76,7 +76,7 @@ def create_map_markers():
                             business.biz_name + "</div><p>" +
                             business.biz_addr + "<br><a href=\"" +
                             business.biz_url + ">see on Yelp</a></p>"),
-            "marker-symbol": "marker-stroked"
+            "marker-symbol": "marker"
         }
         geometry = {
             "type": "Point",
@@ -89,9 +89,14 @@ def create_map_markers():
         }
         features.append(feature)
 
-    markers = {
+    data = {
         "type": "FeatureCollection",
         "features": features
+    }
+
+    markers = {
+        "type": "geojson",
+        "data": data
     }
 
     return markers
