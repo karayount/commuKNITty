@@ -24,8 +24,8 @@ function showYarnOptions(result) {
         text +=  "<input type='submit' value='Submit'>" +
             "</select></form>";
         // the part below doesn't appear to work
-        //text += "<br><p>Don't see the yarn you were looking for?</p>" +
-        //    "<button class='search_again_button'>Search again</button>";
+        text += "<br><p>Don't see the yarn you were looking for?</p>" +
+            "<button class='search_again_button'>Search again</button>";
 
         $('#yarn_search_results').html(text);
     }
@@ -47,7 +47,7 @@ function showYarnAddForm(evt) {
 
 $('#yarn_select_form').submit(showYarnAddForm);
 
-$('.search_again_button').click(function() {
+$('body').on('click', '.search_again_button', function() {
     $('#yarn_search_results').toggle();
     $('#search_yarn').toggle();
 });
