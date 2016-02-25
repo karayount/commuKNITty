@@ -2,40 +2,80 @@
 
 {% block header %}
     <title>commuKNITty: {{ user.username }}'s basket</title>
+    <style>
+        html, body{
+            min-height: 100%;
+        }
+        body{
+            position: relative;
+        }
+        .overlay{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background-color: rgba(53, 53, 53, 0.5); /*dim the background*/
+        }
+        .modal {
+            width: 300px;
+            height: 200px;
+{#            line-height: 100px;#}
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -100px;
+            margin-left: -150px;
+            background-color: #3be6f1;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 11; /* 1px higher than the overlay layer */
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
 
-    <div id="add_yarn_section">
-        <label><button id="add_yarn_button">Add yarn to your basket</button></label>
-        <div id="search_yarn_by_name" style="display: none">
-            <label>Name of yarn: <input type="text" id="yarn_name_field"></label>
-            <label><input type="submit" id="search_yarns" value="Search Yarns"</label>
+    <div class="overlay" style="display: none"></div>
+    <div class="modal" style="display: none">
+        <div class="page" id="search_yarn" style="display: none">
+            <form id="search_yarn_form">
+                <label>Name of yarn: <input type="text" id="yarn_name_field" name="yarn_name"></label>
+                <input type="submit" id="search_yarn_submit" value="Search Yarns">
+            </form>
         </div>
-        <div id="yarn_search_results" style="display: none">
 
+        <div class="page" id="yarn_search_results" style="display: none">
+            <p>No yarns matched your search.</p>
+            <button class="search_again_button">Search again</button>
         </div>
-        href="/add_yarn_to_basket"
-    </div>
-    <br>
 
-    {% if user_basket_yarns|length > 0 %}
-        <h3>What's in your basket?</h3>
-        {% for yarn in user_basket_yarns %}
-            <div class="basket_yarn_photo">
-                <img src="{{ yarn.yarn.yarn_photo }}">
-            </div>
-            <div class="basket_yarn_data">
-                <p>{{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }}</p>
-                <p>Color: {{ yarn.colorway }}</p>
-                <p>Yards in basket: {{ yarn.yards }}</p>
-                <a href="/yarn_driven_search/{{ yarn.basket_yarn_id }}">Things to make with this yarn</a>
-                <br>
-            </div> {# end basket_yarn_data class #}
-        {% endfor %}
-    {%  else %}
-        <label>You don't have any yarn in your basket yet.</label>
-    {% endif %}
+        <div class="page" id="new_yarn_form" style="display: none">
+        </div>
+
+    </div> {# end modal window content #}
+
+    <div id="basket_section">
+        <button id="add_yarn_button">Add yarn to your basket</button>
+        {% if user_basket_yarns|length > 0 %}
+            <h3>What's in your basket?</h3>
+            {% for yarn in user_basket_yarns %}
+                <div class="basket_yarn_photo">
+                    <img src="{{ yarn.yarn.yarn_photo }}">
+                </div>
+                <div class="basket_yarn_data">
+                    <p>{{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }}</p>
+                    <p>Color: {{ yarn.colorway }}</p>
+                    <p>Yards in basket: {{ yarn.yards }}</p>
+                    <a href="/yarn_driven_search/{{ yarn.basket_yarn_id }}">Things to make with this yarn</a>
+                    <br>
+                </div> {# end basket_yarn_data class #}
+            {% endfor %}
+        {%  else %}
+            <label>You don't have any yarn in your basket yet.</label>
+        {% endif %}
+    </div> {#  end basket section  #}
 
     <script src="https://code.jquery.com/jquery.js"></script>
     <script type='text/javascript' src='/static/basket.js'></script>

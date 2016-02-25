@@ -142,6 +142,32 @@ def show_basket():
                            user_basket_yarns=user_basket_yarns)
 
 
+@app.route("/find_yarn_matches.json", methods=["POST"])
+def find_yarn_matches():
+    """ Takes in search string
+    :return: JSON object with yarns matching search string
+    """
+
+    search_yarn = request.form.get("yarn_name")
+    search_string = "%" + search_yarn + "%"
+
+    yarn_list = Yarn.query.filter((Yarn.yarn_name.like(search_string))|
+                                  (Yarn.yarn_company.like(search_string))).all()
+
+    list_of_yarn_objs = []
+    for yarn in yarn_list:
+        current_yarn = {
+            "yarn_id": yarn.yarn_id,
+            "company": yarn.yarn_company,
+            "yarn_name": yarn.yarn_name
+        }
+        list_of_yarn_objs.append(current_yarn)
+
+    yarn_dict = {"yarns": list_of_yarn_objs}
+
+    return jsonify(yarn_dict)
+
+
 # @app.route("/add_yarn_to_basket")
 # def add_yarn_to_basket():
 #     #TODO: build this
