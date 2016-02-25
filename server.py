@@ -168,9 +168,33 @@ def find_yarn_matches():
     return jsonify(yarn_dict)
 
 
-# @app.route("/add_yarn_to_basket")
-# def add_yarn_to_basket():
-#     #TODO: build this
+@app.route("/add_yarn_to_basket", methods=['POST'])
+def add_yarn_to_basket():
+    """ From new yarn entered by user, adds BasketYarn to database
+    :return: redirects to /basket (will include newly added yarn)
+    """
+
+    user = User.query.filter(User.username == session["username"]).first()
+    if user == None:
+        flash("You are not authorized to view this page")
+        return redirect("/")
+
+    basket = Basket.query.filter(Basket.user_id == user.user_id).one()
+    basket_id = basket.basket_id
+    yarn_id = request.form.get("yarn_select")
+    yards = request.form.get("yardage")
+    colorway = request.form.get("colorway")
+
+    new_basket_yarn = BasketYarn(basket_id=basket_id,
+                                 yarn_id=yarn_id,
+                                 yards=yards,
+                                 colorway=colorway)
+
+    db.session.add(new_basket_yarn)
+
+    db.session.commit()
+
+    return redirect("/basket")
 
 
 @app.route("/search")

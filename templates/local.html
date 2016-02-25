@@ -26,7 +26,7 @@
         #map {
             float: left;
             position: relative;
-            width: 400px;
+{#            width: 400px;#}
             height: 400px;
         }
     </style>
@@ -54,49 +54,19 @@
     <script>
 
     function renderMap(results) {
-         mapboxgl.accessToken = 'pk.eyJ1Ijoia2FyYXlvdW50IiwiYSI6ImNpa3l3NjNoODA5M3J1YWtzbWN5bjFxd2MifQ.lpKDreQHp7X-urPys6nmSg';
-{#        debugger;#}
-        var markers2 = results;
-        console.log(markers2);
-        var markers = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [-77.03238901390978, 38.913188059745586]
-                    },
-                    "properties": {
-                        "title": "Mapbox DC",
-                        "marker-symbol": "monument"
-                    }
-                }, {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [-122.414, 37.776]
-                    },
-                    "properties": {
-                        "title": "Mapbox SF",
-                        "marker-symbol": "harbor"
-                    }
-                }]
-            }
-        };
-        console.log(markers);
+        mapboxgl.accessToken = 'pk.eyJ1Ijoia2FyYXlvdW50IiwiYSI6ImNpa3l3NjNoODA5M3J1YWtzbWN5bjFxd2MifQ.lpKDreQHp7X-urPys6nmSg';
+        var markers = results;
 
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v8',
-            center: [-122.4, 37.7],
-            zoom: 11.15
+            center: [-122.45, 37.77],
+            zoom: 11
         });
 
         map.on('style.load', function () {
             // Add marker data as a new GeoJSON source.
-            map.addSource("markers", markers2);
+            map.addSource("markers", markers);
 
 {#            {#}
 {#                "type": "geojson",#}

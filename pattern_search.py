@@ -29,7 +29,7 @@ def build_pattern_list_from_yarn(basket_yarn_id):
 
     pattern_ids_from_projects_with_this_yarn = (db.session.query(
         Project.project_rav_pattern_id).filter(
-        Project.project_yarn_id == basket_yarn_id)).all()
+        Project.project_yarn_id == basket_yarn.yarn_id)).all()
 
     list_of_pattern_ids = []
     for pattern_id in pattern_ids_from_projects_with_this_yarn:
