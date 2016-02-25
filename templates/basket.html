@@ -39,32 +39,32 @@
 
     <div class="overlay" style="display: none"></div>
     <div class="modal" style="display: none">
-        <div class="page" id="search_yarn" style="display: none">
-            <form id="search_yarn_form">
-                <label>Name of yarn: <input type="text" id="yarn_name_field" name="yarn_name"></label>
-                <input type="submit" id="search_yarn_submit" value="Search Yarns">
+        <div class="page" id="search-yarn" style="display: none">
+            <form id="search-yarn-form">
+                <label>Name of yarn: <input type="text" id="yarn-name-field" name="yarn_name"></label>
+                <input type="submit" id="search-yarn-submit" value="Search Yarns">
             </form>
         </div>
 
-        <div class="page" id="yarn_search_results" style="display: none">
+        <div class="page" id="yarn-search-results" style="display: none">
             <p>No yarns matched your search.</p>
-            <button class="search_again_button">Search again</button>
+            <button class="search-again-button">Search again</button>
         </div>
 
-        <div class="page" id="new_yarn_form" style="display: none">
+        <div class="page" id="new-yarn-form" style="display: none">
         </div>
 
     </div> {# end modal window content #}
 
     <div id="basket_section">
-        <button id="add_yarn_button">Add yarn to your basket</button>
+        <button id="add-yarn-button">Add yarn to your basket</button>
         {% if user_basket_yarns|length > 0 %}
             <h3>What's in your basket?</h3>
             {% for yarn in user_basket_yarns %}
-                <div class="basket_yarn_photo">
+                <div class="basket-yarn-photo">
                     <img src="{{ yarn.yarn.yarn_photo }}">
                 </div>
-                <div class="basket_yarn_data">
+                <div class="basket-yarn-data">
                     <p>{{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }}</p>
                     <p>Color: {{ yarn.colorway }}</p>
                     <p>Yards in basket: {{ yarn.yards }}</p>

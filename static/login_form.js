@@ -1,5 +1,5 @@
 
-$('#login_button').click(function() {
-  $('#login_form').toggle();
-  $('#login_button').toggle();
+$('#login-button').click(function() {
+  $('#login-form').toggle();
+  $('#login-button').toggle();
 });

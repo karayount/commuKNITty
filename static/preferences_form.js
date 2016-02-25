@@ -5,8 +5,8 @@
 "use strict";
 
 // toggle update preferences form on Update Preferences Button click
-$('#update_preferences_button').click(function() {
-  $('#update_preferences_form').toggle();
+$('#update-preferences-button').click(function() {
+  $('#update-preferences-form').toggle();
 });
 
 function reprintPreferences(data) {

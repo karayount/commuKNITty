@@ -30,7 +30,7 @@
 {% block body %}
 
     <h2>Welcome {{ user.username }}</h2>
-    <div id="basket_yarns"> <!-- TODO: display photo (of yarn in basket) here -->
+    <div id="basket-yarns"> <!-- TODO: display photo (of yarn in basket) here -->
         <h4><a href="/basket">What's in your basket?</a></h4>
     </div> <!-- end basket yarns -->
     <div id="preferences">    
@@ -48,10 +48,10 @@
     </div> <!-- end id preferences -->
 
     <!-- allow to update preferences -->
-    <div id="preferences_form">
+    <div id="preferences-form">
     <br>
-        <button id="update_preferences_button">Update your preferences</button>
-        <form id="update_preferences_form" style="display: none">
+        <button id="update-preferences-button">Update your preferences</button>
+        <form id="update-preferences-form" style="display: none">
             {{ print_update_pref('pc', all_prefs.pc, user_prefs.pc, 'What do you like to knit? (Choose as many as you like.') }}<br>
             {{ print_update_pref('fit', all_prefs.fit, user_prefs.fit, 'Who do you like to knit for?') }}<br>
             {{ print_update_pref('weight', all_prefs.weight, user_prefs.weight, 'What are your preferred yarn weights?') }}<br>

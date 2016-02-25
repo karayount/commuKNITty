@@ -34,14 +34,14 @@
 {% block body %}
 
     <div id="all-the-things">
-        <div id="yelp_results">
+        <div id="yelp-results">
             <h2>Local knitterly resources</h2>
                 {% for biz in business_list %}
-                    <a class="yelp_biz_name">{{ biz.biz_name }}</a><br>
-                    <a class="yelp_biz_addr">{{ biz.biz_addr }}</a><br>
-                    <a class="yelp_url" href="{{ biz.biz_url }}">find {{ biz.biz_name }} on Yelp</a><br>
+                    <a class="yelp-biz-name">{{ biz.biz_name }}</a><br>
+                    <a class="yelp-biz-addr">{{ biz.biz_addr }}</a><br>
+                    <a class="yelp-url" href="{{ biz.biz_url }}">find {{ biz.biz_name }} on Yelp</a><br>
                 {% endfor %}
-            <div id="local_meetups">group things here</div>
+            <div id="local-meetups">group things here</div>
         </div>
 
 
