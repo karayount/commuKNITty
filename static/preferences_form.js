@@ -6,7 +6,7 @@
 
 // toggle update preferences form on Update Preferences Button click
 $('#update-preferences-button').click(function() {
-  $('#update-preferences-form').toggle();
+    $('#update-preferences-form').removeClass('hidden');
 });
 
 function reprintPreferences(data) {

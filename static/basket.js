@@ -3,17 +3,17 @@
  */
 
 $('#add-yarn-button').click(function() {
-    $('.overlay').toggle();
-    $('.modal').toggle();
-    $('#search-yarn').toggle();
+    $('.overlay').removeClass('hidden');
+    $('.modal').removeClass('hidden');
+    $('#search-yarn').removeClass('hidden');
 });
 
 $('#search-yarn-form').submit(searchForYarns);
 
 function searchForYarns(evt) {
     evt.preventDefault();
-    $('#search-yarn').toggle();
-    $('#add-new-yarn').toggle();
+    $('#search-yarn').addClass('hidden');
+    $('#add-new-yarn').removeClass('hidden');
     var name = $('#yarn-name-field').val();
     var payload = {"yarn_name": name};
 
@@ -42,6 +42,6 @@ function showYarnOptions(result) {
 }
 
 $('body').on('click', '.search-again-button', function() {
-    $('#add-new-yarn').toggle();
-    $('#search-yarn').toggle();
+    $('#add-new-yarn').addClass('hidden');
+    $('#search-yarn').removeClass('hidden');
 });

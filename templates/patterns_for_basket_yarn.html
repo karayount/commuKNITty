@@ -4,20 +4,38 @@
 {% extends 'base.html' %}
 
 {% block header %}
+
+    <meta name="description" content="BlocksIt.js jQuery plugin Demonstration #2 Pinterest dynamic grid with CSS3 Transitions by inWebson.com"/>
+    <meta name="keywords" content="demonstration,demo,jquery,blocksit.js,css3,dynamic,grid,layout,inwebson"/>
+    <link rel='stylesheet' href='/static/basket-yarn-patterns.css' media='screen' />
+
     <title>commuKNITty: patterns for {{ basket_yarn.yarn.yarn_name }}</title>
+
 {% endblock %}
 
 {% block body %}
 
     <h3>Patterns for {{ basket_yarn.yarn.yarn_name }}</h3>
 
-    {% for pattern in patterns %}
-        <div id="{{ pattern.pattern_name }}">
-            <img src="{{ pattern.pattern_photo }}"><br>
-            {{ pattern.pattern_name }}<br>
-            Category: {{ pattern.pattern_category }}<br>
-            <a href="{{ pattern.rav_pattern_link }}">See details on Ravelry</a>
-        </div>
-    {% endfor %}
+    <!-- Content -->
+    <section id="wrapper">
+    <div id="container">
+        {% for pattern in patterns %}
+            <div class="grid">
+                <div class="imgholder">
+                    <img src={{ pattern.pattern_photo }} />
+                </div>
+                <strong>{{ pattern.pattern_name }}</strong>
+                <div class="meta">category: {{ pattern.pattern_category | prettify_preference }}</div>
+                <p href="{{ pattern.rav_pattern_link }}">See details on Ravelry</p>
+            </div>
+        {% endfor %}
+        <!---->
+    </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="/static/blocksit.min.js"></script>
+    <script type="text/javascript" src="/static/basket-yarn-patterns.js"></script>
 
 {% endblock %}

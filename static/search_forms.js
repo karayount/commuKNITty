@@ -3,6 +3,6 @@
 "use strict";
 
 $('#parameter-search-button').click(function() {
-    $('#parameter-search-form').toggle();
+    $('#parameter-search-form').removeClass('hidden');
 });
 

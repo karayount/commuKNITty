@@ -6,7 +6,7 @@
         {% if pref in user_list %}
             <a id="{{ category }}-{{ pref }}-display">{{ pref | prettify_preference }}</a>
         {% else %}
-            <a id="{{ category }}-{{ pref }}-display" class="start-hidden">{{ pref | prettify_preference }}</a>
+            <a id="{{ category }}-{{ pref }}-display" class="hidden">{{ pref | prettify_preference }}</a>
         {% endif %}
     {% endfor %}
 {% endmacro %}
@@ -26,7 +26,7 @@
 {% block header %}
     <title>commuKNITty: {{ user.username }}'s profile</title>
     <style>
-        .start-hidden {
+        .hidden {
             display: none;
         }
     </style>
@@ -40,7 +40,8 @@
     </div> <!-- end basket yarns -->
     <div id="about-me">
         <img src={{ user.photo }}>
-
+        <label>Years knitting: {{ user.years_knitting }}</label>
+        <label>Lifetime miles knit: {{ user.miles_knit }}</label>
     </div>
     <div id="preferences">    
         <h4 text="bold">Your preferences</h4>
@@ -60,7 +61,7 @@
     <div id="preferences-form">
     <br>
         <button id="update-preferences-button">Update your preferences</button>
-        <form id="update-preferences-form" class="start-hidden">
+        <form id="update-preferences-form" class="hidden">
             {{ print_update_pref('pc', all_prefs.pc, user_prefs.pc, 'What do you like to knit? (Choose as many as you like.') }}<br>
             {{ print_update_pref('fit', all_prefs.fit, user_prefs.fit, 'Who do you like to knit for?') }}<br>
             {{ print_update_pref('weight', all_prefs.weight, user_prefs.weight, 'What are your preferred yarn weights?') }}<br>

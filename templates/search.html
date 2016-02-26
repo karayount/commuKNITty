@@ -10,7 +10,7 @@
 {% block header %}
     <title>commuKNITty: search</title>
     <style>
-        .start-hidden {
+        .hidden {
             display: none;
         }
     </style>
@@ -24,7 +24,7 @@
     <br>
 
     <label><button id="parameter-search-button">Search for patterns</button></label>
-    <form action="/parameter_search_results" method='POST' id="parameter-search-form" class="start-hidden">
+    <form action="/parameter_search_results" method='POST' id="parameter-search-form" class="hidden">
         <br>{{ print_pref('pc', all_prefs.pc, 'Pattern Category') }}<br>
         <br>{{ print_pref('fit', all_prefs.fit, 'Size') }}<br>
         <br>{{ print_pref('weight', all_prefs.weight, 'Yarn Weight') }}<br>

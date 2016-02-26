@@ -3,7 +3,7 @@ from flask import Flask, render_template, session, redirect, request, flash, jso
 from jinja_filters import prettify_preference
 
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
-                   UserPreference, Preference, BasketYarnPhoto, Project,
+                   UserPreference, Preference, Project,
                    Pattern)
 from pattern_search import (build_pattern_list_from_parameters,
                             build_pattern_list_from_yarn)

@@ -143,35 +143,12 @@ class BasketYarn(db.Model):
 
     basket = db.relationship("Basket")
     yarn = db.relationship("Yarn")
-    photos = db.relationship("BasketYarnPhoto")
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "<BasketYarn b_y_id=%s yarn_id=%s>" % (self.basket_yarn_id,
                                                       self.yarn_id)
-
-
-class BasketYarnPhoto(db.Model):
-    """Photo stored with BasketYarn"""
-
-    __tablename__ = "basket_yarn_photos"
-
-    photo_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    basket_yarn_id = db.Column(db.Integer,
-                               db.ForeignKey("basket_yarns.basket_yarn_id"),
-                               nullable=False)
-    photo = db.Column(db.String(400), nullable=False, unique=True)
-
-    basket_yarn = db.relationship("BasketYarn")
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<BasketYarnPhoto photo_id=%s basket_yarn_id=%s>" % (
-            self.photo_id,
-            self.basket_yarn_id)
-
 
 
 # classes that are just used for search, in MVP

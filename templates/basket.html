@@ -32,7 +32,7 @@
             text-align: center;
             z-index: 11; /* 1px higher than the overlay layer */
         }
-        .start-hidden {
+        .hidden {
             display: none;
         }
     </style>
@@ -40,16 +40,16 @@
 
 {% block body %}
 
-    <div class="overlay start-hidden"></div>
-    <div class="modal start-hidden">
-        <div class="page start-hidden" id="search-yarn">
+    <div class="overlay hidden"></div>
+    <div class="modal hidden">
+        <div class="page hidden" id="search-yarn">
             <form id="search-yarn-form">
                 <label>Name of yarn (case-sensitive): <input type="text" id="yarn-name-field" name="yarn_name"></label>
                 <br><input type="submit" id="search-yarn-submit" value="Search Yarns">
             </form>
         </div>
 
-        <div class="page start-hidden" id="add-new-yarn">
+        <div class="page hidden" id="add-new-yarn">
             <p>No yarns matched your search.</p>
             <button class="search-again-button">Search again</button>
         </div>

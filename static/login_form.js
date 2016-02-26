@@ -1,5 +1,5 @@
 
 $('#login-button').click(function() {
-  $('#login-form').toggle();
-  $('#login-button').toggle();
+  $('#login-form').removeClass('hidden');
+  $('#login-button').addClass('hidden');
 });
