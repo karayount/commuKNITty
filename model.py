@@ -204,6 +204,19 @@ class Pattern(db.Model):
                                                             self.pattern_name)
 
 
+class GroupEvent(db.Model):
+    """ Group event dummy data for display on local page"""
+
+    __tablename__ = "group_events"
+
+    group_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    group_name = db.Column(db.String(50), nullable=False)
+    day = db.Column(db.String(50), nullable=False)
+    time = db.Column(db.String(50), nullable=False)
+    location = db.Column(db.String(50), nullable=False)
+    city = db.Column(db.String(50), nullable=False)
+
+
 ##############################################################################
 # Helper functions
 

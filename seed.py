@@ -3,10 +3,11 @@
 
 from sqlalchemy import func
 from model import (User, Preference, UserPreference, Basket, Yarn, BasketYarn,
-                   BasketYarnPhoto, Project, Pattern)
+                   GroupEvent, Project, Pattern)
 from model import connect_to_db, db
 from server import app
 import requests
+import csv
 
 
 def load_users_and_create_baskets():
@@ -184,6 +185,34 @@ def load_basket_yarns():
         db.session.commit()
 
 
+def load_group_events():
+    """ Load
+    :return: none
+    """
+
+    group_event_data = "seed_data/group-events.csv"
+
+    f = open(group_event_data)
+    csv_f = csv.reader(f)
+
+    for row in csv_f:
+        group_name = row[0]
+        day = row[1]
+        time = row[2]
+        location = row[3]
+        city = row[4]
+
+        group_event = GroupEvent(group_name=group_name,
+                                 day=day,
+                                 time=time,
+                                 location=location,
+                                 city=city)
+
+        db.session.add(group_event)
+
+    db.session.commit()
+
+
 if __name__ == "__main__":
     connect_to_db(app)
 
@@ -192,7 +221,8 @@ if __name__ == "__main__":
 
     # Import different types of data
     # load_yarns()
-    load_users_and_create_baskets()
+    # load_users_and_create_baskets()
     # load_preferences()
-    load_user_preferences()
-    load_basket_yarns()
+    # load_user_preferences()
+    # load_basket_yarns()
+    load_group_events()

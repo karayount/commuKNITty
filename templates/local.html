@@ -40,7 +40,12 @@
 
     <div id="all-the-things">
         <div id="groups">
-            <h1>print group info here</h1>
+            <h4>Weekly knit nights near you</h4>
+            {% for group in groups %}
+                <p>{{ group.group_name }}<br>
+                    meets on {{ group.day }} at {{ group.time }}<br>
+                    at {{ group.location }} in {{ group.city }}</p>
+            {% endfor %}
         </div>
 
         <div id="yelp-results">

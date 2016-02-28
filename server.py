@@ -4,7 +4,7 @@ from jinja_filters import prettify_preference
 
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
                    UserPreference, Preference, Project,
-                   Pattern)
+                   Pattern, GroupEvent)
 from pattern_search import (build_pattern_list_from_parameters,
                             build_pattern_list_from_yarn)
 from preferences import (group_user_prefs, get_all_grouped_prefs,
@@ -68,9 +68,11 @@ def show_local():
     """
 
     business_list = get_businesses_from_yelp()
+    group_events = GroupEvent.query.all()
 
     return render_template("local.html",
-                           business_list=business_list)
+                           business_list=business_list,
+                           groups=group_events)
 
 
 @app.route("/get_markers.json")
