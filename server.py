@@ -1,10 +1,10 @@
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, session, redirect, request, flash, jsonify
+# from flask_debugtoolbar import DebugToolbarExtension
 from jinja_filters import prettify_preference
 
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
-                   UserPreference, Preference, Project,
-                   Pattern, GroupEvent)
+                   GroupEvent)
 from pattern_search import (build_pattern_list_from_parameters,
                             build_pattern_list_from_yarn)
 from preferences import (group_user_prefs, get_all_grouped_prefs,
@@ -26,14 +26,14 @@ def show_landing_page():
     return render_template("landing_page.html")
 
 
-@app.route("/process_login")
+@app.route("/process_login", methods=["POST"])
 def process_login():
 
-    username = request.args.get("username")
+    username = request.form.get("username")
 
     existing_user = User.query.filter(User.username == username).first()
     if existing_user is None:
-        flash("Username incorrect. Please re-enter")
+        flash("Username incorrect. Please try logging in again.")
         return redirect("/")
     else:
         session["username"] = existing_user.username
@@ -53,8 +53,9 @@ def process_logout():
 def show_homepage():
     """Show homepage of logged in commuKNITty user"""
 
-    user = User.query.filter(User.username == session["username"]).first()
-    if user == None:
+    logged_in_user = session.get("username", "")
+    user = User.query.filter(User.username == logged_in_user).first()
+    if user is None:
         flash("You are not authorized to view this page")
         return redirect("/")
 
@@ -66,6 +67,13 @@ def show_local():
     """ Show local page with Yelp map results and group meeting events.
     :return: rendered template
     """
+
+    logged_in_user = session.get("username", "")
+    user = User.query.filter(User.username == logged_in_user).first()
+    # verify that user is logged in
+    if user is None:
+        flash("You are not authorized to view this page")
+        return redirect("/")
 
     business_list = get_businesses_from_yelp()
     group_events = GroupEvent.query.all()
@@ -83,15 +91,15 @@ def get_markers():
     return jsonify(markers)
 
 
-@app.route("/profile/<string:username>")
-def show_user_profile(username):
+@app.route("/profile")
+def show_user_profile():
     """Show the user their info"""
 
-    user = User.query.filter(User.username == session["username"]).first()
-
-    # verify that page is for the logged in user
-    if user.username != username:
-        flash("You are not authorized to view this profile")
+    logged_in_user = session.get("username", "")
+    user = User.query.filter(User.username == logged_in_user).first()
+    # verify that user is logged in
+    if user is None:
+        flash("You are not authorized to view this page")
         return redirect("/")
 
     basket = Basket.query.filter(Basket.user_id == user.user_id).one()
@@ -132,10 +140,13 @@ def update_preference_in_db():
 def show_basket():
     """Shows yarns in user's basket"""
 
-    user = User.query.filter(User.username == session["username"]).first()
-    if user == None:
+    logged_in_user = session.get("username", "")
+    user = User.query.filter(User.username == logged_in_user).first()
+    # verify that user is logged in
+    if user is None:
         flash("You are not authorized to view this page")
         return redirect("/")
+
     basket = Basket.query.filter(Basket.user_id == user.user_id).one()
     user_basket_yarns = BasketYarn.query.filter(BasketYarn.basket_id == basket.basket_id).all()
 
@@ -176,8 +187,9 @@ def add_yarn_to_basket():
     :return: redirects to /basket (will include newly added yarn)
     """
 
-    user = User.query.filter(User.username == session["username"]).first()
-    if user == None:
+    logged_in_user = session.get("username", "")
+    user = User.query.filter(User.username == logged_in_user).first()
+    if user is None:
         flash("You are not authorized to view this page")
         return redirect("/")
 
@@ -203,8 +215,9 @@ def add_yarn_to_basket():
 def show_search_page():
     """Search page for users: personalized recs, and for basket yarns."""
 
-    user = User.query.filter(User.username == session["username"]).first()
-    if user == None:
+    logged_in_user = session.get("username", "")
+    user = User.query.filter(User.username == logged_in_user).first()
+    if user is None:
         flash("You are not authorized to view this page")
         return redirect("/")
 
@@ -222,8 +235,9 @@ def yarn_driven_search(basket_yarn_id):
     Pattern object for which there are Projects which have both this Pattern
     and Yarn linked."""
 
-    user = User.query.filter(User.username == session["username"]).first()
-    if user == None:
+    logged_in_user = session.get("username", "")
+    user = User.query.filter(User.username == logged_in_user).first()
+    if user is None:
         flash("You are not authorized to view this page")
         return redirect("/")
 
@@ -241,8 +255,9 @@ def show_parameter_search_results():
     :return: html page with patterns
     """
 
-    user = User.query.filter(User.username == session["username"]).first()
-    if user == None:
+    logged_in_user = session.get("username", "")
+    user = User.query.filter(User.username == logged_in_user).first()
+    if user is None:
         flash("You are not authorized to view this page")
         return redirect("/")
 
@@ -267,8 +282,9 @@ def show_preference_search_results():
     :return: html page with patterns
     """
 
-    user = User.query.filter(User.username == session["username"]).first()
-    if user == None:
+    logged_in_user = session.get("username", "")
+    user = User.query.filter(User.username == logged_in_user).first()
+    if user is None:
         flash("You are not authorized to view this page")
         return redirect("/")
 
@@ -287,5 +303,7 @@ if __name__ == "__main__":
     app.debug = True
 
     connect_to_db(app)
+
+    # DebugToolbarExtension(app)
 
     app.run()

@@ -1,43 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">#}
 
-    <!-- Optional theme -->
-{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">#}
-{##}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {% block header %}
         HEADER CONTENT GOES HERE
     {% endblock %}
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap-styles.css">
+
 </head>
 
 <body>
-  
-  <div class="container">
 
-  <!-- Show flashed messages -->
-  {% with messages = get_flashed_messages() %}
-      {% for message in messages %}
-          <div class="alert alert-warning">{{ message }}</div>
-      {% endfor %}
-  {% endwith %}
-  </div>
+  <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                 <button type="button"
+                        class="navbar-toggle collapsed"
+                        data-toggle="collapse"
+                        data-target="#navbar"
+                        aria-expanded="false"
+                        aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/home">CommuKNITty</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/basket">Basket</a></li>
+                    <li><a href="/search">Find Patterns</a></li>
+                    <li><a href="/local">Nearby</a></li>
 
-  {% block body %} 
-    BODY CONTENT GOES HERE 
-  {% endblock %}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                	<li><a href="/process_logout" id="logout-button">Logout</a></li>
+                    <li><a class="hidden" id="login-button">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <!-- Latest compiled and minified JavaScript -->
-{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>#}
-{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>#}
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-{#    <script type='text/javascript' src="/triangle-js/bootstrap.min.js"></script>#}
-<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/bootstrap/3.3.4/css/bootstrap.min.css">
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/bootstrap/3.3.4/bootstrap.min.js"></script>
-{#<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/bootstrap/3.3.4/css/bootstrap.min.css">#}
+
+    <div class="container">
+    <!-- Show flashed messages -->
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+              <div class="alert alert-warning">{{ message }}</div>
+          {% endfor %}
+    {% endwith %}
+    </div>
+
+    {% block body %}
+        BODY CONTENT GOES HERE
+    {% endblock %}
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/static/base.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"</script>
 
 </body>
 </html>

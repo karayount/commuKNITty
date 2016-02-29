@@ -1,19 +1,20 @@
 body{
 	margin:0;
 	padding:0;
-	background:url(../bg.gif) 0 0 repeat #f7f5f5;
-	color:#333;
+    background: #f7f5f5 repeat 0 0;
+    color:#333;
 	font-family:Cambria, Georgia, serif;
 	font-size:15px;
 	overflow-x:hidden;
 }
-header, section, footer, hgroup{
+header, section, footer{
 	display:block;
 }
 a {
-	color:#35BFFF;
+    color:#35BFFF;
 	text-decoration:none;
 }
+
 a:hover, a:active{
 	color:#91DCFF;
 }
@@ -39,6 +40,7 @@ a:hover, a:active{
 	float:left;
 	font-size:27px;
 }
+
 #backlinks{
 	float:right;
 	padding:0 20px;
@@ -79,9 +81,6 @@ a:hover, a:active{
 	margin-top:70px;
 	width:100%;
 }
-#wrapper hgroup{
-	text-align:center;
-}
 #wrapper h2{
 	margin:5px 0;
 	color:#FF6D99;
@@ -120,7 +119,6 @@ a:hover, a:active{
 	-webkit-transition: top 1s ease, left 1s ease;
 	-moz-transition: top 1s ease, left 1s ease;
 	-o-transition: top 1s ease, left 1s ease;
-	-ms-transition: top 1s ease, left 1s ease;
 }
 
 .grid strong {

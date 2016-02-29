@@ -35,9 +35,6 @@
 {% block body %}
 
     <h2>Welcome {{ user.username }}</h2>
-    <div id="basket-yarns"> <!-- TODO: display photo (of yarn in basket) here -->
-        <h4><a href="/basket">What's in your basket?</a></h4>
-    </div> <!-- end basket yarns -->
     <div id="about-me">
         <img src={{ user.photo }}>
         <label>Years knitting: {{ user.years_knitting }}</label>

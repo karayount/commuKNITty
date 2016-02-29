@@ -2,25 +2,31 @@
 
 {% block header %}
     <title>Welcome to commuKNITty</title>
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
+
 {% endblock %}
 
 {% block body %}
 
-    <h2>commuKNITty</h2>
-    <p>your home for knitting.</p>
-    <button id="login-button">Log In</button>
-    <form action="/process_login" id="login-form" class="hidden" method="GET">
-        <label>Username<input type="text" id="username-for-login"
-                        name="username"></label>
-        <input type="submit" value="Log In">
-    </form>
+    <div class="container-fluid">
+        <h2>CommuKNITty</h2>
+        <div class="row">
+            <section class="col-xs-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3" id="splash">
+                <p>A place where knitters plan their yarny adventures</p>
+            </section>
+        </div>
+        <!-- End of centered main text. -->
+        <div class="overlay hidden"></div>
+        <div class="modal hidden">
+            <div class="page hidden" id="login-modal">
+                <form action="/process_login" method="post" id="login-form">
+                    <label>Username: <input type="text" id="username-for-login" name="username"></label>
+                    <br><input type="submit" value="Login">
+                </form>
+            </div>
+        </div> <!-- end modal window -->
+    </div>
 
     <script src="https://code.jquery.com/jquery.js"></script>
-    <script type='text/javascript' src='/static/login_form.js'></script>
+    <script type='text/javascript' src='/static/landing_page.js'></script>
 
 {% endblock %}

@@ -225,4 +225,4 @@ if __name__ == "__main__":
     # load_preferences()
     # load_user_preferences()
     # load_basket_yarns()
-    load_group_events()
+    # load_group_events()
