@@ -4,23 +4,21 @@
 
     <title>commuKNITty: A place where knitters plan their yarny adventures</title>
 
-
 {% endblock %}
 
 {% block body %}
 
     <!-- It's container-fluid so it spans the whole page. -->
     <div class="container-fluid">
-        <h2>CommuKNITty</h2>
-        <div class="row">
-            <section class="col-xs-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3" id="splash">
-                <p>A place where knitters plan their yarny adventures</p>
+         <div class="row">
+            <section class="col-xs-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
+                <h2 class="centered">CommuKNITty</h2>
+                <p class="centered">A place where knitters plan their yarny adventures</p>
             </section>
         </div>
-
         <div class="row">
-            <section class="col-xs-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3" id="splash">
-                <p>Welcome {{ user.username }}<p>
+            <section class="col-xs-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
+                <img class="centered-image sweater" src="/static/anja-hoodie.jpeg" alt="sweater">
             </section>
         </div>
         <!-- End of centered main text. -->

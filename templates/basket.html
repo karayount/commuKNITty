@@ -25,28 +25,38 @@
 
     </div> {# end modal window content #}
 
-    <div id="basket_section">
+
+    <div id="basket_header" class >
+         <h3>What's in your basket?</h3>
         <button id="add-yarn-button">Add yarn to your basket</button>
+    </div> {#  end basket section  #}
+
+    <div class="container">
         {% if user_basket_yarns|length > 0 %}
-            <h3>What's in your basket?</h3>
-            {% for yarn in user_basket_yarns %}
-                <div class="basket-yarn-photo">
-                    <img src="{{ yarn.yarn.yarn_photo }}">
-                </div>
-                <div class="basket-yarn-data">
-                    <p>{{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }}</p>
-                    <p>Color: {{ yarn.colorway }}</p>
-                    <p>Yards in basket: {{ yarn.yards }}</p>
-                    <a href="/yarn_driven_search/{{ yarn.basket_yarn_id }}">Things to make with this yarn</a>
-                    <br>
-                </div> {# end basket_yarn_data class #}
-            {% endfor %}
+            <div class="row">
+                <hr>
+                <section id="pinBoot">
+                    {% for yarn in user_basket_yarns %}
+                        <article class="white-panel basket-yarn-data">
+                            <img class="basket-yarn-photo" src="{{ yarn.yarn.yarn_photo }}" alt="">
+                            <h4>{{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }}</h4>
+                            <p>Color: {{ yarn.colorway }}</p>
+                            <p>Yards in basket: {{ yarn.yards }}</p>
+                            <a href="/yarn_driven_search/{{ yarn.basket_yarn_id }}">Things to make with this yarn</a>
+                        </article>
+                    {% endfor %}
+                </section>
+                <hr>
+            </div>
         {%  else %}
             <label>You don't have any yarn in your basket yet.</label>
         {% endif %}
-    </div> {#  end basket section  #}
+    </div>
+
 
     <script src="https://code.jquery.com/jquery.js"></script>
+    <script type="text/javascript" src="/static/basket-scroll.js"></script>
     <script type='text/javascript' src='/static/basket.js'></script>
 
 {% endblock %}
+

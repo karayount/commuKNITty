@@ -73,7 +73,7 @@ body{
     left: 50%;
     margin-top: -100px;
     margin-left: -150px;
-    background-color: #3be6f1;
+    background-color: #77bbc1;
     border-radius: 5px;
     text-align: center;
     z-index: 11; /* 1px higher than the overlay layer */
@@ -84,4 +84,15 @@ body{
 }
 #login-form {
     margin-top: 50px;
+}
+.centered {
+    text-align: center;
+}
+.centered-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.sweater {
+    height: 300px;
 }

@@ -37,6 +37,7 @@ def process_login():
         return redirect("/")
     else:
         session["username"] = existing_user.username
+        flash("Welcome, " + username)
         return redirect("/home")
 
 
