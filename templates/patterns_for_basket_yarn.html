@@ -5,33 +5,41 @@
 
 {% block header %}
 
-    <link rel='stylesheet' href='/static/basket-yarn-patterns.css' media='screen' />
+    <link rel='stylesheet' href='/static/freetile.css'>
     <title>commuKNITty: patterns for {{ basket_yarn.yarn.yarn_name }}</title>
 
 {% endblock %}
 
 {% block body %}
 
-    <h3>Patterns for {{ basket_yarn.yarn.yarn_name }}</h3>
-    <!-- Content -->
-    <section id="wrapper">
-    <div id="container">
-        {% for pattern in patterns %}
-            <div class="grid">
-                <div class="imgholder">
-                    <img src={{ pattern.pattern_photo }}>
-                </div>
-                <strong>{{ pattern.pattern_name }}</strong>
-                <p>category: {{ pattern.pattern_category | prettify_preference }}</p>
-                <a href="{{ pattern.rav_pattern_link }}">See details on Ravelry</a>
-            </div>
-        {% endfor %}
-        <!---->
+    <div class="container">
+    <div id="pattern_header" class="row">
+        <div class="col-xs-12">
+            <h3>Patterns for {{ basket_yarn.yarn.yarn_name }}</h3>
+        </div>
     </div>
-    </section>
+
+    <div class="container">
+        <div class="row">
+            <hr>
+            <section id="container">
+                {% for pattern in patterns %}
+                    <div class="tile pattern">
+                        <img class="tile-photo pattern-photo" src="{{ pattern.pattern_photo }}" alt="">
+                        <h4 class="tile-title">{{ pattern.pattern_name }}</h4>
+                        <p class="tile-content">category: {{ pattern.pattern_category | prettify_preference }}</p>
+                        <a href="{{ pattern.rav_pattern_link }}" class="tile-link">See details on Ravelry</a>
+                    </div>
+                {% endfor %}
+            </section>
+            <hr>
+        </div>
+    </div>
+
 
     <script src="https://code.jquery.com/jquery.js"></script>
-    <script type="text/javascript" src="/static/basket-yarn-patterns.js"></script>
+    <script src="/static/vendor/jquery.freetile.js"></script>
+    <script type="text/javascript" src="/static/freetile.js"></script>
 
 {% endblock %}
 

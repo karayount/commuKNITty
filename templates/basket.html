@@ -2,7 +2,7 @@
 
 {% block header %}
     <title>commuKNITty: {{ user.username }}'s basket</title>
-    <link rel="stylesheet" href="/static/basket.css"></link>
+    <link rel="stylesheet" href="/static/freetile.css"></link>
 {% endblock %}
 
 {% block body %}
@@ -31,7 +31,7 @@
         <div class="col-xs-6">
             <button id="add-yarn-button">Add yarn to your basket</button>
         </div>
-    </div> {#  end basket section  #}
+    </div>
 
         {% if user_basket_yarns|length > 0 %}
             <div class="row">
@@ -57,7 +57,7 @@
 
 
     <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="/static/jquery.freetile.js"></script>
+    <script src="/static/vendor/jquery.freetile.js"></script>
     <script type='text/javascript' src='/static/basket.js'></script>
 
 {% endblock %}

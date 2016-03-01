@@ -2,53 +2,35 @@
 
 {% block header %}
     <title>commuKNITty: pattern search results</title>
-
+    <link rel="stylesheet" href="/static/freetile.css"></link>
 {% endblock %}
 
 {% block body %}
 
-    <section id="page-breadcrumb">
-        <div class="vertical-center sun">
-             <div class="container">
-                <div class="row">
-                    <div class="action">
-                        <div class="col-sm-12">
-                            <h1 class="title">{{ headline }}</h1>
-                        </div>
-                    </div>
-                </div>
+    <div class="container">
+        <div id="pattern_header" class="row">
+            <div class="col-xs-12">
+                <h3>{{ headline }}</h3>
             </div>
         </div>
-   </section>
-    <!--/#action-->
 
-    <section id="portfolio">
-        <div class="container">
-            <div class="row">
-                <div class="portfolio-items">
+        <div class="row">
+            <hr>
+            <section id="container">
                 {% for pattern in patterns %}
-                    <div class="col-xs-6 col-sm-4 col-md-3 portfolio-item branded logos">
-                        <div class="portfolio-wrapper">
-                            <div class="portfolio-single">
-                                <div class="portfolio-thumb">
-                                    <img src="{{ pattern.photo }}" class="img-responsive" alt="">
-                                </div>
-                                <div class="portfolio-view">
-                                    <ul class="nav nav-pills">
-                                        <li><a href="{{ pattern.rav_link }}"><i class="fa fa-link">See pattern on Ravelry</i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="portfolio-info ">
-                                <h4>{{ pattern.name }}</h4>
-                            </div>
-                        </div>
+                    <div class="tile pattern">
+                        <img class="tile-photo pattern-photo" src="{{ pattern.photo }}" alt="">
+                        <h4 class="tile-title">{{ pattern.name }}</h4>
+                        <a href="{{ pattern.rav_link }}" class="tile-link">See pattern on Ravelry</a>
                     </div>
-                {%  endfor %}
-                </div>
-            </div>
+                {% endfor %}
+            </section>
+            <hr>
         </div>
-    </section>
-    <!--/#portfolio-->
+    </div>
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="/static/vendor/jquery.freetile.js"></script>
+    <script type='text/javascript' src='/static/basket.js'></script>
 
 {% endblock %}
