@@ -33,19 +33,18 @@
         </div>
     </div> {#  end basket section  #}
 
-    
         {% if user_basket_yarns|length > 0 %}
             <div class="row">
                 <hr>
                 <section id="container">
                     {% for yarn in user_basket_yarns %}
-                        <article class="white-panel basket-yarn-data">
-                            <img class="basket-yarn-photo" src="{{ yarn.yarn.yarn_photo }}" alt="">
-                            <h4>{{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }}</h4>
-                            <p>Color: {{ yarn.colorway }}</p>
-                            <p>Yards in basket: {{ yarn.yards }}</p>
-                            <a href="/yarn_driven_search/{{ yarn.basket_yarn_id }}">Things to make with this yarn</a>
-                        </article>
+                        <div class="tile basket-yarn-data">
+                            <img class="tile-photo basket-yarn-photo" src="{{ yarn.yarn.yarn_photo }}" alt="">
+                            <h4 class="tile-title">{{ yarn.yarn.yarn_company }} {{ yarn.yarn.yarn_name }}</h4>
+                            <p class="tile-content">Color: {{ yarn.colorway }}<br>
+                                Yards: {{ yarn.yards }}</p>
+                            <a href="/yarn_driven_search/{{ yarn.basket_yarn_id }}" class="tile-link">What to make with this yarn</a>
+                        </div>
                     {% endfor %}
                 </section>
                 <hr>
