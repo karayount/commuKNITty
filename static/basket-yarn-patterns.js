@@ -2,6 +2,8 @@
  * Created by Kara on 2/26/16.
  */
 
+$('#container').freetile();
+
 $(document).ready(function() {
 	$('#container').BlocksIt({
 		numOfCol: 4,

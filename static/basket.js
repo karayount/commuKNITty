@@ -2,6 +2,8 @@
  * Created by Kara on 2/22/16.
  */
 
+$('#container').freetile();
+
 $('#add-yarn-button').click(function() {
     $('.overlay').removeClass('hidden');
     $('.modal').removeClass('hidden');

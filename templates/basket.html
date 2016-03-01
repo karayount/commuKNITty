@@ -2,9 +2,7 @@
 
 {% block header %}
     <title>commuKNITty: {{ user.username }}'s basket</title>
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="/static/basket.css"></link>
 {% endblock %}
 
 {% block body %}
@@ -25,17 +23,21 @@
 
     </div> {# end modal window content #}
 
-
-    <div id="basket_header" class >
-         <h3>What's in your basket?</h3>
-        <button id="add-yarn-button">Add yarn to your basket</button>
+    <div class="container">
+    <div id="basket_header" class="row">
+        <div class="col-xs-6">
+            <h3>What's in your basket?</h3>
+        </div>
+        <div class="col-xs-6">
+            <button id="add-yarn-button">Add yarn to your basket</button>
+        </div>
     </div> {#  end basket section  #}
 
-    <div class="container">
+    
         {% if user_basket_yarns|length > 0 %}
             <div class="row">
                 <hr>
-                <section id="pinBoot">
+                <section id="container">
                     {% for yarn in user_basket_yarns %}
                         <article class="white-panel basket-yarn-data">
                             <img class="basket-yarn-photo" src="{{ yarn.yarn.yarn_photo }}" alt="">
@@ -54,8 +56,9 @@
     </div>
 
 
+
     <script src="https://code.jquery.com/jquery.js"></script>
-    <script type="text/javascript" src="/static/basket-scroll.js"></script>
+    <script src="/static/jquery.freetile.js"></script>
     <script type='text/javascript' src='/static/basket.js'></script>
 
 {% endblock %}
