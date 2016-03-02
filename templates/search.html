@@ -3,7 +3,7 @@
 {% macro print_pref(category, master_list, heading) %}
     <label>{{ heading }}</label><br>
     {% for pref in master_list %}
-        <label><input type="checkbox" name="{{ category }}" value="{{ pref }}" id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label>
+        <label class="pref-box"><input type="checkbox" name="{{ category }}" value="{{ pref }}" id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label><br>
     {% endfor %}
 {% endmacro %}
 
@@ -18,19 +18,42 @@
 
 {% block body %}
 
-    <form action="/preference_search_results">
-        <label><input type="submit" value="See patterns recommended just for you" id="personalized_search_button"></input></label>
-    </form>
+    <div class="row">
+         <div class="col-xs-12 ze-buttons">
+            <form action="/preference_search_results">
+                <label><input type="submit" value="See patterns recommended just for you" id="personalized_search_button"></input></label>
+            </form>
+         </div>
+    </div>
     <br>
 
-    <label><button id="parameter-search-button">Search for patterns</button></label>
+    <div class="row">
+        <div class="col-xs-12 ze-buttons">
+            <label><button id="parameter-search-button">Search for patterns</button></label>
+        </div>
+    </div>
     <form action="/parameter_search_results" method='POST' id="parameter-search-form" class="hidden">
-        <br>{{ print_pref('pc', all_prefs.pc, 'Pattern Category') }}<br>
-        <br>{{ print_pref('fit', all_prefs.fit, 'Size') }}<br>
-        <br>{{ print_pref('weight', all_prefs.weight, 'Yarn Weight') }}<br>
-        <br>{{ print_pref('pa', all_prefs.pa, 'Technique') }}<br>
-        <label><input type="submit" value="Search"</label>
+        <div class="row">
+            <div class="col-xs-2 ze-buttons">
+                <br>{{ print_pref('pc', all_prefs.pc, 'Pattern Category') }}<br>
+            </div>
+            <div class="col-xs-2">
+                <br>{{ print_pref('fit', all_prefs.fit, 'Garment Size') }}<br>
+            </div>
+            <div class="col-xs-2">
+                <br>{{ print_pref('weight', all_prefs.weight, 'Yarn Weight') }}<br>
+            </div>
+            <div class="col-xs-2">
+                <br>{{ print_pref('pa', all_prefs.pa, 'Technique') }}<br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 ze-buttons">
+                <label><input type="submit" value="Search"</label>
+            </div>
+        </div>
     </form>
+
 
     <script src="https://code.jquery.com/jquery.js"></script>
     <script type='text/javascript' src='/static/search_forms.js'></script>

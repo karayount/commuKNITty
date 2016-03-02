@@ -21,9 +21,9 @@
     <label>{{ heading }}</label><br>
     {% for pref in master_list %}
         {% if pref in user_list %}
-            <label><input class="pref-box" type="checkbox" name="{{ category }}" value="{{ pref }}" checked id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label>
+            <label class="pref-box"><input type="checkbox" name="{{ category }}" value="{{ pref }}" checked id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label><br>
         {% else %}
-            <label><input class="pref-box" type="checkbox" name="{{ category }}" value="{{ pref }}" id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label>
+            <label class="pref-box"><input type="checkbox" name="{{ category }}" value="{{ pref }}" id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label><br>
         {% endif %}
     {% endfor %}
 {% endmacro %}
@@ -40,7 +40,7 @@
         </div>
         <div id="about-me" class="row">
             <div class="col-xs-2">
-                <img src={{ user.photo }}>
+                <img src="{{ user.photo }}" alt="Userface">
             </div>
             <div class="col-xs-10">
                 <p>Years knitting: {{ user.years_knitting }}</p><br>
@@ -78,12 +78,22 @@
             <br>
                 <button id="update-preferences-button">Update your preferences</button>
                 <br><br>
-                <form id="update-preferences-form" class="hidden">
-                    {{ print_update_pref('pc', all_prefs.pc, user_prefs.pc, 'What do you like to knit? (Choose as many as you like.') }}<br>
-                    {{ print_update_pref('fit', all_prefs.fit, user_prefs.fit, 'Who do you like to knit for?') }}<br>
-                    {{ print_update_pref('weight', all_prefs.weight, user_prefs.weight, 'What are your preferred yarn weights?') }}<br>
-                    {{ print_update_pref('pa', all_prefs.pa, user_prefs.pa, 'Do you enjoy any of these techniques?') }}<br>
-                </form>
+                <div class="row">
+                    <form id="update-preferences-form" class="hidden">
+                        <div class="col-xs-3">
+                            {{ print_update_pref('pc', all_prefs.pc, user_prefs.pc, 'What do you like to knit?') }}<br>
+                        </div>
+                        <div class="col-xs-3">
+                            {{ print_update_pref('fit', all_prefs.fit, user_prefs.fit, 'Who do you like to knit for?') }}<br>
+                        </div>
+                        <div class="col-xs-3">
+                            {{ print_update_pref('weight', all_prefs.weight, user_prefs.weight, 'What are your preferred yarn weights?') }}<br>
+                        </div>
+                        <div class="col-xs-3">
+                            {{ print_update_pref('pa', all_prefs.pa, user_prefs.pa, 'Do you enjoy any of these techniques?') }}<br>
+                        </div>
+                    </form>
+                </div>
             </div> <!-- end preferences_form -->
         </div>
     </div>

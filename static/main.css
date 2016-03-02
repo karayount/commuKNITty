@@ -69,6 +69,9 @@ body {
 .sweater {
     height: 300px;
 }
-.pref-box{
-    font: smaller;
+.pref-box {
+    margin-left: 20px;
+}
+.ze-buttons {
+    margin-left: 20px;
 }

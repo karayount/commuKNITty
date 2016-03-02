@@ -1,22 +1,20 @@
 """Utility file to seed commuknitty database from Ravelry API calls, and
     from static data in files in seed_data/"""
 
-from sqlalchemy import func
 from model import (User, Preference, UserPreference, Basket, Yarn, BasketYarn,
-                   GroupEvent, Project, Pattern)
+                   GroupEvent)
 from model import connect_to_db, db
 from server import app
 import requests
 import csv
 
 
-def load_users_and_create_baskets():
+def load_users_and_create_baskets(user_data):
     """Load existing users into database from file"""
 
     print "Users"
 
     User.query.delete()
-    user_data = "seed_data/user_data.txt"
 
     with open(user_data) as users:
         for row in users:
@@ -101,7 +99,7 @@ def load_yarns():
         db.session.commit()
 
 
-def load_preferences():
+def load_preferences(preference_data):
     """Load all options for preferences, from file
 
        pref_category and pref_value will match Ravelry search terms,
@@ -111,7 +109,6 @@ def load_preferences():
     print "Preferences"
 
     Preference.query.delete()
-    preference_data = "seed_data/preference_data.txt"
 
     with open(preference_data) as prefs:
         for row in prefs:
@@ -131,13 +128,12 @@ def load_preferences():
         db.session.commit()
 
 
-def load_user_preferences():
+def load_user_preferences(user_preference_data):
     """Load user preferences from file"""
 
     print "UserPreferences"
 
     UserPreference.query.delete()
-    user_preference_data = "seed_data/user_preference_data.txt"
 
     with open(user_preference_data) as user_prefs:
         for row in user_prefs:
@@ -156,13 +152,12 @@ def load_user_preferences():
         db.session.commit()
 
 
-def load_basket_yarns():
+def load_basket_yarns(basket_yarn_data):
     """Load BasketYarn data from file."""
 
     print "BasketYarns"
 
     BasketYarn.query.delete()
-    basket_yarn_data = "seed_data/basket_yarn_data.txt"
 
     with open(basket_yarn_data) as basket_yarns:
         for row in basket_yarns:
@@ -185,12 +180,10 @@ def load_basket_yarns():
         db.session.commit()
 
 
-def load_group_events():
+def load_group_events(group_event_data):
     """ Load
     :return: none
     """
-
-    group_event_data = "seed_data/group-events.csv"
 
     f = open(group_event_data)
     csv_f = csv.reader(f)
@@ -220,9 +213,9 @@ if __name__ == "__main__":
     db.create_all()
 
     # Import different types of data
-    # load_yarns()
-    # load_users_and_create_baskets()
-    # load_preferences()
-    # load_user_preferences()
-    # load_basket_yarns()
-    # load_group_events()
+    load_yarns()
+    load_users_and_create_baskets("seed_data/user_data.txt")
+    load_preferences("seed_data/preference_data.txt")
+    load_user_preferences("seed_data/user_preference_data.txt")
+    load_basket_yarns("seed_data/basket_yarn_data.txt")
+    load_group_events("seed_data/group-events.csv")
