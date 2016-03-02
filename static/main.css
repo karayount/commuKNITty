@@ -1,0 +1,74 @@
+/*   Sitewide  */
+
+.nav, .navbar, .navbar-default, .navbar-default {
+    background-color: #77bbc1;
+    color: #000000;
+    border-radius: 0px;
+}
+.navbar-default .navbar-brand {
+    color: #151515;
+}
+.navbar-default .navbar-nav>li>a {
+    color: white;
+}
+
+#login {
+    margin: 20px;
+}
+.feature {
+    text-align: center;
+}
+
+
+/* Things added since melon shopping site template */
+html {
+    height: 100%;
+}
+body {
+    min-height: 100%;
+    position: relative;
+    background-color: #e8fffa;
+}
+.overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(53, 53, 53, 0.5); /*dim the background*/
+}
+.modal {
+    width: 400px;
+    height: 300px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -150px;
+    background-color: #77bbc1;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 11; /* 1px higher than the overlay layer */
+    display: block;
+}
+.hidden {
+    display: none;
+}
+#login-form {
+    margin-top: 50px;
+}
+.centered {
+    text-align: center;
+}
+.centered-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.sweater {
+    height: 300px;
+}
+.pref-box{
+    font: smaller;
+}

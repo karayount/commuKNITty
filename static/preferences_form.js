@@ -6,11 +6,21 @@
 
 // toggle update preferences form on Update Preferences Button click
 $('#update-preferences-button').click(function() {
-    $('#update-preferences-form').removeClass('hidden');
+    if ($('#update-preferences-form').hasClass('hidden')) {
+        $('#update-preferences-form').removeClass('hidden');
+    }
+    else {
+        $('#update-preferences-form').addClass('hidden');
+    }
 });
 
 function reprintPreferences(data) {
-    $("#" + data).toggle();
+    if ($("#" + data).hasClass('hidden')) {
+        $("#" + data).removeClass('hidden');
+    }
+    else {
+        $("#" + data).addClass('hidden');
+    }
 }
 
 function updatePreference(evt) {
