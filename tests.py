@@ -6,6 +6,7 @@ from model import connect_to_db, db, create_example_data
 from server import app
 import server
 from seed import load_preferences, load_user_preferences
+from local import get_businesses_from_yelp, YelpBusiness, create_map_markers
 
 # assertEqual(a, b)	a == b
 # assertNotEqual(a, b)	a != b
@@ -22,6 +23,7 @@ from seed import load_preferences, load_user_preferences
 
 
 class FlaskTests(unittest.TestCase):
+    """ Tests of Flask routes """
 
     def setUp(self):
         """Stuff to do before every test."""
@@ -41,8 +43,13 @@ class FlaskTests(unittest.TestCase):
         #                       projects, and patterns
         create_example_data()
         # create db records for preferences and user_preferences
-        # load_preferences("test_data/preference_data.txt")
-        # load_user_preferences("test_data/user_preference_data.txt")
+        load_preferences("test_data/preference_data.txt")
+        load_user_preferences("test_data/user_preference_data.txt")
+
+        with self.client as c:
+                with c.session_transaction() as session:
+                    session['user'] = 'u1'
+                c.set_cookie('localhost', 'MYCOOKIE', 'cookie_value')
 
     def tearDown(self):
         """Do at end of every test."""
@@ -51,7 +58,7 @@ class FlaskTests(unittest.TestCase):
         db.drop_all()
 
     def test_landing_page(self):
-        test_client = server.app.test_client()
+        test_client = self.client
         result = test_client.get('/')
 
         self.assertEqual(result.status_code, 200)
@@ -119,32 +126,21 @@ class FlaskTests(unittest.TestCase):
 #
 
 
+class LocalPageTests(unittest.TestCase):
+    """ Unit tests about local page"""
 
-# class EmpTests(unittest.TestCase):
-#     """Unit tests about employees."""
-#
-#     def test_emp_to_dict(self):
-#         """Can employee turn to dictionary?"""
-#
-#         leonard = Employee(name='Leonard', state='CA')
-#         expected = {'state': 'CA',
-#                     'id': None,
-#                     'dept_code': None,
-#                     'name': 'Leonard'}
-#         self.assertDictEqual(leonard.to_dict(), expected)
-#
-#     def test_emp_with_dept_to_dict(self):
-#         """Can employee with department turn to a dictionary?"""
-#
-#         legal = Department(dept_code='legal', dept='Legal', phone='555-1212')
-#         leonard = Employee(name='Leonard', state='CA', dept=legal)
-#         expected = {'dept': {'dept': 'Legal', 'phone': '555-1212'},
-#                     'state': 'CA',
-#                     'id': None,
-#                     'dept_code': None,
-#                     'name': 'Leonard'}
-#         self.assertDictEqual(leonard.to_dict(), expected)
+    def test_get_businesses_from_yelp(self):
+        """ Can we build list of YelpBusiness objects? """
 
+        business_list = get_businesses_from_yelp()
+        self.assertIsInstance(business_list[0], YelpBusiness)
+        self.assertIsInstance(business_list[0], YelpBusiness)
+
+    def test_create_map_markers(self):
+        """ Can we create map markers? """
+
+        markers = create_map_markers()
+        self.assertIsInstance(markers, dict)
 
 
 

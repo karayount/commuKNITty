@@ -12,8 +12,6 @@ import csv
 def load_users_and_create_baskets(user_data):
     """Load existing users into database from file"""
 
-    print "Users"
-
     User.query.delete()
 
     with open(user_data) as users:
@@ -47,8 +45,6 @@ def load_yarns():
     """Load yarns into database from Ravelry API requests for most popular
 
        Ravelry pagination uses 50 records per page. Response in JSON."""
-
-    print "Yarns"
 
     # Delete all rows in table, so if we need to run this a second time,
     # we won't be trying to add duplicate records
@@ -106,8 +102,6 @@ def load_preferences(preference_data):
        so they can be appended to url for API requests. Complete
        mapping is laid out in preferences.py """
 
-    print "Preferences"
-
     Preference.query.delete()
 
     with open(preference_data) as prefs:
@@ -131,8 +125,6 @@ def load_preferences(preference_data):
 def load_user_preferences(user_preference_data):
     """Load user preferences from file"""
 
-    print "UserPreferences"
-
     UserPreference.query.delete()
 
     with open(user_preference_data) as user_prefs:
@@ -154,8 +146,6 @@ def load_user_preferences(user_preference_data):
 
 def load_basket_yarns(basket_yarn_data):
     """Load BasketYarn data from file."""
-
-    print "BasketYarns"
 
     BasketYarn.query.delete()
 

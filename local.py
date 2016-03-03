@@ -63,9 +63,8 @@ def get_businesses_from_yelp():
 
 
 def create_map_markers():
-    """
-    :param business_list: list of YelpBusiness objects
-    :return: JSON object of business data for creating mapbox markers
+    """ Creates dictionary of map marker data to be sent to mapbox
+    :return: dictionary of business data for creating mapbox markers
     """
 
     business_list = get_businesses_from_yelp()

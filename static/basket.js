@@ -4,13 +4,21 @@
 
 $('#container').freetile();
 
-$('#add-yarn-button').click(function() {
-    $('.overlay').removeClass('hidden');
-    $('.modal').removeClass('hidden');
-    $('#search-yarn').removeClass('hidden');
-});
+//$('#add-yarn-button').click(function() {
+//    $('.overlay').removeClass('hidden');
+//    $('.modal').removeClass('hidden');
+//    $('#search-yarn').removeClass('hidden');
+//});
 
 $('#search-yarn-form').submit(searchForYarns);
+
+
+//$('body').on('click', '.close', function() {
+//    $('.overlay').addClass('hidden');
+//    $('.modal').addClass('hidden');
+//    $('#search-yarn').addClass('hidden');
+//});
+
 
 function searchForYarns(evt) {
     evt.preventDefault();
@@ -30,7 +38,7 @@ function showYarnOptions(result) {
             "<select name='yarn_select'>";
         for (var i = 0; i < yarnList.length; i++) {
             var yarn = yarnList[i];
-            text += "<option value='" + yarn.yarn_id + "'>" + yarn.company + " " + yarn.yarn_name + "</option><br>";
+            text += "<option value='" + yarn.yarn_id + "'>" + yarn.company + " " + yarn.yarn_name + "</option>";
         }
         text += "</select><label>How many yards? <input type='number' name='yardage'></label>" +
             "<br><label>What color? <input type='text' name='colorway'></label>" +
