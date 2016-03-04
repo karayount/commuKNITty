@@ -85,24 +85,30 @@ class FlaskTests(unittest.TestCase):
         self.assertIn("/home", result.data)
 
     def test_get_markers(self):
-        """  """
+        """ Does the route return a json object of map markers? """
 
         test_client = self.client
-        # result = test_client.get('/')
+        result = test_client.get('/get_markers.json')
 
         self.assertEqual(result.status_code, 200)
         self.assertIn('text/html', result.headers['Content-Type'])
-        # self.assertIn('<h1>Test</h1>', result.data)
+        self.assertIn('see on Yelp', result.data)
+        self.assertIn('{', result.data)
+        self.assertNotIsInstance(result.data, dict)
 
     def tests_find_yarn_matches(self):
         """  """
 
         test_client = self.client
-        # result = test_client.get('/')
+        result = test_client.get('/find_yarn_matches.json')
 
         self.assertEqual(result.status_code, 200)
         self.assertIn('text/html', result.headers['Content-Type'])
-        # self.assertIn('<h1>Test</h1>', result.data)
+        self.assertIn('yarn_name', result.data)
+        self.assertIn('{', result.data)
+        self.assertNotIsInstance(result.data, dict)
+
+
 
 
 class FlaskTestsLoggedIn(unittest.TestCase):

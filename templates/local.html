@@ -19,14 +19,20 @@
         </div>
         <div class="row">
             <div id="yelp-results" class="col-xs-3">
-                    {% for biz in business_list %}
-                        <a class="yelp-biz-name">{{ biz.biz_name }}</a><br>
-                        <a class="yelp-biz-addr">{{ biz.biz_addr }}</a><br>
-                        <a class="yelp-url" href="{{ biz.biz_url }}">find {{ biz.biz_name }} on Yelp</a><br>
+                <ol>
+                    {% for index in range(business_list|length) %}
+                        <br>
+                        <li>
+                        <span class="yelp-biz-name">{{ business_list[index].biz_name }}</span><br>
+                        <span class="yelp-biz-addr">{{ business_list[index].biz_addr }}</span><br>
+                        <a class="yelp-url" href="{{ business_list[index].biz_url }}">find {{ business_list[index].biz_name }} on Yelp</a><br>
+                        </li>
                     {% endfor %}
+                </ol>
             </div>
 
             <div class="map-container col-xs-6">
+                <br>
                 <div id='map'></div>
             </div>
 

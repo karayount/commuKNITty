@@ -72,10 +72,14 @@ def create_map_markers():
     iter = 1
     for business in business_list:
         properties = {
+            "title": business.biz_name,
             "description": ("<div class=\"marker-title\">" +
                             business.biz_name + "</div><p>" +
                             business.biz_addr + "<br><a href=\"" +
                             business.biz_url + ">see on Yelp</a></p>"),
+            'marker-size': 'small',
+            'marker-color': "#cccccc",
+            # 'marker-symbol': '2'
             "marker-symbol": "marker"
         }
         geometry = {
@@ -101,3 +105,39 @@ def create_map_markers():
     }
 
     return markers
+
+# #terri's for one marker
+# e_geojson = {
+#                 "type": "FeatureCollection",
+#                 "features": [
+#                     {
+#                     "type": "Feature",
+#                     "properties": {
+#                         "title": marker.title,
+#                         "date": marker.date,
+#                         "date-tier": marker.date_tier,
+#                         "time": marker.time,
+#                         "name": marker.name,
+#                         "address": marker.address,
+#                         "cost": marker.cost,
+#                         "img_url": marker.img_url,
+#                         "event_url": marker.event_url,
+#                         "description": marker.description,
+#                         "category": marker.category,
+#                         "marker-type": marker.marker_type,
+#                         "marker-symbol": marker.marker_symbol,
+#                         "marker-color": marker.marker_color
+#                         },
+#                     "geometry": {
+#                         "coordinates": [
+#                             marker.longitude,
+#                             marker.latitude],
+#                         "type": "Point"
+#                     },
+#                     "id": marker.marker_id
+#                     }
+#                 for marker in Marker.query.filter(Marker.marker_type == 'event', Marker.datetime >= today).all()
+#                 ]
+#             }
+#
+#     return jsonify(e_geojson)

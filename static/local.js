@@ -11,8 +11,8 @@ function renderMap(results) {
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v8',
-        center: [-122.45, 37.77],
-        zoom: 11
+        center: [-122.4, 37.77],
+        zoom: 9.5
     });
 
     map.on('style.load', function () {
