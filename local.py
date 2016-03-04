@@ -69,6 +69,7 @@ def create_map_markers():
 
     business_list = get_businesses_from_yelp()
     features = []
+    iter = 1
     for business in business_list:
         properties = {
             "description": ("<div class=\"marker-title\">" +
@@ -87,6 +88,7 @@ def create_map_markers():
             "geometry": geometry
         }
         features.append(feature)
+        iter += 1
 
     data = {
         "type": "FeatureCollection",

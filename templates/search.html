@@ -9,32 +9,44 @@
 
 {% block header %}
     <title>commuKNITty: search</title>
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/freetile.css"></link>
 {% endblock %}
 
 {% block body %}
 
     <div class="row">
-         <div class="col-xs-12 ze-buttons">
+        <div class="col-xs-12">
+            <h3>Patterns recommended just for you</h3>
+        </div>
+    </div>
+    <div class="row">
+        <section class="col-xs-12" id="container">
+            {% for pattern in pattern_recs %}
+                <div class="tile pattern">
+                    <img class="tile-photo pattern-photo" src="{{ pattern.photo }}" alt="">
+                    <h4 class="tile-title">{{ pattern.name }}</h4>
+                    <a href="{{ pattern.rav_link }}" class="tile-link">See pattern on Ravelry</a>
+                </div>
+            {% endfor %}
+        </section>
+    </div>
+    <div class="row">
+         <div class="col-xs-12 search-buttons">
             <form action="/preference_search_results">
-                <label><input type="submit" value="See patterns recommended just for you" id="personalized_search_button"></input></label>
+                <label><input type="submit" value="See more" id="personalized_search_button"></input></label>
             </form>
          </div>
     </div>
-    <br>
+    <br><hr>
 
     <div class="row">
-        <div class="col-xs-12 ze-buttons">
-            <label><button id="parameter-search-button">Search for patterns</button></label>
+        <div class="col-xs-12 search-buttons">
+            <label><button id="parameter-search-button">Looking for something specific?</button></label>
         </div>
     </div>
     <form action="/parameter_search_results" method='POST' id="parameter-search-form" class="hidden">
         <div class="row">
-            <div class="col-xs-2 ze-buttons">
+            <div class="col-xs-2 search-buttons">
                 <br>{{ print_pref('pc', all_prefs.pc, 'Pattern Category') }}<br>
             </div>
             <div class="col-xs-2">
@@ -48,7 +60,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12 ze-buttons">
+            <div class="col-xs-12 search-buttons">
                 <label><input type="submit" value="Search"</label>
             </div>
         </div>
@@ -56,6 +68,8 @@
 
 
     <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="/static/vendor/jquery.freetile.js"></script>
+    <script src="/static/freetile.js"></script>
     <script type='text/javascript' src='/static/search_forms.js'></script>
 
 

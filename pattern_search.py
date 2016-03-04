@@ -118,3 +118,18 @@ def build_pattern_list_from_parameters(grouped_preferences):
     list_of_patterns = search_patterns_from_ravelry(search_url)
 
     return list_of_patterns
+
+
+def build_short_pattern_list_from_parameters(grouped_preferences):
+    """ Returns list of 5 patterns to make with input parameters.
+    :param grouped_preferences: GroupedPreferences object
+    :return: list of 5 SearchResultPattern objects, based on input parameters
+    """
+
+    search_url = build_parameter_search_url(grouped_preferences)
+
+    list_of_patterns = search_patterns_from_ravelry(search_url)
+
+    list_of_patterns = list_of_patterns[0:5]
+
+    return list_of_patterns

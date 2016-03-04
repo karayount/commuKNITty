@@ -13,29 +13,33 @@
 
     <div id="all-the-things" class="container">
         <div class="row">
-            <div id="groups" class="col-xs-3">
-                <h4>Weekly knit nights near you</h4>
-                {% for group in groups %}
-                    <p><strong>{{ group.group_name }}</strong><br>
-                        meets on {{ group.day }} at {{ group.time }}<br>
-                        at {{ group.location }} in {{ group.city }}</p>
-                {% endfor %}
+            <div class="col-xs-12">
+                <h2>Local knitterly resources</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div id="yelp-results" class="col-xs-3">
+                    {% for biz in business_list %}
+                        <a class="yelp-biz-name">{{ biz.biz_name }}</a><br>
+                        <a class="yelp-biz-addr">{{ biz.biz_addr }}</a><br>
+                        <a class="yelp-url" href="{{ biz.biz_url }}">find {{ biz.biz_name }} on Yelp</a><br>
+                    {% endfor %}
             </div>
 
             <div class="map-container col-xs-6">
                 <div id='map'></div>
             </div>
 
-            <div id="yelp-results" class="col-xs-3">
-                <h2>Local knitterly resources</h2>
-                    {% for biz in business_list %}
-                        <a class="yelp-biz-name">{{ biz.biz_name }}</a><br>
-                        <a class="yelp-biz-addr">{{ biz.biz_addr }}</a><br>
-                        <a class="yelp-url" href="{{ biz.biz_url }}">find {{ biz.biz_name }} on Yelp</a><br>
-                    {% endfor %}
-
+            <div id="groups" class="col-xs-3">
+                <h4>Weekly knit nights near you</h4>
+                {% for group in groups %}
+                    <div class="group-box">
+                        <p><strong>{{ group.group_name }}</strong><br>
+                            {{ group.day }} at {{ group.time }}<br>
+                            {{ group.location }} in {{ group.city }}</p>
+                    </div>
+                {% endfor %}
             </div>
-
         </div>
     </div>
 

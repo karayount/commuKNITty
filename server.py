@@ -6,7 +6,8 @@ from jinja_filters import prettify_preference
 from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
                    GroupEvent)
 from pattern_search import (build_pattern_list_from_parameters,
-                            build_pattern_list_from_yarn)
+                            build_pattern_list_from_yarn,
+                            build_short_pattern_list_from_parameters)
 from preferences import (group_user_prefs, get_all_grouped_prefs,
                          update_user_preference, GroupedPreferences)
 from local import get_businesses_from_yelp, create_map_markers
@@ -222,10 +223,15 @@ def show_search_page():
         flash("You are not authorized to view this page")
         return redirect("/")
 
+    search_params = group_user_prefs(user)
+
+    search_result_patterns = build_short_pattern_list_from_parameters(search_params)
+
     all_grouped_prefs = get_all_grouped_prefs()
 
     return render_template("search.html",
-                           all_prefs=all_grouped_prefs)
+                           all_prefs=all_grouped_prefs,
+                           pattern_recs=search_result_patterns)
 
 
 @app.route("/yarn_driven_search/<int:basket_yarn_id>")
