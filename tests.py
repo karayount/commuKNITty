@@ -1,12 +1,21 @@
 """ Test suite for CommuKNITty webapp. """
 
 import unittest
-import json
-from model import connect_to_db, db, create_example_data
 from server import app
-from jinja_filters import prettify_preference
-from seed import load_preferences, load_user_preferences
+from model import (connect_to_db, db, create_example_data, User, UserPreference,
+                   GroupEvent, Preference, Basket, Yarn, BasketYarn, Project,
+                   Pattern)
+from preferences import (update_user_preference, get_all_grouped_prefs,
+                        group_user_prefs, GroupedPreferences)
+from seed import (load_preferences, load_user_preferences, load_yarns,
+                  load_users_and_create_baskets, load_preferences,
+                  load_user_preferences, load_basket_yarns, load_group_events)
+from pattern_search import (SearchResultPattern, build_pattern_list_from_yarn,
+                            build_parameter_search_url,
+                            search_patterns_from_ravelry,
+                            build_pattern_list_from_parameters)
 from local import get_businesses_from_yelp, YelpBusiness, create_map_markers
+from jinja_filters import prettify_preference
 
 # assertEqual(a, b)	a == b
 # assertNotEqual(a, b)	a != b
