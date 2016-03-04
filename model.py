@@ -38,14 +38,6 @@ class Preference(db.Model):
     __tablename__ = "preferences"
 
     pref_id = db.Column(db.Integer, primary_key=True)
-
-    # pref_category, pref_value will be used for Ravelry API search parameters
-    # pref_category options: weight, pc, fit, or pa
-    # pref_value options: lace, fingering, sport, dk, worsted, aran, bulky,
-    #   cardigan, pullover, vest, socks, mittens, gloves, fingerless,
-    #   beanie-toque, earflap, cowl, scarf, shawl-wrap, adult, child, baby,
-    #   cables, lace, intarsia, stranded, stripes-colorwork
-
     pref_category = db.Column(db.String(50), nullable=False)
     pref_value = db.Column(db.String(50), nullable=False)
 

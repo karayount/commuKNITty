@@ -4,7 +4,7 @@ import unittest
 import json
 from model import connect_to_db, db, create_example_data
 from server import app
-import server
+from flask import session
 from seed import load_preferences, load_user_preferences
 from local import get_businesses_from_yelp, YelpBusiness, create_map_markers
 
@@ -23,7 +23,7 @@ from local import get_businesses_from_yelp, YelpBusiness, create_map_markers
 
 
 class FlaskTests(unittest.TestCase):
-    """ Tests of Flask routes """
+    """ Tests of Flask routes that don't require logged in user """
 
     def setUp(self):
         """Stuff to do before every test."""
@@ -46,10 +46,70 @@ class FlaskTests(unittest.TestCase):
         load_preferences("test_data/preference_data.txt")
         load_user_preferences("test_data/user_preference_data.txt")
 
+    def tearDown(self):
+        """Do at end of every test."""
+
+        db.session.close()
+        db.drop_all()
+
+    def test_show_landing_page(self):
+        """ Does landing page render? """
+
+        test_client = self.client
+        result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('CommuKNITty', result.data)
+
+    def test_process_login(self):
+        """ Does login add user to session and redirect to home? """
+
+        test_client = self.client
+        result = test_client.post('/process_login',
+                                  data={'username': 'u1'},
+                                  follow_redirects=True)
+
+        self.assertIn("Welcome,", result.data)
+        self.assertIn("/home", result.data)
+
+    def test_get_markers(self):
+        pass
+
+    def tests_find_yarn_matches(self):
+        pass
+
+
+class FlaskTestsLoggedIn(unittest.TestCase):
+    """ Tests of Flask routes that require a logged in user """
+
+    def setUp(self):
+        """Stuff to do before every test."""
+
+        # Get the Flask test client
+        self.client = app.test_client()
+
+        # secret key to allow sessions to be used
+        app.config['SECRET_KEY'] = 'sekrit!'
+
+        # Show Flask errors that happen during tests
+        app.config['TESTING'] = True
+
+        # Connect to test database
+        connect_to_db(app, db_uri="postgresql:///testdb")
+
+        # Create tables and add sample data
+        db.create_all()
+        # create db records for yarns, users, baskets, basket_yarns,
+        #                       projects, and patterns
+        create_example_data()
+        # create db records for preferences and user_preferences
+        load_preferences("test_data/preference_data.txt")
+        load_user_preferences("test_data/user_preference_data.txt")
+
         with self.client as c:
                 with c.session_transaction() as session:
-                    session['user'] = 'u1'
-                c.set_cookie('localhost', 'MYCOOKIE', 'cookie_value')
+                    session['username'] = 'u1'
+                # c.set_cookie('localhost', 'MYCOOKIE', 'cookie_value')
 
     def tearDown(self):
         """Do at end of every test."""
@@ -57,12 +117,45 @@ class FlaskTests(unittest.TestCase):
         db.session.close()
         db.drop_all()
 
-    def test_landing_page(self):
-        test_client = self.client
-        result = test_client.get('/')
+    def test_process_logout(self):
+        """ Can user log out and be redirected to landing page? """
 
-        self.assertEqual(result.status_code, 200)
-        self.assertIn('CommuKNITty', result.data)
+        test_client = self.client
+        result = test_client.get('/process_logout',
+                                 follow_redirects=True)
+
+        self.assertIn("now logged out", result.data)
+
+    def test_show_homepage(self):
+        pass
+
+    def test_show_local(self):
+        pass
+
+    def test_show_user_profile(self):
+        pass
+
+    def test_update_preference_in_db(self):
+        pass
+
+    def test_show_basket(self):
+        pass
+
+    def test_add_yarn_to_basket(self):
+        pass
+
+    def test_show_search_page(self):
+        pass
+
+    def test_yarn_driven_search(self):
+        pass
+
+    def test_show_parameter_search_results(self):
+        pass
+
+    def test_show_preference_search_results(self):
+        pass
+
 
     # def test_find_employee(self):
     #     """Can we find an employee in the sample data?"""
@@ -134,7 +227,7 @@ class LocalPageTests(unittest.TestCase):
 
         business_list = get_businesses_from_yelp()
         self.assertIsInstance(business_list[0], YelpBusiness)
-        self.assertIsInstance(business_list[0], YelpBusiness)
+        self.assertEqual(business_list[0].biz_name, 'ImagiKnit')
 
     def test_create_map_markers(self):
         """ Can we create map markers? """
@@ -142,20 +235,6 @@ class LocalPageTests(unittest.TestCase):
         markers = create_map_markers()
         self.assertIsInstance(markers, dict)
 
-
-
-#
-# class MyAppUnitTestCase(unittest.TestCase):
-#     """Examples of unit tests: discrete code testing."""
-#
-#     def testAdder(self):
-#         assert server.adder(1, 1) == 99
-#
-#     def test_should_add_two_nums(self):
-#         self.assertEqual(server.adder(4, 5), 9)
-#
-#     def test_things(self):
-#         self.assertEqual(len(server.things_from_db()), 3)
 #
 #
 # class MyAppIntegrationTestCase(unittest.TestCase):
