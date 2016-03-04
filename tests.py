@@ -373,6 +373,7 @@ class JinjaFilterTests(unittest.TestCase):
         pass
 
 
+#TODO can these even be tested if they attempt to clear current db?
 class SeedTests(unittest.TestCase):
     """ Unit tests for seeding data functions """
 
