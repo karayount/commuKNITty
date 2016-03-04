@@ -4,7 +4,7 @@ import unittest
 import json
 from model import connect_to_db, db, create_example_data
 from server import app
-from flask import session
+from jinja_filters import prettify_preference
 from seed import load_preferences, load_user_preferences
 from local import get_businesses_from_yelp, YelpBusiness, create_map_markers
 
@@ -59,6 +59,7 @@ class FlaskTests(unittest.TestCase):
         result = test_client.get('/')
 
         self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
         self.assertIn('CommuKNITty', result.data)
 
     def test_process_login(self):
@@ -69,14 +70,30 @@ class FlaskTests(unittest.TestCase):
                                   data={'username': 'u1'},
                                   follow_redirects=True)
 
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
         self.assertIn("Welcome,", result.data)
         self.assertIn("/home", result.data)
 
     def test_get_markers(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def tests_find_yarn_matches(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
 
 class FlaskTestsLoggedIn(unittest.TestCase):
@@ -124,54 +141,110 @@ class FlaskTestsLoggedIn(unittest.TestCase):
         result = test_client.get('/process_logout',
                                  follow_redirects=True)
 
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
         self.assertIn("now logged out", result.data)
 
     def test_show_homepage(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def test_show_local(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def test_show_user_profile(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def test_update_preference_in_db(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def test_show_basket(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def test_add_yarn_to_basket(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def test_show_search_page(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def test_yarn_driven_search(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def test_show_parameter_search_results(self):
-        pass
+        """  """
+
+        test_client = self.client
+        # result = test_client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
 
     def test_show_preference_search_results(self):
-        pass
+        """  """
 
+        test_client = self.client
+        # result = test_client.get('/')
 
-    # def test_find_employee(self):
-    #     """Can we find an employee in the sample data?"""
-    #
-    #     leonard = Employee.query.filter(Employee.name == "Leonard").first()
-    #     self.assertEqual(leonard.name, "Leonard")
-    #
-    # def test_emps_by_state(self):
-    #     """Find employees in a state."""
-    #
-    #     r = self.client.get("/emps-by-state.json?state_name=California")
-    #
-    #     # Turn json -> Python dictionary
-    #     info = json.loads(r.data)
-    #
-    #     self.assertEqual(len(info['CA']), 4)
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        # self.assertIn('<h1>Test</h1>', result.data)
+
 
 
 # class MockFlaskTests(unittest.TestCase):
@@ -235,40 +308,102 @@ class LocalPageTests(unittest.TestCase):
         markers = create_map_markers()
         self.assertIsInstance(markers, dict)
 
-#
-#
-# class MyAppIntegrationTestCase(unittest.TestCase):
-#     """Examples of integration tests: testing Flask server."""
-#
-#     def setUp(self):
-#         print "(setUp ran)"
-#         self.client = server.app.test_client()
-#         server.app.config['TESTING'] = True
-#
-#     def tearDown(self):
-#         # We don't need to do anything here; we could just
-#         # not define this method at all, but we have a stub
-#         # here as an example.
-#         print "(tearDown ran)"
-#
-#     def test_home(self):
-#         result = self.client.get('/')
-#         self.assertIn('<h1>Test</h1>', result.data)
-#
-#     def test_adder(self):
-#         result = self.client.get('/add-things?x=-1&y=1')
-#         self.assertEqual(result.data, "99")
-#
-#     def test_results(self):
-#         result = self.client.get('/')
-#         self.assertEqual(result.status_code, 200)
-#         self.assertIn('text/html', result.headers['Content-Type'])
-#         self.assertIn('<h1>Test</h1>', result.data)
+
+class PatternSearchTests(unittest.TestCase):
+    """ Unit tests about search functions """
+
+    def test_build_pattern_list_from_yarn(self):
+        """  """
+
+        pass
+
+    def test_build_parameter_search_url(self):
+        """  """
+
+        pass
+
+    def test_search_patterns_from_ravelry(self):
+        """  """
+
+        #TODO mock API call
+        pass
+
+    def test_build_pattern_list_from_parameters(self):
+        """  """
+
+        #TODO mock API call, or use one from above function
+        pass
+
+
+class PreferencesTests(unittest.TestCase):
+    """ Unit tests for preferences functions """
+
+    def test_group_user_prefs(self):
+        """  """
+
+        pass
+
+    def test_get_all_grouped_prefs(self):
+        """  """
+
+        get_all_grouped_prefs()
+
+    def test_update_user_preference(self):
+        """ """
+
+        #TODO this one requires a user in the session (see if others do?)
+        pass
+
+
+class JinjaFilterTests(unittest.TestCase):
+    """ Unit tests about Jinja filters """
+
+    def test_prettify_preference(self):
+        """  """
+
+        pass
+
+
+class SeedTests(unittest.TestCase):
+    """ Unit tests for seeding data functions """
+
+    def test_load_users_and_create_baskets(self):
+        """  """
+
+        load_users_and_create_baskets("test_data/user_data.txt")
+
+    def test_load_yarns(self):
+        """ """
+
+        #TODO this one should mock the API call, perhaps
+        pass
+
+    def test_load_preferences(self):
+        """  """
+
+        load_preferences("test_data/preference_data.txt")
+
+    def test_load_user_preferences(self):
+        """  """
+
+        load_user_preferences("test_data/user_preference_data.txt")
+
+    def test_load_basket_yarns(self):
+        """  """
+
+        load_basket_yarns("test_data/basket_yarn_data.txt")
+
+    def test_load_group_events(self):
+        """  """
+
+        load_group_events("test_data/group-events.csv")
+
 
 if __name__ == '__main__':
     # If called like a script, run our tests
 
     unittest.main()
+
 
 
 #

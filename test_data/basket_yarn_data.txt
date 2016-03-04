@@ -1,0 +1,6 @@
+1|10|110|by10_color
+1|11|111|by11_color
+2|20|220|by12_color
+2|21|221|by13_color
+3|30|330|by14_color
+3|31|310|by15_color

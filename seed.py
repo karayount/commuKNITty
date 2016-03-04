@@ -19,10 +19,9 @@ def load_users_and_create_baskets(user_data):
             row = row.rstrip()
             username, years_knitting, miles_knit, photo = row.split("|")
 
-            # TODO: try except this
-            if miles_knit != "":
+            try:
                 miles_knit = float(miles_knit)
-            else:
+            except ValueError:
                 miles_knit = None
 
             user = User(username=username,
@@ -171,9 +170,7 @@ def load_basket_yarns(basket_yarn_data):
 
 
 def load_group_events(group_event_data):
-    """ Load
-    :return: none
-    """
+    """ Load GroupEvent data """
 
     f = open(group_event_data)
     csv_f = csv.reader(f)
