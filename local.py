@@ -4,7 +4,6 @@ import io
 import json
 
 
-
 class YelpBusiness(object):
     """ Business objects collected from Yelp API
 
@@ -20,9 +19,10 @@ class YelpBusiness(object):
         self.biz_url = biz_url
 
 
-
-def get_businesses_from_yelp():
+def get_businesses_from_yelp(location_string):
     """ Search Yelp through API for knitting/yarn, save results to objects
+
+    location_string: the user location string
     :return: list of YelpBusiness objects for input city
     """
 
@@ -32,11 +32,13 @@ def get_businesses_from_yelp():
         auth = Oauth1Authenticator(**creds)
         client = Client(auth)
 
+    yelp_knitting_category_alias = 'knittingsupplies'
+
     params = {
-        'category_filter': 'knittingsupplies'
+        'category_filter': yelp_knitting_category_alias
     }
 
-    yelp_results = client.search('San Francisco', **params)
+    yelp_results = client.search(location_string, **params)
 
     list_of_biz = []
 
@@ -67,7 +69,8 @@ def create_map_markers():
     :return: dictionary of business data for creating mapbox markers
     """
 
-    business_list = get_businesses_from_yelp()
+    location = 'San Francisco'
+    business_list = get_businesses_from_yelp(location)
     features = []
     iter = 1
     for business in business_list:
@@ -77,10 +80,12 @@ def create_map_markers():
                             business.biz_name + "</div><p>" +
                             business.biz_addr + "<br><a href=\"" +
                             business.biz_url + ">see on Yelp</a></p>"),
-            'marker-size': 'small',
-            'marker-color': "#cccccc",
-            # 'marker-symbol': '2'
-            "marker-symbol": "marker"
+            'marker-size': 'large',
+            #'marker-color': "#cccccc",
+            'marker-color': '#f0a',
+            'marker-symbol': str(iter)
+            # 'marker-symbol': '1'
+            # "marker-symbol": "harbor"
         }
         geometry = {
             "type": "Point",
@@ -105,6 +110,8 @@ def create_map_markers():
     }
 
     return markers
+
+
 
 # #terri's for one marker
 # e_geojson = {

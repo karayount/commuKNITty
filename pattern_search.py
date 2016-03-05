@@ -48,11 +48,11 @@ def build_parameter_search_url(grouped_preferences):
     :return: url string
     """
 
-    PREF_CATEGORIES = ["pc", "weight", "fit", "pa"]
+    pref_categories = ["pc", "weight", "fit", "pa"]
     search_url = "https://api.ravelry.com/patterns/search.json?craft=knitting&photo=yes&availability=ravelry&sort=popularity"
 
     # add specific categories and values to search_url to customize
-    for category in PREF_CATEGORIES:
+    for category in pref_categories:
         value_list = getattr(grouped_preferences, category)
         if ((len(value_list) == 0) and
                 (category == "weight" or category == "pc")):
@@ -74,8 +74,11 @@ def search_patterns_from_ravelry(search_url):
     :return: list of SearchResultPattern objects
     """
 
+    required_fields = ["first_photo", "permalink", "name"]
+    base_pattern_link = "http://www.ravelry.com/patterns/library/"
     append_page = "&page="
     start_page = 1
+    # request took very long to render with more than 1 page
     end_page = 1
     list_of_patterns = []
 
@@ -87,15 +90,14 @@ def search_patterns_from_ravelry(search_url):
         pattern_dict = page_of_patterns.json()
         pattern_list = pattern_dict["patterns"]
 
+
         for current_pattern in pattern_list:
-            if ("first_photo" in current_pattern and
-                "name" in current_pattern and "permalink" in current_pattern):
+            if all(field in current_pattern for field in required_fields):
                 if "small_url" in current_pattern["first_photo"]:
                     pattern_photo = current_pattern["first_photo"]["small_url"]
                     pattern_name = current_pattern["name"]
                     pattern_permalink = current_pattern["permalink"]
-                    rav_pattern_link = ("http://www.ravelry.com/patterns/library/" +
-                                            pattern_permalink)
+                    rav_pattern_link = (base_pattern_link + pattern_permalink)
 
                     new_pattern = SearchResultPattern(photo=pattern_photo,
                                                       name=pattern_name,

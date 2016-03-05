@@ -1,14 +1,11 @@
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, session, redirect, request, flash, jsonify
-# from flask_debugtoolbar import DebugToolbarExtension
 from jinja_filters import prettify_preference
-
-from model import (connect_to_db, db, User, Basket, Yarn, BasketYarn,
-                   GroupEvent)
+from model import connect_to_db, db, User, Basket, Yarn, BasketYarn, GroupEvent
 from pattern_search import (build_pattern_list_from_parameters,
                             build_pattern_list_from_yarn,
                             build_short_pattern_list_from_parameters)
-from preferences import (group_user_prefs, get_all_grouped_prefs,
+from preferences import (group_user_prefs, ALL_PREFERENCES,
                          update_user_preference, GroupedPreferences)
 from local import get_businesses_from_yelp, create_map_markers
 
@@ -16,7 +13,6 @@ from local import get_businesses_from_yelp, create_map_markers
 app = Flask(__name__)
 app.secret_key = "thatthingyouneedtoremembertodoitrhymeswithcount"
 app.jinja_env.undefined = StrictUndefined
-
 app.jinja_env.filters['prettify_preference'] = prettify_preference
 
 
@@ -55,7 +51,7 @@ def process_logout():
 def show_homepage():
     """Show homepage of logged in commuKNITty user"""
 
-    logged_in_user = session.get("username", "")
+    logged_in_user = session.get("username")
     user = User.query.filter(User.username == logged_in_user).first()
     if user is None:
         flash("You are not authorized to view this page")
@@ -70,9 +66,8 @@ def show_local():
     :return: rendered template
     """
 
-    logged_in_user = session.get("username", "")
+    logged_in_user = session.get("username")
     user = User.query.filter(User.username == logged_in_user).first()
-    # verify that user is logged in
     if user is None:
         flash("You are not authorized to view this page")
         return redirect("/")
@@ -84,6 +79,26 @@ def show_local():
                            business_list=business_list,
                            groups=group_events)
 
+# @app.route("/local")
+# def test_mapbox():
+#     """ Show local page with different mapbox config. Test.
+#     :return: rendered template
+#     """
+#
+#     logged_in_user = session.get("username", "")
+#     user = User.query.filter(User.username == logged_in_user).first()
+#     # verify that user is logged in
+#     if user is None:
+#         flash("You are not authorized to view this page")
+#         return redirect("/")
+#
+#     business_list = get_businesses_from_yelp()
+#     group_events = GroupEvent.query.all()
+#
+#     return render_template("zz-messing-with-things/test-mapbox.html",
+#                            business_list=business_list,
+#                            groups=group_events)
+
 
 @app.route("/get_markers.json")
 def get_markers():
@@ -92,30 +107,38 @@ def get_markers():
 
     return jsonify(markers)
 
-
-@app.route("/profile")
-def show_user_profile():
-    """Show the user their info"""
-
+def verify_login(session):
     logged_in_user = session.get("username", "")
     user = User.query.filter(User.username == logged_in_user).first()
     # verify that user is logged in
     if user is None:
         flash("You are not authorized to view this page")
-        return redirect("/")
+    return user
 
+@app.route("/profile")
+def show_user_profile():
+    """Show the user their info"""
+    #
+    # logged_in_user = session.get("username", "")
+    # user = User.query.filter(User.username == logged_in_user).first()
+    # # verify that user is logged in
+    # if user is None:
+    #     flash("You are not authorized to view this page")
+    #     return redirect("/")
+    user = verify_login(session)
+    if not user:
+        return redirect("/")
     basket = Basket.query.filter(Basket.user_id == user.user_id).one()
     basket_yarns = BasketYarn.query.filter(BasketYarn.basket_id == basket.basket_id).all()
 
     # get GroupedPreferences object for user and all
     user_grouped_prefs = group_user_prefs(user)
-    all_grouped_prefs = get_all_grouped_prefs()
 
     return render_template("profile.html",
                            user=user,
                            basket_yarns=basket_yarns,
                            user_prefs=user_grouped_prefs,
-                           all_prefs=all_grouped_prefs)
+                           all_prefs=ALL_PREFERENCES)
 
 
 @app.route("/update_preference.json", methods=['POST'])
@@ -227,10 +250,8 @@ def show_search_page():
 
     search_result_patterns = build_short_pattern_list_from_parameters(search_params)
 
-    all_grouped_prefs = get_all_grouped_prefs()
-
     return render_template("search.html",
-                           all_prefs=all_grouped_prefs,
+                           all_prefs=ALL_PREFERENCES,
                            pattern_recs=search_result_patterns)
 
 
@@ -304,13 +325,9 @@ def show_preference_search_results():
                            patterns=search_result_patterns,
                            headline=headline)
 
+
 if __name__ == "__main__":
-    # We have to set debug=True here, since it has to be True at the point
-    # that we invoke the DebugToolbarExtension
+
     app.debug = True
-
     connect_to_db(app)
-
-    # DebugToolbarExtension(app)
-
     app.run()

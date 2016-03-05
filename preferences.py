@@ -4,17 +4,6 @@ from model import UserPreference, Preference, db, User
 from flask import session
 
 
-# mapping of (pref_category, pref_value) pairs:
-# ("weight", "lace"), ("weight", "fingering"), ("weight", "sport"),
-# ("weight", "dk"), ("weight", "worsted"), ("weight", "aran"),
-# ("weight", "bulky"), ("pc", "cardigan"), ("pc", "pullover"), ("pc", "vest"),
-# ("pc", "socks"), ("pc", "mittens"), ("pc", "gloves"), ("pc", "fingerless"),
-# ("pc", "beanie-toque"), ("pc", "earflap"), ("pc", "cowl"), ("pc", "scarf"),
-# ("pc", "shawl-wrap"), ("fit", "adult"), ("fit", "child"), ("fit", "baby"),
-# ("pa", "cables"), ("pa", "lace"), ("pa", "intarsia"), ("pa", "stranded"),
-# ("pa", "stripes-colorwork")
-
-
 class GroupedPreferences(object):
     """Attribute for each category which stores list of values."""
 
@@ -79,12 +68,6 @@ def group_user_prefs(user):
     return categorized_user_prefs
 
 
-def get_all_grouped_prefs():
-    """ Returns GroupedPreferences object ALL_PREFERENCES"""
-
-    return ALL_PREFERENCES
-
-
 def update_user_preference(preference, include):
     """ Takes id of changed checkbox and updates user_preferences table.
 
@@ -103,7 +86,7 @@ def update_user_preference(preference, include):
     pref = Preference.query.filter(Preference.pref_category == pref_category,
                                    Preference.pref_value == pref_value).one()
     pref_id = pref.pref_id
-    user = User.query.filter(User.username == session["username"]).first()
+    user = User.query.filter(User.username == session.get("username")).first()
     user_id = user.user_id
 
     if (include == 1):

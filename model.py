@@ -2,10 +2,6 @@
 
 from flask_sqlalchemy import SQLAlchemy
 
-# This is the connection to the PostgreSQL database; we're getting this through
-# the Flask-SQLAlchemy helper library. On this, we can find the `session`
-# object, where we do most of our interactions (like committing, etc.)
-
 db = SQLAlchemy()
 
 
@@ -103,7 +99,7 @@ class Yarn(db.Model):
     yarn_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     # rav_yarn_id is ravelry's key for this record, to simplify searching
     rav_yarn_id = db.Column(db.Integer)
-    # attributes below will be copied from ravelry, for simpler search
+    # attributes below will be copied from Ravelry, for simpler search
     yarn_name = db.Column(db.String(100))
     yarn_company = db.Column(db.String(50))
     yarn_weight = db.Column(db.String(25))
@@ -143,7 +139,7 @@ class BasketYarn(db.Model):
                                                       self.yarn_id)
 
 
-# classes that are just used for search, in MVP
+# Standalone classes that are used to support yarn-based search functionality.
 class Project(db.Model):
     """Project with associated yarn and pattern
 
