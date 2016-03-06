@@ -7,7 +7,7 @@ from pattern_search import (build_pattern_list_from_parameters,
                             build_short_pattern_list_from_parameters)
 from preferences import (group_user_prefs, ALL_PREFERENCES,
                          update_user_preference, GroupedPreferences)
-from local import get_businesses_from_yelp, build_dict_for_google_maps
+from local import get_businesses_from_yelp, build_dict_for_markers
 
 
 app = Flask(__name__)
@@ -72,29 +72,11 @@ def show_homepage():
     return render_template("homepage.html", user=user)
 
 
-# @app.route("/local")
-# def show_local():
-#     """ Show local page with Yelp map results and group meeting events.
-#     :return: rendered template
-#     """
-#
-#     user = verify_login(session)
-#     if not user:
-#         return redirect("/")
-#
-#     location = 'San Francisco'
-#     business_list = get_businesses_from_yelp(location)
-#     group_events = GroupEvent.query.all()
-#
-#     return render_template("local.html",
-#                            business_list=business_list,
-#                            groups=group_events)
-
 @app.route("/local")
-def test_google_maps():
-    """ Show local page with different mapbox or google maps config. Test.
-    :return: rendered template
-    """
+def show_local():
+    """ Show local page with Yelp map results and group meeting events.
+        :return: rendered template
+     """
 
     user = verify_login(session)
     if not user:
@@ -104,7 +86,7 @@ def test_google_maps():
     business_list = get_businesses_from_yelp(location)
     group_events = GroupEvent.query.all()
 
-    return render_template("zz-messing-with-things/google-maps-testing.html",
+    return render_template("local.html",
                            business_list=business_list,
                            groups=group_events)
 
@@ -116,17 +98,9 @@ def get_businesses_for_markers():
     """
 
     location = 'San Francisco'
-    businesses = build_dict_for_google_maps(location)
+    businesses = build_dict_for_markers(location)
 
     return jsonify(businesses)
-
-# @app.route("/get_markers.json")
-# def get_markers():
-#
-#     location = 'San Francisco'
-#     markers = create_map_markers(location)
-#
-#     return jsonify(markers)
 
 
 @app.route("/profile")

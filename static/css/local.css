@@ -3,18 +3,6 @@ body {
     margin:0;
     padding:0;
 }
-#map {
-    position:absolute;
-    top:0;
-    bottom:0;
-    width:100%;
-}
-.map {
-    position:absolute;
-    top:0;
-    bottom:0;
-    width:100%;
-}
 #yelp_results {
     float: left;
 }
@@ -24,9 +12,11 @@ body {
 #map {
     float: left;
     position: relative;
-    width: 400px;
-    height: 400px;
+    height: 500px;
 }
-.map-container {
-    position: relative;
+.yelp-biz-name {
+    font-weight: bold;
+}
+.group-name {
+    font-weight: bold;
 }
