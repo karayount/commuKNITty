@@ -1,7 +1,6 @@
 
-from model import (connect_to_db, db, User, UserPreference,
-                   GroupEvent, Preference, Basket, Yarn, BasketYarn, Project,
-                   Pattern)
+from model import (db, User, Preference, Basket, Yarn, BasketYarn,
+                   Project, Pattern)
 
 
 def create_example_data():

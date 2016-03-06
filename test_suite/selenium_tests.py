@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class TestCalculator(unittest.TestCase):
+class BrowserTest(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -20,6 +20,17 @@ class TestCalculator(unittest.TestCase):
         self.browser.get('http://localhost:5000/')
         self.browser.find_element_by_id("nav-profile").click()
         self.assertIn("You are not authorized", self.browser.page_source)
+
+
+
+def get_suite():
+
+    suite = unittest.TestSuite()
+    suite.addTest(BrowserTest("test_title"))
+    suite.addTest(BrowserTest("test_landing_page"))
+
+    return suite
+
 
     # def test_math(self):
     #     self.browser.get('http://localhost:5000/')
