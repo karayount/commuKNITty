@@ -1,5 +1,5 @@
 """ This script loads Project and Pattern objects into db from API calls
-to Ravelry. It is intended to be run a single time.
+to Ravelry. It is intended to be run a single time to populate db.
 """
 
 from server import app
