@@ -64,12 +64,34 @@ def get_businesses_from_yelp(location_string):
     return list_of_biz
 
 
-def create_map_markers():
+def build_dict_for_google_maps(location):
+    """ Created dictionary of data for google maps to use for markers
+    :return: dictionary of business data
+    """
+
+    business_list = get_businesses_from_yelp(location)
+    iter = 1
+    dict = {}
+    for business in business_list:
+        biz_data = {
+            "biz_lat": business.biz_lat,
+            "biz_long": business.biz_long,
+            "biz_name": business.biz_name,
+            "biz_addr": business.biz_addr,
+            "biz_city": business.biz_city,
+            "biz_url": business.biz_url,
+        }
+        dict[str(iter)] = biz_data
+        iter += 1
+
+    return dict
+
+
+def create_map_markers(location):
     """ Creates dictionary of map marker data to be sent to mapbox
     :return: dictionary of business data for creating mapbox markers
     """
 
-    location = 'San Francisco'
     business_list = get_businesses_from_yelp(location)
     features = []
     iter = 1
@@ -110,41 +132,3 @@ def create_map_markers():
     }
 
     return markers
-
-
-
-# #terri's for one marker
-# e_geojson = {
-#                 "type": "FeatureCollection",
-#                 "features": [
-#                     {
-#                     "type": "Feature",
-#                     "properties": {
-#                         "title": marker.title,
-#                         "date": marker.date,
-#                         "date-tier": marker.date_tier,
-#                         "time": marker.time,
-#                         "name": marker.name,
-#                         "address": marker.address,
-#                         "cost": marker.cost,
-#                         "img_url": marker.img_url,
-#                         "event_url": marker.event_url,
-#                         "description": marker.description,
-#                         "category": marker.category,
-#                         "marker-type": marker.marker_type,
-#                         "marker-symbol": marker.marker_symbol,
-#                         "marker-color": marker.marker_color
-#                         },
-#                     "geometry": {
-#                         "coordinates": [
-#                             marker.longitude,
-#                             marker.latitude],
-#                         "type": "Point"
-#                     },
-#                     "id": marker.marker_id
-#                     }
-#                 for marker in Marker.query.filter(Marker.marker_type == 'event', Marker.datetime >= today).all()
-#                 ]
-#             }
-#
-#     return jsonify(e_geojson)

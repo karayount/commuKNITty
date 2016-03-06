@@ -1,39 +1,17 @@
 {% extends 'base.html' %}
 
-{% block header %}
+{% block head %}
     <title>commuKNITty: {{ user.username }}'s basket</title>
-    <link rel="stylesheet" href="/static/freetile.css"></link>
-    <link rel="stylesheet" href="/static/basket.css"></link>
+    <link rel="stylesheet" href="/static/css/freetile.css"></link>
+    <link rel="stylesheet" href="/static/css/basket.css"></link>
 
 {% endblock %}
 
 {% block body %}
 
-{#    <div class="overlay hidden"></div>#}
-{#    <div class="modal hidden">#}
-{#        <span class="close">x</span>#}
-{#        <div class="page hidden" id="search-yarn">#}
-{#            <form id="search-yarn-form">#}
-{#                <label>Name of yarn (case-sensitive): <input type="text" id="yarn-name-field" name="yarn_name"></label>#}
-{#                <br><input type="submit" id="search-yarn-submit" value="Search Yarns">#}
-{#            </form>#}
-{#        </div>#}
-{##}
-{#        <div class="page hidden" id="add-new-yarn">#}
-{#            <p>No yarns matched your search.</p>#}
-{#            <button class="search-again-button">Search again</button>#}
-{#        </div>#}
-{##}
-{#    </div> #}
-
-<!-- Trigger the modal with a button -->
-
-
-<!-- Modal -->
 <div id="add-yarn-modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -56,8 +34,6 @@
 
   </div>
 </div>
-
-
 {# end modal window content #}
 
     <div class="container">
@@ -91,11 +67,9 @@
         {% endif %}
     </div>
 
-
-
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="/static/vendor/jquery.freetile.js"></script>
-    <script type='text/javascript' src='/static/basket.js'></script>
+    <script type='text/javascript' src='/static/js/basket.js'></script>
 
 {% endblock %}
 

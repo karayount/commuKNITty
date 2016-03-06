@@ -1,11 +1,9 @@
 
-{# show patterns with: image, name, pattern_category, link to Rav#}
-
 {% extends 'base.html' %}
 
-{% block header %}
+{% block head %}
 
-    <link rel='stylesheet' href='/static/freetile.css'>
+    <link rel='stylesheet' href='/static/css/freetile.css'>
     <title>commuKNITty: patterns for {{ basket_yarn.yarn.yarn_name }}</title>
 
 {% endblock %}
@@ -36,11 +34,8 @@
         </div>
     </div>
 
-
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="/static/vendor/jquery.freetile.js"></script>
-    <script type="text/javascript" src="/static/freetile.js"></script>
+    <script type="text/javascript" src="/static/js/freetile.js"></script>
 
 {% endblock %}
-
-<

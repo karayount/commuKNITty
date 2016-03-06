@@ -2,9 +2,10 @@
 
 import unittest
 from server import app
-from model import (connect_to_db, db, create_example_data, User, UserPreference,
+from model import (connect_to_db, db, User, UserPreference,
                    GroupEvent, Preference, Basket, Yarn, BasketYarn, Project,
                    Pattern)
+from test_model import create_example_data
 from preferences import (update_user_preference, get_all_grouped_prefs,
                         group_user_prefs, GroupedPreferences)
 from seed import (load_preferences, load_user_preferences, load_yarns,
@@ -141,7 +142,6 @@ class FlaskTestsLoggedIn(unittest.TestCase):
         with self.client as c:
                 with c.session_transaction() as session:
                     session['username'] = 'u1'
-                # c.set_cookie('localhost', 'MYCOOKIE', 'cookie_value')
 
     def tearDown(self):
         """Do at end of every test."""

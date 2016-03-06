@@ -15,16 +15,6 @@ body {
     bottom:0;
     width:100%;
 }
-
-
-.mapboxgl-popup {
-    max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
-.marker-title {
-    font-weight: 700;
-}
 #yelp_results {
     float: left;
 }

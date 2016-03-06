@@ -68,15 +68,16 @@ def load_yarns():
 
         for yarn in yarns_fetched:
 
-            rav_yarn_id = yarn["id"]
-            # TODO: test if each one there (using get), use default or continue (if want to skip this one)
-            yarn_name = yarn["name"]
-            yarn_company = yarn["yarn_company_name"]
-            yarn_weight = yarn["yarn_weight"]["name"]
-            ball_yardage = yarn["yardage"]
-            ball_grams = yarn["grams"]
-            yarn_photo = yarn["first_photo"]["small_url"]
-            yarn_permalink = yarn["permalink"]
+            rav_yarn_id = yarn.get("id")
+            yarn_name = yarn.get("name")
+            yarn_company = yarn.get("yarn_company_name")
+            yarn_weight_obj = yarn.get("yarn_weight")
+            yarn_weight = yarn_weight_obj.get("name")
+            ball_yardage = yarn.get("yardage")
+            ball_grams = yarn.vet("grams")
+            yarn_photo_obj = yarn.get("first_photo")
+            yarn_photo = yarn_photo_obj.get("small_url")
+            yarn_permalink = yarn.get("permalink")
 
             new_yarn = Yarn(rav_yarn_id=rav_yarn_id,
                             yarn_name=yarn_name,

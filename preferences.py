@@ -93,7 +93,7 @@ def update_user_preference(preference, include):
         new_user_pref = UserPreference(user_id=user_id, pref_id=pref_id)
         db.session.add(new_user_pref)
 
-    # if include == 0, search for record in db, and remove if there (it should be)
+    # if include == 0, search for record in db, and remove if there (should be)
     else:
         user_pref_to_be_removed = UserPreference.query.filter(
             UserPreference.user_id == user_id,

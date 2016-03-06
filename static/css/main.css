@@ -1,4 +1,3 @@
-/*   Sitewide  */
 
 .nav, .navbar, .navbar-default, .navbar-default {
     background-color: #77bbc1;
@@ -12,15 +11,6 @@
     color: white;
 }
 
-#login {
-    margin: 20px;
-}
-.feature {
-    text-align: center;
-}
-
-
-/* Things added since melon shopping site template */
 html {
     height: 100%;
 }
@@ -29,12 +19,10 @@ body {
     position: relative;
     background-color: #e8fffa;
 }
+
 .hidden {
     display: none;
 }
-/*#login-form {*/
-    /*margin-top: 50px;*/
-/*}*/
 .centered {
     text-align: center;
 }

@@ -1,24 +1,7 @@
-/**
- * Created by Kara on 2/22/16.
- */
 
 $('#container').freetile();
 
-//$('#add-yarn-button').click(function() {
-//    $('.overlay').removeClass('hidden');
-//    $('.modal').removeClass('hidden');
-//    $('#search-yarn').removeClass('hidden');
-//});
-
 $('#search-yarn-form').submit(searchForYarns);
-
-
-//$('body').on('click', '.close', function() {
-//    $('.overlay').addClass('hidden');
-//    $('.modal').addClass('hidden');
-//    $('#search-yarn').addClass('hidden');
-//});
-
 
 function searchForYarns(evt) {
     evt.preventDefault();

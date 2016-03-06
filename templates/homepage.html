@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block header %}
+{% block head %}
 
     <title>commuKNITty: A place where knitters plan their yarny adventures</title>
 
@@ -8,7 +8,6 @@
 
 {% block body %}
 
-    <!-- It's container-fluid so it spans the whole page. -->
     <div class="container-fluid">
          <div class="row">
             <section class="col-xs-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
@@ -18,10 +17,9 @@
         </div>
         <div class="row">
             <section class="col-xs-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
-                <img class="centered-image sweater" src="/static/anja-hoodie.jpeg" alt="sweater">
+                <img class="centered-image sweater" src="/static/img/anja-hoodie.jpeg" alt="sweater">
             </section>
         </div>
-        <!-- End of centered main text. -->
     </div>
 
 {% endblock %}

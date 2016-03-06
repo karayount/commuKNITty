@@ -1,6 +1,3 @@
-/**
- * Created by Kara on 2/29/16.
- */
 
 debugger;
 
@@ -16,11 +13,8 @@ function renderMap(results) {
     });
 
     map.on('style.load', function () {
-        // Add marker data as a new GeoJSON source.
         map.addSource("markers", markers);
 
-
-        // Add a layer showing the markers.
         map.addLayer({
             "id": "markers",
             "interactive": true,
@@ -35,11 +29,9 @@ function renderMap(results) {
 
     var popup = new mapboxgl.Popup();
 
-    // When a click event occurs near a marker icon, open a popup at the location of
-    // the feature, with description HTML from its properties.
     map.on('click', function (e) {
         map.featuresAt(e.point, {
-            radius: 7.5, // Half the marker size (15px).
+            radius: 7.5,
             includeGeometry: true,
             layer: 'markers'
         }, function (err, features) {
@@ -51,19 +43,15 @@ function renderMap(results) {
 
             var feature = features[0];
 
-            // Popuplate the popup and set its coordinates
-            // based on the feature found.
             popup.setLngLat(feature.geometry.coordinates)
                 .setHTML(feature.properties.description)
                 .addTo(map);
         });
     });
 
-    // Use the same approach as above to indicate that the symbols are clickable
-    // by changing the cursor style to 'pointer'.
     map.on('mousemove', function (e) {
         map.featuresAt(e.point, {
-            radius: 7.5, // Half the marker size (15px).
+            radius: 7.5,
             layer: 'markers'
         }, function (err, features) {
             map.getCanvas().style.cursor = (!err && features.length) ? 'pointer' : '';

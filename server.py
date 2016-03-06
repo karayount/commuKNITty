@@ -7,7 +7,7 @@ from pattern_search import (build_pattern_list_from_parameters,
                             build_short_pattern_list_from_parameters)
 from preferences import (group_user_prefs, ALL_PREFERENCES,
                          update_user_preference, GroupedPreferences)
-from local import get_businesses_from_yelp, create_map_markers
+from local import get_businesses_from_yelp, build_dict_for_google_maps
 
 
 app = Flask(__name__)
@@ -22,7 +22,7 @@ def verify_login(session):
     :return: user object for logged in user, or None
     """
 
-    logged_in_user = session.get("username", "")
+    logged_in_user = session.get("username")
     user = User.query.filter(User.username == logged_in_user).first()
     if user is None:
         flash("You are not authorized to view this page")
@@ -38,6 +38,7 @@ def show_landing_page():
 
 @app.route("/process_login", methods=["POST"])
 def process_login():
+    """ Add username from form to session, if User exists in db """
 
     username = request.form.get("username")
 
@@ -53,7 +54,7 @@ def process_login():
 
 @app.route("/process_logout")
 def process_logout():
-
+    """ Remove username from session, return to landing page. """
     del session["username"]
 
     flash("You're now logged out!")
@@ -71,9 +72,27 @@ def show_homepage():
     return render_template("homepage.html", user=user)
 
 
+# @app.route("/local")
+# def show_local():
+#     """ Show local page with Yelp map results and group meeting events.
+#     :return: rendered template
+#     """
+#
+#     user = verify_login(session)
+#     if not user:
+#         return redirect("/")
+#
+#     location = 'San Francisco'
+#     business_list = get_businesses_from_yelp(location)
+#     group_events = GroupEvent.query.all()
+#
+#     return render_template("local.html",
+#                            business_list=business_list,
+#                            groups=group_events)
+
 @app.route("/local")
-def show_local():
-    """ Show local page with Yelp map results and group meeting events.
+def test_google_maps():
+    """ Show local page with different mapbox or google maps config. Test.
     :return: rendered template
     """
 
@@ -81,40 +100,33 @@ def show_local():
     if not user:
         return redirect("/")
 
-    business_list = get_businesses_from_yelp()
+    location = 'San Francisco'
+    business_list = get_businesses_from_yelp(location)
     group_events = GroupEvent.query.all()
 
-    return render_template("local.html",
+    return render_template("zz-messing-with-things/google-maps-testing.html",
                            business_list=business_list,
                            groups=group_events)
 
-# @app.route("/local")
-# def test_mapbox():
-#     """ Show local page with different mapbox config. Test.
-#     :return: rendered template
-#     """
+
+@app.route("/get_businesses_for_markers.json")
+def get_businesses_for_markers():
+    """ Gets businesses from Yelp API and passes JSON to create map markers
+    :return: JSON of list of YelpBusiness objects
+    """
+
+    location = 'San Francisco'
+    businesses = build_dict_for_google_maps(location)
+
+    return jsonify(businesses)
+
+# @app.route("/get_markers.json")
+# def get_markers():
 #
-#     logged_in_user = session.get("username", "")
-#     user = User.query.filter(User.username == logged_in_user).first()
-#     # verify that user is logged in
-#     if user is None:
-#         flash("You are not authorized to view this page")
-#         return redirect("/")
+#     location = 'San Francisco'
+#     markers = create_map_markers(location)
 #
-#     business_list = get_businesses_from_yelp()
-#     group_events = GroupEvent.query.all()
-#
-#     return render_template("zz-messing-with-things/test-mapbox.html",
-#                            business_list=business_list,
-#                            groups=group_events)
-
-
-@app.route("/get_markers.json")
-def get_markers():
-
-    markers = create_map_markers()
-
-    return jsonify(markers)
+#     return jsonify(markers)
 
 
 @app.route("/profile")
@@ -128,7 +140,7 @@ def show_user_profile():
     basket = Basket.query.filter(Basket.user_id == user.user_id).one()
     basket_yarns = BasketYarn.query.filter(BasketYarn.basket_id == basket.basket_id).all()
 
-    # get GroupedPreferences object for user and all
+    # get GroupedPreferences object for user
     user_grouped_prefs = group_user_prefs(user)
 
     return render_template("profile.html",
