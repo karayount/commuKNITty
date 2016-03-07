@@ -4,15 +4,15 @@ from server import app, verify_login
 from jinja2 import StrictUndefined
 from jinja_filters import prettify_preference
 from test_model import create_example_data
-from flask import flash
-from model import connect_to_db, db, User
+from flask import jsonify
+from model import connect_to_db, db, User, UserPreference
 from seed import load_preferences, load_user_preferences, load_group_events
 
 class FlaskTest(unittest.TestCase):
     """ Tests of Flask routes that don't require logged in user """
 
     def setUp(self):
-        """Stuff to do before every test."""
+        """Setup to do before every test."""
 
         # Get the Flask test client
         self.client = app.test_client()
@@ -79,7 +79,7 @@ class FlaskTest(unittest.TestCase):
         self.assertNotIsInstance(result.data, dict)
 
     def test_find_yarn_matches(self):
-        """  """
+        """ Does route return JSON object of Yarn objects? """
 
         test_client = self.client
         result = test_client.post('/find_yarn_matches.json',
@@ -91,12 +91,21 @@ class FlaskTest(unittest.TestCase):
         self.assertIn('{', result.data)
         self.assertNotIsInstance(result.data, dict)
 
+    def test_verify_login_fail(self):
+        """ Without logged in user, are we prevented from viewing profile? """
+
+        test_client = self.client
+        result = test_client.get('/profile')
+
+        self.assertEqual(result.status_code, 302)
+        self.assertIn('text/html', result.headers['Content-Type'])
+
 
 class FlaskTestLoggedIn(unittest.TestCase):
     """ Tests of Flask routes that require a logged in user """
 
     def setUp(self):
-        """Stuff to do before every test."""
+        """Setup to do before every test."""
 
         # Get the Flask test client
         self.client = app.test_client()
@@ -148,7 +157,7 @@ class FlaskTestLoggedIn(unittest.TestCase):
         self.assertIn("now logged out", result.data)
 
     def test_show_homepage(self):
-        """  """
+        """ Can we render the homepage with a logged in user """
 
         test_client = self.client
         result = test_client.get('/home')
@@ -158,7 +167,7 @@ class FlaskTestLoggedIn(unittest.TestCase):
         self.assertIn('yarny', result.data)
 
     def test_show_local(self):
-        """  """
+        """ Can we render the Nearby tab? """
 
         test_client = self.client
         result = test_client.get('/local')
@@ -166,87 +175,113 @@ class FlaskTestLoggedIn(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertIn('text/html', result.headers['Content-Type'])
         self.assertIn('Local knitterly resources', result.data)
+
+    def test_show_user_profile(self):
+        """ Can we show a logged in user their profile? """
+
+        test_client = self.client
+        result = test_client.get('/profile')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        self.assertIn('Techniques you enjoy', result.data)
+
+    def test_update_preference_in_db(self):
+        """ Does database update and return an id for JS to update page? """
+
+        test_client = self.client
+        payload = {'preference': 'pa-stranded', 'include': 1}
+        result = test_client.post('/update_preference.json', data=payload)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('test/html', result.headers['Content-Type'])
+        self.assertIn('-', result.data)
+        self.assertNotIsInstance(result.data, dict)
+        new_pref = UserPreference.query.filter(
+            UserPreference.user_id == 1,
+            UserPreference.pref_id == 26).one()
+        self.assertIsNotNone(new_pref)
+
+    def test_show_basket(self):
+        """ Does Basket page render for logged in user? """
+
+        test_client = self.client
+        result = test_client.get('/basket')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        self.assertIn('Add yarn to your basket', result.data)
+
+    def test_add_yarn_to_basket(self):
+        """ Can new basket yarn be created? """
+
+        pass
+    #     test_client = self.client
+    #     payload =
+    #     result = test_client.post('/add_yarn_to_basket', payload)
     #
-    # def test_show_user_profile(self):
-    #     """  """
-    #
+    #     self.assertEqual(result.status_code, 200)
+    #     self.assertIn('text/html', result.headers['Content-Type'])
+    #     # self.assertIn('<h1>Test</h1>', result.data)
+
+        #
+        # test_client = self.client
+        # payload = {'preference': 'pa-stranded', 'include': 1}
+        # result = test_client.post('/update_preference.json', data=payload)
+        #
+        # self.assertEqual(result.status_code, 200)
+        # self.assertIn('test/html', result.headers['Content-Type'])
+        # self.assertIn('-', result.data)
+        # self.assertNotIsInstance(result.data, dict)
+        # new_pref = UserPreference.query.filter(
+        #     UserPreference.user_id == 1,
+        #     UserPreference.pref_id == 26).one()
+        # self.assertIsNotNone(new_pref)
+
+    def test_show_search_page(self):
+        """ Does search page render with personalized recommendations? """
+
+        pass
     #     test_client = self.client
     #     # result = test_client.get('/')
     #
     #     self.assertEqual(result.status_code, 200)
     #     self.assertIn('text/html', result.headers['Content-Type'])
     #     # self.assertIn('<h1>Test</h1>', result.data)
-    #
-    # def test_update_preference_in_db(self):
-    #     """  """
-    #
+
+    def test_yarn_driven_search(self):
+        """ Does db query on yarn return patterns to make with that yarn? """
+
+        pass
     #     test_client = self.client
     #     # result = test_client.get('/')
     #
     #     self.assertEqual(result.status_code, 200)
     #     self.assertIn('text/html', result.headers['Content-Type'])
     #     # self.assertIn('<h1>Test</h1>', result.data)
-    #
-    # def test_show_basket(self):
-    #     """  """
-    #
+
+    def test_show_parameter_search_results(self):
+        """ Do custom pattern results render from input search parameters? """
+
+        pass
     #     test_client = self.client
     #     # result = test_client.get('/')
     #
     #     self.assertEqual(result.status_code, 200)
     #     self.assertIn('text/html', result.headers['Content-Type'])
     #     # self.assertIn('<h1>Test</h1>', result.data)
-    #
-    # def test_add_yarn_to_basket(self):
-    #     """  """
-    #
+
+    def test_show_preference_search_results(self):
+        """ Do personalized pattern results render from user pref params? """
+
+        pass
     #     test_client = self.client
     #     # result = test_client.get('/')
     #
     #     self.assertEqual(result.status_code, 200)
     #     self.assertIn('text/html', result.headers['Content-Type'])
     #     # self.assertIn('<h1>Test</h1>', result.data)
-    #
-    # def test_show_search_page(self):
-    #     """  """
-    #
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
-    #
-    # def test_yarn_driven_search(self):
-    #     """  """
-    #
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
-    #
-    # def test_show_parameter_search_results(self):
-    #     """  """
-    #
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
-    #
-    # def test_show_preference_search_results(self):
-    #     """  """
-    #
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
-    #
+
 
 def get_suite():
     """ Build suite of all tests this module to send to main tests.py
@@ -258,11 +293,19 @@ def get_suite():
     suite.addTest(FlaskTest("test_get_businesses_for_markers"))
     suite.addTest(FlaskTest("test_process_login"))
     suite.addTest(FlaskTest("test_find_yarn_matches"))
+    suite.addTest(FlaskTest("test_verify_login_fail"))
     suite.addTest(FlaskTestLoggedIn("test_process_logout"))
     suite.addTest(FlaskTestLoggedIn("test_verify_login"))
     suite.addTest(FlaskTestLoggedIn("test_show_homepage"))
     suite.addTest(FlaskTestLoggedIn("test_show_local"))
-
+    suite.addTest(FlaskTestLoggedIn("test_show_user_profile"))
+    suite.addTest(FlaskTestLoggedIn("test_update_preference_in_db"))
+    suite.addTest(FlaskTestLoggedIn("test_show_basket"))
+    # suite.addTest(FlaskTestLoggedIn("test_add_yarn_to_basket"))
+    # suite.addTest(FlaskTestLoggedIn("test_show_search_page"))
+    # suite.addTest(FlaskTestLoggedIn("test_yarn_driven_search"))
+    # suite.addTest(FlaskTestLoggedIn("test_show_parameter_search_results"))
+    # suite.addTest(FlaskTestLoggedIn("test_show_preference_search_results"))
 
     return suite
 

@@ -211,6 +211,8 @@ def add_yarn_to_basket():
 
     db.session.commit()
 
+    flash("Yarn successfully added to basket")
+
     return redirect("/basket")
 
 
