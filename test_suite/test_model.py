@@ -1,6 +1,6 @@
 
 from model import (db, User, Preference, Basket, Yarn, BasketYarn,
-                   Project, Pattern)
+                   Project, Pattern, UserPreference, GroupEvent)
 
 
 def create_example_data():
@@ -9,12 +9,15 @@ def create_example_data():
     """
 
     # In case this is run more than once, empty out existing data
-    User.query.delete()
-    Preference.query.delete()
-    Yarn.query.delete()
     BasketYarn.query.delete()
     Project.query.delete()
     Pattern.query.delete()
+    UserPreference.query.delete()
+    Basket.query.delete()
+    Preference.query.delete()
+    Yarn.query.delete()
+    User.query.delete()
+    GroupEvent.query.delete()
 
     # Add users
     u1 = User(username="u1", years_knitting=6, miles_knit=23)

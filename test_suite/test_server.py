@@ -1,9 +1,12 @@
 
 import unittest
-from server import app
+from server import app, verify_login
+from jinja2 import StrictUndefined
+from jinja_filters import prettify_preference
 from test_model import create_example_data
-from model import connect_to_db, db
-
+from flask import flash
+from model import connect_to_db, db, User
+from seed import load_preferences, load_user_preferences, load_group_events
 
 class FlaskTest(unittest.TestCase):
     """ Tests of Flask routes that don't require logged in user """
@@ -13,6 +16,8 @@ class FlaskTest(unittest.TestCase):
 
         # Get the Flask test client
         self.client = app.test_client()
+        app.jinja_env.undefined = StrictUndefined
+        app.jinja_env.filters['prettify_preference'] = prettify_preference
 
         # Show Flask errors that happen during tests
         app.config['TESTING'] = True
@@ -20,14 +25,20 @@ class FlaskTest(unittest.TestCase):
         # Connect to test database
         connect_to_db(app, db_uri="postgresql:///testdb")
 
+        # start with empty db
+        db.drop_all()
         # Create tables and add sample data
         db.create_all()
         # create db records for yarns, users, baskets, basket_yarns,
         #                       projects, and patterns
         create_example_data()
         # create db records for preferences and user_preferences
-        load_preferences("test_suite/test_data/preference_data.txt")
-        load_user_preferences("test_suite/test_data/user_preference_data.txt")
+        load_preferences("test_data/preference_data.txt")
+        load_user_preferences("test_data/user_preference_data.txt")
+        load_group_events("test_data/group-events.csv")
+        with self.client as c:
+            with c.session_transaction() as session:
+                session['_flashes'] = []
 
     def tearDown(self):
         """Do at end of every test."""
@@ -58,6 +69,13 @@ class FlaskTest(unittest.TestCase):
         self.assertIn("Welcome,", result.data)
         self.assertIn("/home", result.data)
 
+    def test_verify_login_fail(self):
+        """ Can we verify whether there is no username attached to session? """
+
+        session = {}
+        user = verify_login(session)
+        self.assertIsNone(user)
+
     # def test_get_markers(self):
     #     """ Does the route return a json object of map markers? """
     #
@@ -74,15 +92,14 @@ class FlaskTest(unittest.TestCase):
         """  """
 
         test_client = self.client
-        result = test_client.get('/find_yarn_matches.json')
+        result = test_client.post('/find_yarn_matches.json',
+                                  data = {"yarn_name": "Merino"})
 
         self.assertEqual(result.status_code, 200)
-        self.assertIn('text/html', result.headers['Content-Type'])
-        self.assertIn('yarn_name', result.data)
+        self.assertIn('json', result.headers['Content-Type'])
+        self.assertIn('yarn', result.data)
         self.assertIn('{', result.data)
         self.assertNotIsInstance(result.data, dict)
-
-
 
 
 class FlaskTestLoggedIn(unittest.TestCase):
@@ -109,8 +126,8 @@ class FlaskTestLoggedIn(unittest.TestCase):
         #                       projects, and patterns
         create_example_data()
         # create db records for preferences and user_preferences
-        load_preferences("test_suite/test_data/preference_data.txt")
-        load_user_preferences("test_suite/test_data/user_preference_data.txt")
+        load_preferences("test_data/preference_data.txt")
+        load_user_preferences("test_data/user_preference_data.txt")
 
         with self.client as c:
                 with c.session_transaction() as session:
@@ -121,6 +138,13 @@ class FlaskTestLoggedIn(unittest.TestCase):
 
         db.session.close()
         db.drop_all()
+
+    def test_verify_login(self):
+        """ Can we verify whether there is a username attached to session? """
+
+        session = {'username': "u1"}
+        user = verify_login(session)
+        self.assertIsInstance(user, User)
 
     def test_process_logout(self):
         """ Can user log out and be redirected to landing page? """
@@ -243,7 +267,9 @@ def get_suite():
     suite.addTest(FlaskTest("test_show_landing_page"))
     suite.addTest(FlaskTest("test_process_login"))
     suite.addTest(FlaskTest("test_find_yarn_matches"))
+    suite.addTest(FlaskTest("test_verify_login_fail"))
     suite.addTest(FlaskTestLoggedIn("test_process_logout"))
+    suite.addTest(FlaskTestLoggedIn("test_verify_login"))
 
     return suite
 
