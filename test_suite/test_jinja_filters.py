@@ -1,26 +1,18 @@
 
 import unittest
+from jinja_filters import prettify_preference
 
 
 class JinjaFilterTest(unittest.TestCase):
     """ Unit tests about Jinja filters """
 
-    def setUp(self):
-
-        print "got to set up"
-
-    def tearDown(self):
-
-        print "tore down"
-
     def test_prettify_preference(self):
-        """  """
+        """ Does function convert string? """
 
-        print "test pretty maker"
-
-    def test_another(self):
-
-        print "another test case"
+        string1 = prettify_preference("test_string_1")
+        string2 = prettify_preference("the second test")
+        self.assertEqual(string1, "Test")
+        self.assertEqual(string2, "The")
 
 
 def get_suite():
@@ -30,6 +22,5 @@ def get_suite():
 
     suite = unittest.TestSuite()
     suite.addTest(JinjaFilterTest("test_prettify_preference"))
-    suite.addTest(JinjaFilterTest("test_another"))
 
     return suite

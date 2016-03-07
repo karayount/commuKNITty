@@ -18,20 +18,18 @@ if __name__ == '__main__':
     runner = unittest.TextTestRunner(stream=sys.stdout, verbosity=2)
 
     server_suite = test_server.get_suite()
-    # local_suite = test_local.get_suite()
+    local_suite = test_local.get_suite()
     # pattern_search_suite = test_pattern_search.get_suite()
     # preferences_suite = test_preferences.get_suite()
     jinja_filters_suite = test_jinja_filters.get_suite()
-    testy_suite = test_the_test.get_suite()
     # seed_suite = test_seed.get_suite()
     # selenium_suite = selenium_tests.get_suite()
     all_tests = unittest.TestSuite([
         server_suite,
-        # local_suite,
+        local_suite,
         # pattern_search_suite,
         # preferences_suite,
         jinja_filters_suite,
-        testy_suite,
         # seed_suite,
         # selenium_suite,
     ])

@@ -36,9 +36,6 @@ class FlaskTest(unittest.TestCase):
         load_preferences("test_data/preference_data.txt")
         load_user_preferences("test_data/user_preference_data.txt")
         load_group_events("test_data/group-events.csv")
-        with self.client as c:
-            with c.session_transaction() as session:
-                session['_flashes'] = []
 
     def tearDown(self):
         """Do at end of every test."""
@@ -69,24 +66,17 @@ class FlaskTest(unittest.TestCase):
         self.assertIn("Welcome,", result.data)
         self.assertIn("/home", result.data)
 
-    def test_verify_login_fail(self):
-        """ Can we verify whether there is no username attached to session? """
+    def test_get_businesses_for_markers(self):
+        """ Does the route return a json object of map markers? """
 
-        session = {}
-        user = verify_login(session)
-        self.assertIsNone(user)
+        test_client = self.client
+        result = test_client.get('/get_businesses_for_markers.json')
 
-    # def test_get_markers(self):
-    #     """ Does the route return a json object of map markers? """
-    #
-    #     test_client = self.client
-    #     result = test_client.get('/get_markers.json')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     self.assertIn('see on Yelp', result.data)
-    #     self.assertIn('{', result.data)
-    #     self.assertNotIsInstance(result.data, dict)
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('json', result.headers['Content-Type'])
+        self.assertIn('biz_addr', result.data)
+        self.assertIn('{', result.data)
+        self.assertNotIsInstance(result.data, dict)
 
     def test_find_yarn_matches(self):
         """  """
@@ -157,25 +147,25 @@ class FlaskTestLoggedIn(unittest.TestCase):
         self.assertIn('text/html', result.headers['Content-Type'])
         self.assertIn("now logged out", result.data)
 
-    # def test_show_homepage(self):
-    #     """  """
-    #
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
-    #
-    # def test_show_local(self):
-    #     """  """
-    #
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
+    def test_show_homepage(self):
+        """  """
+
+        test_client = self.client
+        result = test_client.get('/home')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        self.assertIn('yarny', result.data)
+
+    def test_show_local(self):
+        """  """
+
+        test_client = self.client
+        result = test_client.get('/local')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        self.assertIn('Local knitterly resources', result.data)
     #
     # def test_show_user_profile(self):
     #     """  """
@@ -265,11 +255,14 @@ def get_suite():
 
     suite = unittest.TestSuite()
     suite.addTest(FlaskTest("test_show_landing_page"))
+    suite.addTest(FlaskTest("test_get_businesses_for_markers"))
     suite.addTest(FlaskTest("test_process_login"))
     suite.addTest(FlaskTest("test_find_yarn_matches"))
-    suite.addTest(FlaskTest("test_verify_login_fail"))
     suite.addTest(FlaskTestLoggedIn("test_process_logout"))
     suite.addTest(FlaskTestLoggedIn("test_verify_login"))
+    suite.addTest(FlaskTestLoggedIn("test_show_homepage"))
+    suite.addTest(FlaskTestLoggedIn("test_show_local"))
+
 
     return suite
 
