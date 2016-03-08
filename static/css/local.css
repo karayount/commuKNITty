@@ -1,34 +1,37 @@
-
 body {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
 }
-#yelp_results {
-    float: left;
-}
-#groups {
-    float: left;
-}
-#map {
-    float: left;
-    position: relative;
-    height: 500px;
-    border: 1px solid #4DB6AC;
-    margin-top: 50px;
-}
-.yelp-biz-name {
-    font-weight: 700;
-}
+
 .group-name {
     font-weight: 700;
 }
+
 .group-box {
     margin: 10px;
-    padding-top: 5px;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: -5px;
+    padding: 5px 5px -5px;
 }
+
 .yarn-shop {
     margin-bottom: 8px;
+}
+
+.yelp-biz-name {
+    font-weight: 700;
+}
+
+#groups {
+    float: left;
+}
+
+#map {
+    border: 1px solid #4DB6AC;
+    float: left;
+    height: 500px;
+    margin-top: 50px;
+    position: relative;
+}
+
+#yelp_results {
+    float: left;
 }

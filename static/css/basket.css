@@ -1,14 +1,15 @@
+.basket-header {
+    margin-bottom: 10px;
+}
 
 #add-yarn-button {
-    vertical-align: bottom;
     background-color: #4DB6AC;
     border-color: #4DB6AC;
     font-size: 14px;
     margin-top: 10px;
+    vertical-align: bottom;
 }
+
 #basket-headline {
     margin-top: 10px;
-}
-.basket-header {
-    margin-bottom: 10px;
 }
