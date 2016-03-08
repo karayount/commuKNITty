@@ -1,0 +1,15 @@
+h1, h3 {
+    text-align: center;
+}
+
+.sweater {
+    border-radius: 10px;
+    display: block;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.unbold-header {
+    font-weight: 400;
+}

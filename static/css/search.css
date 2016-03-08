@@ -1,5 +1,9 @@
-.basket-header {
-    margin-bottom: 10px;
+.pref-box {
+    margin-left: 20px;
+}
+
+.search-buttons {
+    margin-left: 20px;
 }
 
 .tile {
@@ -16,14 +20,8 @@
     max-width: 180px;
 }
 
-#add-yarn-button {
+#personalized-search-button, #parameter-search-button {
     background-color: #4DB6AC;
     border-color: #4DB6AC;
     font-size: 14px;
-    margin-top: 10px;
-    vertical-align: bottom;
-}
-
-#basket-headline {
-    margin-top: 10px;
 }

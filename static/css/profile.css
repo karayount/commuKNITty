@@ -1,0 +1,9 @@
+.pref-box {
+    margin-left: 20px;
+}
+
+#update-preferences-button {
+    background-color: #4DB6AC;
+    border-color: #4DB6AC;
+    font-size: 14px;
+}

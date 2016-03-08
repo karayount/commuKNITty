@@ -1,6 +1,6 @@
 .tile {
     background: white;
-    box-shadow: 1px 1px 10px rgba(0, 0, 0, 1);
+    border: 1px solid #4DB6AC;
     margin: 5px;
     position: absolute;
     padding: 10px;

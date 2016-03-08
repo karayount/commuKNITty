@@ -39,38 +39,16 @@ function updatePreference() {
 
 // the 27 event listeners below function on each preference checkbox in the
 // form.
-
-// TODO: Finish this list
-var checkboxes = ["#weight-lace", "#weight-fingering", "#weight-sport"];
+var checkboxes = ["#weight-lace", "#weight-fingering", "#weight-sport",
+                  "#weight-dk", "#weight-worsted", "#weight-aran",
+                  "#weight-bulky", "#pc-cardigan", "#pc-pullover",
+                  "#pc-vest", "#pc-socks", "#pc-mittens", "#pc-gloves",
+                  "#pc-fingerless", "#pc-beanie-toque", "#pc-earflap",
+                  "#pc-cowl", "#pc-scarf", "#pc-shawl-wrap", "#fit-adult",
+                  "#fit-child", "#fit-baby", "pa-cables", "pa-lace",
+                  "#pa-intarsia", "#pa-stranded", "#pa-stripes-colorwork"];
 for (var i = 0; i < checkboxes.length; i++) {
     $(checkboxes[i]).change(updatePreference);
 }
 
-$("#weight-lace").change(updatePreference);
-$("#weight-fingering").change(updatePreference);
-$("#weight-sport").change(updatePreference);
-$("#weight-dk").change(updatePreference);
-$("#weight-worsted").change(updatePreference);
-$("#weight-aran").change(updatePreference);
-$("#weight-bulky").change(updatePreference);
-$("#pc-cardigan").change(updatePreference);
-$("#pc-pullover").change(updatePreference);
-$("#pc-vest").change(updatePreference);
-$("#pc-socks").change(updatePreference);
-$("#pc-mittens").change(updatePreference);
-$("#pc-gloves").change(updatePreference);
-$("#pc-fingerless").change(updatePreference);
-$("#pc-beanie-toque").change(updatePreference);
-$("#pc-earflap").change(updatePreference);
-$("#pc-cowl").change(updatePreference);
-$("#pc-scarf").change(updatePreference);
-$("#pc-shawl-wrap").change(updatePreference);
-$("#fit-adult").change(updatePreference);
-$("#fit-child").change(updatePreference);
-$("#fit-baby").change(updatePreference);
-$("#pa-cables").change(updatePreference);
-$("#pa-lace").change(updatePreference);
-$("#pa-intarsia").change(updatePreference);
-$("#pa-stranded").change(updatePreference);
-$("#pa-stripes-colorwork").change(updatePreference);
 
