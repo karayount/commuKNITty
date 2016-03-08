@@ -12,7 +12,8 @@ class PatternSearchTest(unittest.TestCase):
     def test_build_pattern_list_from_yarn(self):
         """  """
 
-        pass
+        yarn_list = build_pattern_list_from_yarn(2)
+
 
     def test_build_parameter_search_url(self):
         """  """

@@ -6,6 +6,7 @@ body {
     background-color: #E0F2F1;
     font-family: 'Lato', sans-serif;
     min-height: 100%;
+    padding-top: 70px;
     position: relative;
 }
 
