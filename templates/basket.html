@@ -4,48 +4,44 @@
     <title>commuKNITty: {{ user.username }}'s basket</title>
     <link rel="stylesheet" href="/static/css/freetile.css"></link>
     <link rel="stylesheet" href="/static/css/basket.css"></link>
-
 {% endblock %}
 
 {% block body %}
-
-<div id="add-yarn-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add Yarn</h4>
-      </div>
-      <div class="modal-body" id="search-yarn">
-            <form id="search-yarn-form">
-                <label>Name of yarn (case-sensitive): <input type="text" id="yarn-name-field" name="yarn_name"></label>
-                <br><label><input type="submit" class="btn btn-info" id="search-yarn-submit" value="Search Yarns"></label>
-            </form>
-      </div>
-      <div class="modal-body hidden" id="add-new-yarn">
-            <p>No yarns matched your search.</p>
-            <button class="btn btn-info search-again-button">Search again</button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
+    <!-- begin modal window content -->
+    <div id="add-yarn-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Yarn</h4>
+                  </div>
+                  <div class="modal-body" id="search-yarn">
+                      <form id="search-yarn-form">
+                          <label>Name of yarn (case-sensitive): <input type="text" id="yarn-name-field" name="yarn_name"></label>
+                          <br><label><input type="submit" class="btn btn-info" id="search-yarn-submit" value="Search Yarns"></label>
+                      </form>
+                  </div>
+                  <div class="modal-body hidden" id="add-new-yarn">
+                      <p>No yarns matched your search.</p>
+                      <button class="btn btn-info search-again-button">Search again</button>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+            </div>
+        </div>
     </div>
-
-  </div>
-</div>
-{# end modal window content #}
+    <!-- end modal window content -->
 
     <div class="container">
-    <div id="basket_header" class="row page-header">
-        <div class="col-xs-8">
-            <h2 id="basket-headline">What's in your basket?</h2>
+        <div id="basket_header" class="row page-header">
+            <div class="col-xs-8">
+                <h2 id="basket-headline">What's in your basket?</h2>
+            </div>
+            <div class="col-xs-4">
+                <button type="button" id="add-yarn-button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#add-yarn-modal">Add more yarn</button>
+            </div>
         </div>
-        <div class="col-xs-4">
-            <button type="button" id="add-yarn-button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#add-yarn-modal">Add more yarn</button>
-        </div>
-    </div>
-
         {% if user_basket_yarns|length > 0 %}
             <div class="row">
                 <section id="container">
@@ -69,6 +65,5 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="/static/vendor/jquery.freetile.js"></script>
     <script type='text/javascript' src='/static/js/basket.js'></script>
-
 {% endblock %}
 
