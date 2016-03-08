@@ -1,8 +1,3 @@
-
-$('#container').freetile();
-
-$('#search-yarn-form').submit(searchForYarns);
-
 function searchForYarns(evt) {
     evt.preventDefault();
     $('#search-yarn').addClass('hidden');
@@ -14,7 +9,7 @@ function searchForYarns(evt) {
 }
 
 function showYarnOptions(result) {
-    var yarnList = result["yarns"];
+    var yarnList = result['yarns'];
     if (yarnList.length !== 0) {
         var text = "<label>Select a yarn from the list below: </label><br>" +
             "<form id='yarn-select-form' action='/add_yarn_to_basket' method='POST'>" +
@@ -33,6 +28,10 @@ function showYarnOptions(result) {
         $('#add-new-yarn').html(text);
     }
 }
+
+$('#container').freetile();
+
+$('#search-yarn-form').submit(searchForYarns);
 
 $('body').on('click', '.search-again-button', function() {
     $('#add-new-yarn').addClass('hidden');

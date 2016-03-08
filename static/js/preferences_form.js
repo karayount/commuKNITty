@@ -15,18 +15,19 @@ $('#update-preferences-button').click(function() {
 });
 
 function reprintPreferences(data) {
-    if ($("#" + data).hasClass('hidden')) {
-        $("#" + data).removeClass('hidden');
+    var selector = $("#" + data);
+    if (selector.hasClass('hidden')) {
+        selector.removeClass('hidden');
     }
     else {
-        $("#" + data).addClass('hidden');
+        selector.addClass('hidden');
     }
 }
 
-function updatePreference(evt) {
+function updatePreference() {
     var include = 0;
     var isChecked = $(this).is(":checked");
-    if(isChecked)  {
+    if (isChecked === true) {
         include = 1;
     }
     var pref = this.id;
@@ -37,7 +38,14 @@ function updatePreference(evt) {
 }
 
 // the 27 event listeners below function on each preference checkbox in the
-// form. 
+// form.
+
+// TODO: Finish this list
+var checkboxes = ["#weight-lace", "#weight-fingering", "#weight-sport"];
+for (var i = 0; i < checkboxes.length; i++) {
+    $(checkboxes[i]).change(updatePreference);
+}
+
 $("#weight-lace").change(updatePreference);
 $("#weight-fingering").change(updatePreference);
 $("#weight-sport").change(updatePreference);

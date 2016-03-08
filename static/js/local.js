@@ -1,7 +1,8 @@
-
 function buildMarkerList(markerJSON) {
     var data = markerJSON;
     var markers = [];
+
+    // i starts at 1 because keys start at 1, not 0
     for (var i = 1; i <= Object.keys(data).length; i++) {
         var biz = data[i];
         var bizLat = biz.biz_lat;
@@ -39,7 +40,7 @@ function initMap(result) {
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControl: false
     };
-    var map = new google.maps.Map(document.getElementById("map"),myOptions);
+    var map = new google.maps.Map(document.getElementById("map"), myOptions);
 
     var markers = [];
     var infoWindows = [];
