@@ -1,5 +1,15 @@
+.display-pref {
+    font-size: 18px;
+}
+
+.row {
+    font-size: 18px;
+}
+
 .pref-box {
     margin-left: 20px;
+    font-size: 18px;
+    font-weight: 400;
 }
 
 #update-preferences-button {

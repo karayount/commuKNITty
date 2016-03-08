@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% macro print_current_pref(category, master_list, user_list, heading) %}
-    <h5>{{ heading }}:</h5>
+    <h4>{{ heading }}:</h4>
     <ul>
     {% if user_list | length < 1 %}
         <li class="display-preference">None selected</li>
@@ -18,7 +18,7 @@
 {% endmacro %}
 
 {% macro print_update_pref(category, master_list, user_list, heading) %}
-    <label>{{ heading }}</label><br>
+    <h4>{{ heading }}</h4>
     {% for pref in master_list %}
         {% if pref in user_list %}
             <label class="pref-box"><input type="checkbox" name="{{ category }}" value="{{ pref }}" checked id="{{ category }}-{{ pref }}"> {{ pref | prettify_preference }}</label><br>
@@ -30,6 +30,7 @@
 
 {% block head %}
     <title>commuKNITty: {{ user.username }}'s profile</title>
+    <link rel="stylesheet" href="/static/css/profile.css"></link>
 {% endblock %}
 
 {% block body %}
