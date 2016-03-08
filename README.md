@@ -63,6 +63,8 @@ To help knitters plan their next project, personalized recommendations are provi
 
 If a user wants to knit a particular type of item, like a beanie or a cardigan, the selection form is accessed by the "Looking for something specific?" button. Submitting this form requests the same pattern set from the Ravelry API as the personalized recommendations, but uses input paramaters, rather than user's preferences.
 
+![Custom Search Form](/docs/screen-shot-find-patterns-search-form.png?raw=true)
+
 ![Custom Search](/docs/screen-shot-find-patterns-search-results.png?raw=true)
 
 
