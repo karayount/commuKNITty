@@ -34,7 +34,7 @@ function updatePreference() {
 
     var payload = {"preference": pref, "include": include};
 
-    $.post("/update_preference.json", payload, reprintPreferences);
+    $.post('/update_preference', payload, reprintPreferences);
 }
 
 // the 27 event listeners below function on each preference checkbox in the

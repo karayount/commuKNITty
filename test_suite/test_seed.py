@@ -1,4 +1,3 @@
-
 import unittest
 
 #TODO can these even be tested if they attempt to clear current db?

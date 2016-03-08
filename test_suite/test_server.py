@@ -1,11 +1,11 @@
+""" This module tests functions in server.py, primarily routes """
 
 import unittest
 from server import app, verify_login
 from jinja2 import StrictUndefined
 from jinja_filters import prettify_preference
 from test_model import create_example_data
-from flask import jsonify
-from model import connect_to_db, db, User, UserPreference
+from model import connect_to_db, db, User, UserPreference, BasketYarn
 from seed import load_preferences, load_user_preferences, load_group_events
 
 class FlaskTest(unittest.TestCase):
@@ -191,10 +191,10 @@ class FlaskTestLoggedIn(unittest.TestCase):
 
         test_client = self.client
         payload = {'preference': 'pa-stranded', 'include': 1}
-        result = test_client.post('/update_preference.json', data=payload)
+        result = test_client.post('/update_preference', data=payload)
 
         self.assertEqual(result.status_code, 200)
-        self.assertIn('test/html', result.headers['Content-Type'])
+        self.assertIn('text/html', result.headers['Content-Type'])
         self.assertIn('-', result.data)
         self.assertNotIsInstance(result.data, dict)
         new_pref = UserPreference.query.filter(
@@ -210,77 +210,80 @@ class FlaskTestLoggedIn(unittest.TestCase):
 
         self.assertEqual(result.status_code, 200)
         self.assertIn('text/html', result.headers['Content-Type'])
-        self.assertIn('Add yarn to your basket', result.data)
+        self.assertIn('Add more yarn', result.data)
 
     def test_add_yarn_to_basket(self):
         """ Can new basket yarn be created? """
 
-        pass
-    #     test_client = self.client
-    #     payload =
-    #     result = test_client.post('/add_yarn_to_basket', payload)
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
+        test_client = self.client
+        payload = {
+            "yarn_select": 3,
+            "yardage": 1111,
+            "colorway": "test_color"
+        }
+        result = test_client.post('/add_yarn_to_basket', data=payload)
 
-        #
-        # test_client = self.client
-        # payload = {'preference': 'pa-stranded', 'include': 1}
-        # result = test_client.post('/update_preference.json', data=payload)
-        #
-        # self.assertEqual(result.status_code, 200)
-        # self.assertIn('test/html', result.headers['Content-Type'])
-        # self.assertIn('-', result.data)
-        # self.assertNotIsInstance(result.data, dict)
-        # new_pref = UserPreference.query.filter(
-        #     UserPreference.user_id == 1,
-        #     UserPreference.pref_id == 26).one()
-        # self.assertIsNotNone(new_pref)
+        new_yarn = BasketYarn.query.filter(BasketYarn.yarn_id == 2,
+                                           BasketYarn.basket_id == 1).one()
+
+        self.assertEqual(result.status_code, 302)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        self.assertIsNotNone(new_yarn)
+
 
     def test_show_search_page(self):
         """ Does search page render with personalized recommendations? """
 
-        pass
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
+        test_client = self.client
+        result = test_client.get('/search')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        self.assertIn('something specific?', result.data)
 
     def test_yarn_driven_search(self):
         """ Does db query on yarn return patterns to make with that yarn? """
 
-        pass
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
+        test_client = self.client
+        basket_yarn_id = 2
+        route = '/yarn_driven_search/' + str(basket_yarn_id)
+        result = test_client.get(route)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        self.assertIn('What to make with', result.data)
 
     def test_show_parameter_search_results(self):
         """ Do custom pattern results render from input search parameters? """
 
-        pass
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
+        test_client = self.client
+        payload = {
+            "pc": ["cardigan", "beanie-toque"],
+            "fit": ["adult", "baby"],
+            "weight": ["worsted", "aran"],
+            "pa": ["cables", "lace"],
+        }
+        result = test_client.post('/parameter_search_results', data=payload)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        self.assertIn('Pattern results from your search', result.data)
 
     def test_show_preference_search_results(self):
         """ Do personalized pattern results render from user pref params? """
 
-        pass
-    #     test_client = self.client
-    #     # result = test_client.get('/')
-    #
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('text/html', result.headers['Content-Type'])
-    #     # self.assertIn('<h1>Test</h1>', result.data)
+        test_client = self.client
+        payload = {
+            "pc": ["cardigan", "beanie-toque"],
+            "fit": ["adult", "baby"],
+            "weight": ["worsted", "aran"],
+            "pa": ["cables", "lace"],
+        }
+        result = test_client.get('/preference_search_results', data=payload)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('text/html', result.headers['Content-Type'])
+        self.assertIn('Personalized recommendations', result.data)
 
 
 def get_suite():
@@ -289,6 +292,7 @@ def get_suite():
     """
 
     suite = unittest.TestSuite()
+
     suite.addTest(FlaskTest("test_show_landing_page"))
     suite.addTest(FlaskTest("test_get_businesses_for_markers"))
     suite.addTest(FlaskTest("test_process_login"))
@@ -301,55 +305,10 @@ def get_suite():
     suite.addTest(FlaskTestLoggedIn("test_show_user_profile"))
     suite.addTest(FlaskTestLoggedIn("test_update_preference_in_db"))
     suite.addTest(FlaskTestLoggedIn("test_show_basket"))
-    # suite.addTest(FlaskTestLoggedIn("test_add_yarn_to_basket"))
-    # suite.addTest(FlaskTestLoggedIn("test_show_search_page"))
-    # suite.addTest(FlaskTestLoggedIn("test_yarn_driven_search"))
-    # suite.addTest(FlaskTestLoggedIn("test_show_parameter_search_results"))
-    # suite.addTest(FlaskTestLoggedIn("test_show_preference_search_results"))
+    suite.addTest(FlaskTestLoggedIn("test_add_yarn_to_basket"))
+    suite.addTest(FlaskTestLoggedIn("test_show_search_page"))
+    suite.addTest(FlaskTestLoggedIn("test_yarn_driven_search"))
+    suite.addTest(FlaskTestLoggedIn("test_show_parameter_search_results"))
+    suite.addTest(FlaskTestLoggedIn("test_show_preference_search_results"))
 
     return suite
-
-
-# class MockFlaskTests(unittest.TestCase):
-#     """Flask tests that show off mocking."""
-#
-#     def setUp(self):
-#         """Stuff to do before every test."""
-#
-#         # Get the Flask test client
-#         self.client = app.test_client()
-#
-#         # Show Flask errors that happen during tests
-#         app.config['TESTING'] = True
-#
-#         # Connect to test database
-#         connect_to_db(app, "postgresql:///testdb")
-#
-#         # Create tables and add sample data
-#         db.create_all()
-#         example_data()
-#
-#         # Make mock
-#         def _mock_state_to_code(state_name):
-#             return "CA"
-#
-#         self._old_state_to_code = server.state_to_code
-#         server.state_to_code = _mock_state_to_code
-#
-#     def tearDown(self):
-#         """Do at end of every test."""
-#
-#         server.state_to_code = self._old_state_to_code
-#         db.session.close()
-#         db.drop_all()
-#
-#     def test_emps_by_state_with_mock(self):
-#         """Find employees in a state."""
-#
-#         r = self.client.get("/emps-by-state.json?state_name=California")
-#
-#         # Turn json -> Python dictionary
-#         info = json.loads(r.data)
-#
-#         self.assertEqual(len(info['CA']), 4)
-#

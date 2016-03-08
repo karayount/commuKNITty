@@ -1,4 +1,3 @@
-
 import unittest
 from pattern_search import (build_pattern_list_from_yarn,
                             build_parameter_search_url,

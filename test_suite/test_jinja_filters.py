@@ -1,4 +1,3 @@
-
 import unittest
 from jinja_filters import prettify_preference
 

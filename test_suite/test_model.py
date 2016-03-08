@@ -1,4 +1,3 @@
-
 from model import (db, User, Preference, Basket, Yarn, BasketYarn,
                    Project, Pattern, UserPreference, GroupEvent)
 
@@ -43,7 +42,7 @@ def create_example_data():
     db.session.flush()
     by1 = BasketYarn(basket_id=1, yarn_id=1, yards=1000, colorway="by1_color")
     by2 = BasketYarn(basket_id=1, yarn_id=2, yards=1000, colorway="by2_color")
-    by3 = BasketYarn(basket_id=1, yarn_id=3, yards=1000, colorway="by3_color")
+    # by3 omitted so BY with basket_id=1 and yarn_id=3 can be created in test
     by4 = BasketYarn(basket_id=2, yarn_id=1, yards=1000, colorway="by4_color")
     by5 = BasketYarn(basket_id=2, yarn_id=2, yards=1000, colorway="by5_color")
     by6 = BasketYarn(basket_id=2, yarn_id=3, yards=1000, colorway="by6_color")
@@ -124,7 +123,7 @@ def create_example_data():
                   pattern_yarn_weight="y9_weight", pattern_name="pa9_name",
                   pattern_category="shawl-wrap", rav_pattern_link="pa9_link")
 
-    db.session.add_all([by1, by2, by3, by4, by5, by6, by7, by8, by9,])
+    db.session.add_all([by1, by2, by4, by5, by6, by7, by8, by9,])
     db.session.add_all([pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9, pr10, pr11, pr12, pr13, pr14, pr15])
     db.session.add_all([pa1, pa2, pa3, pa4, pa5, pa6, pa7, pa8, pa9])
     db.session.commit()

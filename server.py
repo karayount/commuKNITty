@@ -124,7 +124,7 @@ def show_user_profile():
                            all_prefs=ALL_PREFERENCES)
 
 
-@app.route("/update_preference.json", methods=['POST'])
+@app.route("/update_preference", methods=['POST'])
 def update_preference_in_db():
     """Process form field in user profile to update preferences.
 
