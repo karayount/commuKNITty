@@ -17,14 +17,15 @@
                 <h2>Local knitterly resources</h2>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div id="yelp-results" class="col-xs-3">
+                <h3>Yarn Shops</h3>
                 <ol type="A">
                     {% for index in range(business_list|length) %}
-                        <br>
-                        <li>
-                        <span class="yelp-biz-name">{{ business_list[index].biz_name }}</span><br>
-                        <span class="yelp-biz-addr">{{ business_list[index].biz_addr }}</span><br>
+                        <li class="yarn-shop">
+                        <span class="yelp-biz-name"> {{ business_list[index].biz_name }}</span><br>
+                        <span class="yelp-biz-addr"> {{ business_list[index].biz_addr }}</span><br>
                         </li>
                     {% endfor %}
                 </ol>
@@ -33,14 +34,16 @@
             <div id='map' class="map-container col-xs-6"></div>
 
             <div id="groups" class="col-xs-3">
-                <h4>Weekly knit nights near you</h4>
+                <h3>Weekly Knit Nights</h3>
+                <ul>
                 {% for group in groups %}
-                    <div class="group-box">
-                        <p><span class="group-name">{{ group.group_name }}</span><br>
-                            {{ group.day }} at {{ group.time }}<br>
-                            {{ group.location }} in {{ group.city }}</p>
-                    </div>
+                    <li class="group-box" type="square">
+                        <span class="group-name">{{ group.group_name }}</span>
+                        <p>{{ group.day }} at {{ group.time }}<br>
+                           {{ group.location }} in {{ group.city }}</p>
+                    </li>
                 {% endfor %}
+                </ul>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 
 .nav, .navbar, .navbar-default, .navbar-default {
-    background-color: #77bbc1;
+    background-color: #4DB6AC;
     color: #000000;
     border-radius: 0px;
 }
@@ -17,9 +17,20 @@ html {
 body {
     min-height: 100%;
     position: relative;
-    background-color: #e8fffa;
+    background-color: #E0F2F1;
+    font-family: 'Lato', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+}
+.unbold-header {
+    font-weight: 400;
 }
 
+.btn, .btn-info, .btn-lg {
+    background-color: #4DB6AC;
+    border-color: #4DB6AC;
+}
 .hidden {
     display: none;
 }
@@ -52,8 +63,8 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
-.group-box {
-    border: 1px solid black;
-    margin: 7px;
-    padding: 3px;
+#update-preferences-button, #personalized-search-button, #parameter-search-button {
+    background-color: #4DB6AC;
+    border-color: #4DB6AC;
+    font-size: 14px;
 }

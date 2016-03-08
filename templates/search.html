@@ -13,58 +13,61 @@
 {% endblock %}
 
 {% block body %}
-
-    <div class="row">
-        <div class="col-xs-12">
-            <h3>Patterns recommended just for you</h3>
-        </div>
-    </div>
-    <div class="row">
-        <section class="col-xs-12" id="container">
-            {% for pattern in pattern_recs %}
-                <div class="tile pattern">
-                    <img class="tile-photo pattern-photo" src="{{ pattern.photo }}" alt="">
-                    <h4 class="tile-title">{{ pattern.name }}</h4>
-                    <a href="{{ pattern.rav_link }}" class="tile-link">See pattern on Ravelry</a>
-                </div>
-            {% endfor %}
-        </section>
-    </div>
-    <div class="row">
-         <div class="col-xs-12 search-buttons">
-            <form action="/preference_search_results">
-                <label><input type="submit" value="See more" id="personalized_search_button"></input></label>
-            </form>
-         </div>
-    </div>
-    <br><hr>
-
-    <div class="row">
-        <div class="col-xs-12 search-buttons">
-            <label><button id="parameter-search-button">Looking for something specific?</button></label>
-        </div>
-    </div>
-    <form action="/parameter_search_results" method='POST' id="parameter-search-form" class="hidden">
+    <div class="container">
         <div class="row">
-            <div class="col-xs-2 search-buttons">
-                <br>{{ print_pref('pc', all_prefs.pc, 'Pattern Category') }}<br>
-            </div>
-            <div class="col-xs-2">
-                <br>{{ print_pref('fit', all_prefs.fit, 'Garment Size') }}<br>
-            </div>
-            <div class="col-xs-2">
-                <br>{{ print_pref('weight', all_prefs.weight, 'Yarn Weight') }}<br>
-            </div>
-            <div class="col-xs-2">
-                <br>{{ print_pref('pa', all_prefs.pa, 'Technique') }}<br>
+            <div class="col-xs-12">
+                <h2>Patterns recommended just for you</h2>
             </div>
         </div>
+        <hr>
+        <div class="row">
+            <section class="col-xs-12" id="container">
+                {% for pattern in pattern_recs %}
+                    <div class="tile pattern">
+                        <img class="tile-photo pattern-photo" src="{{ pattern.photo }}" alt="">
+                        <h4 class="tile-title">{{ pattern.name }}</h4>
+                        <a href="{{ pattern.rav_link }}" class="tile-link">See pattern on Ravelry</a>
+                    </div>
+                {% endfor %}
+            </section>
+        </div>
+        <br>
+        <div class="row">
+             <div class="col-xs-12 search-buttons">
+                <form action="/preference_search_results">
+                    <label><input type="submit" value="See more" id="personalized_search_button" class="btn btn-info btn-lg"></input></label>
+                </form>
+             </div>
+        </div>
+        <br><hr>
+
         <div class="row">
             <div class="col-xs-12 search-buttons">
-                <label><input type="submit" value="Search"</label>
+                <label><button id="parameter-search-button" type="button" class="btn btn-info btn-lg" >Looking for something specific?</button></label>
             </div>
         </div>
-    </form>
+        <form action="/parameter_search_results" method='POST' id="parameter-search-form" class="hidden">
+            <div class="row">
+                <div class="col-xs-2 search-buttons">
+                    <br>{{ print_pref('pc', all_prefs.pc, 'Pattern Category') }}<br>
+                </div>
+                <div class="col-xs-2">
+                    <br>{{ print_pref('fit', all_prefs.fit, 'Garment Size') }}<br>
+                </div>
+                <div class="col-xs-2">
+                    <br>{{ print_pref('weight', all_prefs.weight, 'Yarn Weight') }}<br>
+                </div>
+                <div class="col-xs-2">
+                    <br>{{ print_pref('pa', all_prefs.pa, 'Technique') }}<br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 search-buttons">
+                    <label><input type="submit" value="Search"</label>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="/static/vendor/jquery.freetile.js"></script>

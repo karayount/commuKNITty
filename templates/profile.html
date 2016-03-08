@@ -35,18 +35,23 @@
 
 {% block body %}
     <div class="container">
-        <div id="welcome-user" class="row col-xs-12">
-            <h2>Welcome {{ user.username }}</h2>
+        <div id="welcome-user" class="row">
+            <div class="col-xs-12">
+                <h2>Welcome, {{ user.username }}!</h2>
+            </div>
         </div>
+        <hr>
         <div id="about-me" class="row">
             <div class="col-xs-2">
                 <img src="{{ user.photo }}" alt="Userface">
             </div>
             <div class="col-xs-10">
-                <p>Years knitting: {{ user.years_knitting }}</p><br>
+                <h4>About you</h4>
+                <p>Years knitting: {{ user.years_knitting }}</p>
                 <p>Lifetime miles knit: {{ user.miles_knit }}</p>
             </div>
         </div>
+        <br>
         <div class="row">
             <h3 text="bold">Your preferences</h3>
         </div>
@@ -75,8 +80,7 @@
 
             <!-- allow to update preferences -->
             <div id="preferences-form">
-            <br>
-                <button id="update-preferences-button">Update your preferences</button>
+                <button id="update-preferences-button" type="button" class="btn btn-info btn-lg">Update your preferences</button>
                 <br><br>
                 <div class="row">
                     <form id="update-preferences-form" class="hidden">

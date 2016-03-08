@@ -291,7 +291,7 @@ def show_preference_search_results():
     search_params = group_user_prefs(user)
 
     search_result_patterns = build_pattern_list_from_parameters(search_params)
-    headline = "Customized pattern recommendations for " + user.username
+    headline = "Personalized recommendations for " + user.username
 
     return render_template("pattern_search_results.html",
                            patterns=search_result_patterns,
