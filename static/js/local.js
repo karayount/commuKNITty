@@ -13,7 +13,7 @@ function buildMarkerList(markerJSON) {
         var bizNum = biz.biz_num;
 
         var bizContentString = '<div id="content">' +
-            '<h4 class="firstHeading">' + bizName + '</h4><br>' +
+            '<h4 class="firstHeading">' + bizName + '</h4>' +
             '<div id="bodyContent">' +
             '<span>' + bizAddr + '<br>' + bizCity + '</span><br><a href="' +
             bizURL + '">find on Yelp</a></div></div>';

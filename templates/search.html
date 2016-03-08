@@ -16,10 +16,9 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <h2>Patterns recommended just for you</h2>
+                <h2 class="page-header">Patterns recommended just for you</h2>
             </div>
         </div>
-        <hr>
         <div class="row">
             <section class="col-xs-12" id="container">
                 {% for pattern in pattern_recs %}
@@ -39,8 +38,8 @@
                 </form>
              </div>
         </div>
-        <br><hr>
-
+        <br>
+        <hr>
         <div class="row">
             <div class="col-xs-12 search-buttons">
                 <label><button id="parameter-search-button" type="button" class="btn btn-info btn-lg" >Looking for something specific?</button></label>
@@ -63,7 +62,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 search-buttons">
-                    <label><input type="submit" value="Search"</label>
+                    <label><input class='btn btn-info' type="submit" value="Search"</label>
                 </div>
             </div>
         </form>

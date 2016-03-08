@@ -25,10 +25,10 @@ function showYarnOptions(result) {
         }
         text += "</select><label>How many yards? <input type='number' name='yardage'></label>" +
             "<br><label>What color? <input type='text' name='colorway'></label>" +
-            "<br><input type='submit' value='Submit'>" +
+            "<br><input class='btn btn-info' type='submit' value='Submit'>" +
             "</form>";
         text += "<br><p>Don't see the yarn you were looking for?</p>" +
-            "<button class='search-again-button'>Search again</button>";
+            "<button class='btn btn-info search-again-button'>Search again</button>";
 
         $('#add-new-yarn').html(text);
     }
