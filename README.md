@@ -25,7 +25,7 @@ CommuKNITty is a full-stack web application where knitters can plan their yarny 
 
 ### Profile
 
-User profile displays user's personal data (including lifetime miles knit), and current preferences, which are retrieved by database query, and displayed with Jinja templating.
+User profile displays user's personal data (including lifetime miles knit), and current preferences, which are retrieved by database query, and rendered with Jinja templating.
 
 ![User Profile Page](/docs/screen-shot-profile.png?raw=true)
 
@@ -36,15 +36,16 @@ Users can update their preferences by opening the form below. When a preference 
 
 ### Basket
 
-The basket features stores a user's personal yarn inventory. Each yarn displays a stock photo for that yarn company's yarn line (similar to make and model for cars) along with color and yardage for the yarn in this basket. 
+The basket feature stores a user's personal yarn inventory. Each yarn displays a stock photo for that yarn company's yarn line (similar to make and model for cars) along with color and yardage for the yarn in this basket. 
 
 ![Basket](/docs/screen-shot-basket.png?raw=true)
 
-Each displayed yarn has a link to see patterns, which are suggestions of what to make with the yarn. The patterns are returned from a database query of patterns for which there is a project that was created using the pattern with the input yarn.
+Each displayed yarn has a link to see patterns, which are suggestions of what to make with the yarn. The patterns are returned from a database query based projects which used that particular yarn. 
+
 
 ![What to Make with Yarn](/docs/screen-shot-yarn-based-search-results.png?raw=true)
 
-Users can also add new yarns to their basket, by clicking the Add yarn to your basket button. A form displays in a modal window asking for a search term, which is used to query the database against the yarn name field in the yarns table. 
+Users can also add new yarns to their basket, by clicking the "Add more yarn" button. A form displays in a modal window asking for a search term, which is used to query the database against the yarn name field in the yarns table. 
 
 ![Find Yarn to Add](/docs/screen-shot-basket-search-yarn.png?raw=true)
 
