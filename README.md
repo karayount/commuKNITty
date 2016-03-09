@@ -29,7 +29,7 @@ User profile displays user's personal data (including lifetime miles knit), and 
 
 ![User Profile Page](/docs/screen-shot-profile.png?raw=true)
 
-Users can update their preferences by opening the form below. When a preference box is checked or unchecked, a post request is sent to the server, which updates the database record. An AJAX call returns the new value to immediately display change to user's preferences.
+Users can update their preferences by opening the form below. When a preference box is checked or unchecked, an AJAX request is sent to the server, which updates the database record, On return, the user's new preference is reflected in the display. 
 
 ![Update Preferences](/docs/screen-shot-profile-update-form.png?raw=true)
 
