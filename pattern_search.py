@@ -65,6 +65,7 @@ def build_parameter_search_url(grouped_preferences):
             else:
                 search_url = search_url + "|" + value
             value_index += 1
+
     return search_url
 
 

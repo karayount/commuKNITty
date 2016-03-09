@@ -11,7 +11,6 @@ import test_seed
 import test_with_selenium
 
 
-
 if __name__ == '__main__':
     # If called like a script, run our tests
 
@@ -19,7 +18,7 @@ if __name__ == '__main__':
 
     server_suite = test_server.get_suite()
     local_suite = test_local.get_suite()
-    # pattern_search_suite = test_pattern_search.get_suite()
+    pattern_search_suite = test_pattern_search.get_suite()
     # preferences_suite = test_preferences.get_suite()
     jinja_filters_suite = test_jinja_filters.get_suite()
     # seed_suite = test_seed.get_suite()
@@ -27,7 +26,7 @@ if __name__ == '__main__':
     all_tests = unittest.TestSuite([
         server_suite,
         local_suite,
-        # pattern_search_suite,
+        pattern_search_suite,
         # preferences_suite,
         jinja_filters_suite,
         # seed_suite,
