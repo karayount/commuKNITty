@@ -1,6 +1,6 @@
 # Overview
 
-CommuKNITty is a full-stack web application where knitters can plan their yarny adventures. Knitters can see their current yarn inventory in their Basket, and maintain preferences of what they like to knit. From those preferences, users receive personalized recommendations of things to knit through calls to the Ravelry API. CommuKNITty maintains a Postgres database of knitting patterns and queries it to provide recommendations of what to knit with a yarn in a user's Basket. Knitters can search for instructions for specific items, like a scarf or beanie, and view local yarn shops, retrieved from the Yelp API and displayed with Google Maps. If solo knitting gets lonely, they can join the larger commuKNITty and find a weekly knit night nearby.
+CommuKNITty is a full-stack web application where knitters can plan their yarny adventures. Knitters can keep track of their yarn inventory in their Basket, and maintain preferences of what they like to knit. From those preferences, users receive personalized recommendations of things to knit through calls to the Ravelry API. CommuKNITty maintains a Postgres database of knitting patterns and queries it to provide recommendations of what to knit with a yarn in a user's Basket. Knitters can search for instructions for specific items, like a scarf or beanie, and view local yarn shops, retrieved from the Yelp API and displayed with Google Maps. If solo knitting gets lonely, they can join the larger commuKNITty and find a weekly knit night nearby.
 
 # Technologies
 
@@ -25,7 +25,7 @@ CommuKNITty is a full-stack web application where knitters can plan their yarny 
 
 ### Profile
 
-User profile displays user's personal data (including lifetime miles knit), and current preferences, which are retrieved by database query, and rendered with Jinja templating.
+The user profile displays user's personal data (including lifetime miles knit), and current preferences, which are retrieved by a database query, and rendered with Jinja templating.
 
 ![User Profile Page](/docs/screen-shot-profile.png?raw=true)
 
@@ -36,7 +36,7 @@ Users can update their preferences by opening the form below. When a preference 
 
 ### Basket
 
-The basket feature stores a user's personal yarn inventory. Each yarn displays a stock photo for that yarn company's yarn line (similar to make and model for cars) along with color and yardage for the yarn in this basket. 
+The basket stores a user's personal yarn inventory. Each yarn displays a stock photo for that yarn company's yarn line (similar to make and model for cars) along with color and yardage for the yarn in this basket. 
 
 ![Basket](/docs/screen-shot-basket.png?raw=true)
 

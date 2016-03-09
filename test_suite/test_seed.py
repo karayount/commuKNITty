@@ -1,7 +1,7 @@
 """ Unit tests of functions in seed.py """
 
 import unittest
-from model import db, connect_to_db, User, Basket
+from model import db, connect_to_db, User, Basket, Preference, UserPreference
 from server import app
 from jinja2 import StrictUndefined
 from seed import (load_group_events, load_preferences, load_user_preferences,
@@ -54,14 +54,19 @@ class SeedTest(unittest.TestCase):
         pass
 
     def test_load_preferences(self):
-        """  """
+        """ Can preferences be added to database tables? """
 
         load_preferences("test_data/preference_data.txt")
+        pref_list = Preference.query.all()
+        self.assertEqual(len(pref_list), 27)
 
     def test_load_user_preferences(self):
         """  """
 
+        load_users_and_create_baskets("test_data/user_data.txt")
+        load_preferences("test_data/preference_data.txt")
         load_user_preferences("test_data/user_preference_data.txt")
+        print "yay"
 
     def test_load_basket_yarns(self):
         """  """
@@ -83,8 +88,8 @@ def get_suite():
     suite = unittest.TestSuite()
     suite.addTest(SeedTest("test_load_users_and_create_baskets"))
     # suite.addTest(SeedTest("test_load_yarns"))
-    # suite.addTest(SeedTest("test_load_preferences"))
-    # suite.addTest(SeedTest("test_load_user_preferences"))
+    suite.addTest(SeedTest("test_load_preferences"))
+    suite.addTest(SeedTest("test_load_user_preferences"))
     # suite.addTest(SeedTest("test_load_basket_yarns"))
     # suite.addTest(SeedTest("test_load_group_events"))
 
